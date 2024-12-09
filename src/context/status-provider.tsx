@@ -1,5 +1,3 @@
-"use client";
-
 import { ReactNode, useState } from "react";
 import { Status, StatusContext } from "./status-context";
 

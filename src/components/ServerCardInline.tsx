@@ -57,7 +57,7 @@ export default function ServerCardInline({
     } else {
       daysLeft = getDaysBetweenDates(
         parsedData.billingDataMod.endDate,
-        new Date().toISOString(),
+        new Date(now).toISOString(),
       );
     }
   }
@@ -94,7 +94,11 @@ export default function ServerCardInline({
             </p>
             {parsedData &&
               (daysLeft >= 0 ? (
-                <p className={cn("text-[10px] text-muted-foreground")}>
+                <p
+                  className={cn("text-[10px] text-muted-foreground", {
+                    "text-orange-600": daysLeft <= 7 && !isNeverExpire,
+                  })}
+                >
                   剩余时间: {isNeverExpire ? "永久" : daysLeft + "天"}
                 </p>
               ) : (

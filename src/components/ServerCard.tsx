@@ -50,7 +50,7 @@ export default function ServerCard({
     } else {
       daysLeft = getDaysBetweenDates(
         parsedData.billingDataMod.endDate,
-        new Date().toISOString(),
+        new Date(now).toISOString(),
       );
     }
   }

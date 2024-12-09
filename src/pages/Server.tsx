@@ -243,7 +243,12 @@ export default function Servers() {
           setCurrentTab={setCurrentGroup}
         />
       </section>
-      {showMap === "1" && <GlobalMap serverList={nezhaWsData?.servers || []} />}
+      {showMap === "1" && (
+        <GlobalMap
+          now={nezhaWsData.now}
+          serverList={nezhaWsData?.servers || []}
+        />
+      )}
       {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
         <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6">

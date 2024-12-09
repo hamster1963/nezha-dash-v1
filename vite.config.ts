@@ -37,10 +37,17 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    headers: {
+      "Cache-Control": "no-store",
+      Pragma: "no-cache",
+    },
   },
   build: {
     rollupOptions: {
       output: {
+        entryFileNames: `assets/[name].[hash].js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`,
         manualChunks(id) {
           if (id.includes("node_modules")) {
             return id

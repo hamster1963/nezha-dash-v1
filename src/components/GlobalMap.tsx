@@ -1,21 +1,22 @@
 import { geoJsonString } from "@/lib/geo-json-string";
 import { NezhaServer } from "@/types/nezha-api";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, m } from "framer-motion";
 import { geoEquirectangular, geoPath } from "d3-geo";
 import { countryCoordinates } from "@/lib/geo-limit";
+import MapTooltip from "./MapTooltip";
+import useTooltip from "@/hooks/use-tooltip";
+import { formatNezhaInfo } from "@/lib/utils";
 
 export default function GlobalMap({
   serverList,
+  now,
 }: {
   serverList: NezhaServer[];
+  now: number;
 }) {
   const { t } = useTranslation();
   const countryList: string[] = [];
   const serverCounts: { [key: string]: number } = {};
-
-  console.log(serverList);
 
   serverList.forEach((server) => {
     if (server.country_code) {
@@ -48,6 +49,8 @@ export default function GlobalMap({
           width={width}
           height={height}
           filteredFeatures={filteredFeatures}
+          nezhaServerList={serverList}
+          now={now}
         />
       </div>
     </section>
@@ -67,21 +70,20 @@ interface InteractiveMapProps {
     };
     geometry: never;
   }[];
+  nezhaServerList: NezhaServer[];
+  now: number;
 }
 
-function InteractiveMap({
+export function InteractiveMap({
   countries,
   serverCounts,
   width,
   height,
   filteredFeatures,
+  nezhaServerList,
+  now,
 }: InteractiveMapProps) {
-  const { t } = useTranslation();
-  const [tooltipData, setTooltipData] = useState<{
-    centroid: [number, number];
-    country: string;
-    count: number;
-  } | null>(null);
+  const { setTooltipData } = useTooltip();
 
   const projection = geoEquirectangular()
     .scale(140)
@@ -91,7 +93,10 @@ function InteractiveMap({
   const path = geoPath().projection(projection);
 
   return (
-    <div className="relative w-full aspect-[2/1]">
+    <div
+      className="relative w-full aspect-[2/1]"
+      onMouseLeave={() => setTooltipData(null)}
+    >
       <svg
         width={width}
         height={height}
@@ -105,14 +110,19 @@ function InteractiveMap({
           </pattern>
         </defs>
         <g>
+          {/* Background rect to handle mouse events in empty areas */}
+          <rect
+            x="0"
+            y="0"
+            width={width}
+            height={height}
+            fill="transparent"
+            onMouseEnter={() => setTooltipData(null)}
+          />
           {filteredFeatures.map((feature, index) => {
             const isHighlighted = countries.includes(
               feature.properties.iso_a2_eh,
             );
-
-            if (isHighlighted) {
-              console.log(feature.properties.iso_a2_eh);
-            }
 
             const serverCount = serverCounts[feature.properties.iso_a2_eh] || 0;
 
@@ -126,15 +136,29 @@ function InteractiveMap({
                     : "fill-neutral-200/50 dark:fill-neutral-800 stroke-neutral-300/40 dark:stroke-neutral-700 stroke-[0.5]"
                 }
                 onMouseEnter={() => {
-                  if (isHighlighted && path.centroid(feature)) {
+                  if (!isHighlighted) {
+                    setTooltipData(null);
+                    return;
+                  }
+                  if (path.centroid(feature)) {
+                    const countryCode = feature.properties.iso_a2_eh;
+                    const countryServers = nezhaServerList
+                      .filter(
+                        (server: NezhaServer) =>
+                          server.country_code?.toUpperCase() === countryCode,
+                      )
+                      .map((server: NezhaServer) => ({
+                        name: server.name,
+                        status: formatNezhaInfo(now, server).online,
+                      }));
                     setTooltipData({
                       centroid: path.centroid(feature),
                       country: feature.properties.name,
                       count: serverCount,
+                      servers: countryServers,
                     });
                   }
                 }}
-                onMouseLeave={() => setTooltipData(null)}
               />
             );
           })}
@@ -161,13 +185,23 @@ function InteractiveMap({
               <g
                 key={countryCode}
                 onMouseEnter={() => {
+                  const countryServers = nezhaServerList
+                    .filter(
+                      (server: NezhaServer) =>
+                        server.country_code?.toUpperCase() ===
+                        countryCode.toUpperCase(),
+                    )
+                    .map((server: NezhaServer) => ({
+                      name: server.name,
+                      status: formatNezhaInfo(now, server).online,
+                    }));
                   setTooltipData({
                     centroid: [x, y],
                     country: coords.name,
                     count: serverCount,
+                    servers: countryServers,
                   });
                 }}
-                onMouseLeave={() => setTooltipData(null)}
                 className="cursor-pointer"
               >
                 <circle
@@ -181,30 +215,7 @@ function InteractiveMap({
           })}
         </g>
       </svg>
-      <AnimatePresence mode="wait">
-        {tooltipData && (
-          <m.div
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            className="absolute hidden lg:block pointer-events-none bg-white dark:bg-neutral-800 px-2 py-1 rounded shadow-lg text-sm dark:border dark:border-neutral-700"
-            key={tooltipData.country}
-            style={{
-              left: tooltipData.centroid[0],
-              top: tooltipData.centroid[1],
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            <p className="font-medium">
-              {tooltipData.country === "China"
-                ? "Mainland China"
-                : tooltipData.country}
-            </p>
-            <p className="text-neutral-600 dark:text-neutral-400">
-              {tooltipData.count} {t("map.Servers")}
-            </p>
-          </m.div>
-        )}
-      </AnimatePresence>
+      <MapTooltip />
     </div>
   );
 }

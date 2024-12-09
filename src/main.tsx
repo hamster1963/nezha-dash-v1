@@ -11,6 +11,7 @@ import { MotionProvider } from "./components/motion/motion-provider";
 import { WebSocketProvider } from "./context/websocket-provider";
 import { StatusProvider } from "./context/status-provider";
 import { FilterProvider } from "./context/network-filter-context";
+import { TooltipProvider } from "./context/tooltip-provider";
 
 import "font-logos/assets/font-logos.css"
 import "flag-icons/css/flag-icons.min.css";
@@ -25,19 +26,21 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <WebSocketProvider url="/api/v1/ws/server">
             <StatusProvider>
               <FilterProvider>
-                <App />
-                <Toaster
-                  duration={1000}
-                  toastOptions={{
-                    classNames: {
-                      default:
-                        "w-fit rounded-full px-2.5 py-1.5 bg-neutral-100 border border-neutral-200 backdrop-blur-xl shadow-none",
-                    },
-                  }}
-                  position="top-center"
-                  className={"flex items-center justify-center"}
-                />
-                <ReactQueryDevtools />
+                <TooltipProvider>
+                  <App />
+                  <Toaster
+                    duration={1000}
+                    toastOptions={{
+                      classNames: {
+                        default:
+                          "w-fit rounded-full px-2.5 py-1.5 bg-neutral-100 border border-neutral-200 backdrop-blur-xl shadow-none",
+                      },
+                    }}
+                    position="top-center"
+                    className={"flex items-center justify-center"}
+                  />
+                  <ReactQueryDevtools />
+                </TooltipProvider>
               </FilterProvider>
             </StatusProvider>
           </WebSocketProvider>

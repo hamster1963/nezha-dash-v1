@@ -1,14 +1,69 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="NEZHA" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="theme-color" content="#242424" />
-    <title>NEZHA</title>
+    <script>
+      // 在页面渲染前就执行主题初始化
+      try {
+        const storageKey = "vite-ui-theme";
+        let theme = localStorage.getItem(storageKey);
+        if (theme === "system" || !theme) {
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        }
+        document.documentElement.classList.add(theme);
+      } catch (e) {
+        document.documentElement.classList.add("light");
+      }
+    </script>
+    <style>
+      /* Prevent FOUC in Safari */
+      html:not(.dark):not(.light) * {
+        visibility: hidden;
+      }
+
+      :root {
+        color-scheme: light;
+        --bg: #ffffff;
+      }
+
+      html.dark {
+        color-scheme: dark;
+        --bg: #242424;
+      }
+
+      html.light {
+        color-scheme: light;
+        --bg: #ffffff;
+      }
+
+      html {
+        background-color: var(--bg) !important;
+      }
+
+      body {
+        background-color: var(--bg) !important;
+      }
+
+      #root {
+        background-color: var(--bg) !important;
+        visibility: hidden;
+      }
+
+      #root.loaded {
+        visibility: visible;
+        animation: fadein 0.2s;
+      }
+
+      @keyframes fadein {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
     <script>
       (function () {
         const storageKey = "vite-ui-theme";
@@ -19,7 +74,13 @@
           const themeColor = isDark ? "#242424" : "#fafafa";
           document
             .querySelector('meta[name="theme-color"]')
-            .setAttribute("content", themeColor);
+            ?.setAttribute("content", themeColor);
+        }
+
+        function setTheme(newTheme) {
+          root.classList.remove("light", "dark");
+          root.classList.add(newTheme);
+          updateThemeColor(newTheme === "dark");
         }
 
         if (theme === "system") {
@@ -27,14 +88,35 @@
             .matches
             ? "dark"
             : "light";
-          root.classList.add(systemTheme);
-          updateThemeColor(systemTheme === "dark");
+          setTheme(systemTheme);
+
+          window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", (e) => {
+              setTheme(e.matches ? "dark" : "light");
+            });
         } else {
-          root.classList.add(theme);
-          updateThemeColor(theme === "dark");
+          setTheme(theme);
         }
+
+        // Add loaded class after React has mounted
+        window.addEventListener("load", () => {
+          const root = document.getElementById("root");
+          if (root) {
+            // 使用 RAF 确保在下一帧渲染
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                root.classList.add("loaded");
+              });
+            });
+          }
+        });
       })();
     </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEZHA</title>
   </head>
   <body>
     <div id="root"></div>

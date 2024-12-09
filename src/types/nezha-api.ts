@@ -23,7 +23,6 @@ export interface NezhaServerHost {
   swap_total: number;
   arch: string;
   boot_time: number;
-  country_code: string;
   version: string;
 }
 
