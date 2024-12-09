@@ -12,6 +12,9 @@ import { WebSocketProvider } from "./context/websocket-provider";
 import { StatusProvider } from "./context/status-provider";
 import { FilterProvider } from "./context/network-filter-context";
 
+import "font-logos/assets/font-logos.css"
+import "flag-icons/css/flag-icons.min.css";
+
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
