@@ -58,9 +58,9 @@ function Header() {
 
   return (
     <div className="mx-auto w-full max-w-5xl">
-      <section className="flex items-center justify-between">
+      <section className="flex items-center justify-between header-top">
         <section onClick={() => navigate("/")} className="cursor-pointer flex items-center sm:text-base text-sm font-medium">
-          <div className="mr-1 flex flex-row items-center justify-start">
+          <div className="mr-1 flex flex-row items-center justify-start header-logo">
             <img
               width={40}
               height={40}
@@ -73,7 +73,7 @@ function Header() {
           <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
-        <section className="flex items-center gap-2">
+        <section className="flex items-center gap-2 header-handles">
           <div className="hidden sm:flex items-center gap-2">
             <Links />
             <DashboardLink />
@@ -189,7 +189,7 @@ function Overview() {
     setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption))
   }, 1000)
   return (
-    <section className={"mt-10 flex flex-col md:mt-16"}>
+    <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
       <p className="text-base font-semibold">👋 {t("overview")}</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>

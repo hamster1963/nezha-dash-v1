@@ -190,7 +190,7 @@ export default function Servers() {
         upSpeed={upSpeed}
         downSpeed={downSpeed}
       />
-      <div className="flex mt-6 items-center justify-between gap-2">
+      <div className="flex mt-6 items-center justify-between gap-2 server-overview-controls">
         <section className="flex items-center gap-2 w-full overflow-hidden">
           <button
             onClick={() => {
@@ -315,14 +315,14 @@ export default function Servers() {
       {showMap === "1" && <GlobalMap now={nezhaWsData.now} serverList={nezhaWsData?.servers || []} />}
       {showServices === "1" && <ServiceTracker />}
       {inline === "1" && (
-        <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6">
+        <section className="flex flex-col gap-2 overflow-x-scroll scrollbar-hidden mt-6 server-inline-list">
           {filteredServers.map((serverInfo) => (
             <ServerCardInline now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
           ))}
         </section>
       )}
       {inline === "0" && (
-        <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6">
+        <section className="grid grid-cols-1 gap-2 md:grid-cols-2 mt-6 server-card-list">
           {filteredServers.map((serverInfo) => (
             <ServerCard now={nezhaWsData.now} key={serverInfo.id} serverInfo={serverInfo} />
           ))}

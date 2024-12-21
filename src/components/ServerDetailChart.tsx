@@ -72,7 +72,7 @@ export default function ServerDetailChart({ server_id }: { server_id: string }) 
   const gpuList = server.host.gpu || []
 
   return (
-    <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3">
+    <section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3 server-charts">
       <CpuChart now={nezhaWsData.now} data={server} />
       {gpuStats.length >= 1 && gpuList.length === gpuStats.length ? (
         gpuList.map((gpu, index) => <GpuChart now={nezhaWsData.now} gpuStat={gpuStats[index]} gpuName={gpu} key={index} />)

@@ -8,7 +8,7 @@ export default function TabSwitch({ tabs, currentTab, setCurrentTab }: { tabs: s
     // @ts-expect-error CustomBackgroundImage is a global variable
     (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
-    <div className="z-50 flex flex-col items-start rounded-[50px]">
+    <div className="z-50 flex flex-col items-start rounded-[50px] server-info-tab">
       <div
         className={cn("flex items-center gap-1 rounded-[50px] bg-stone-100 p-[3px] dark:bg-stone-800", {
           "bg-stone-100/70 dark:bg-stone-800/70": customBackgroundImage,
