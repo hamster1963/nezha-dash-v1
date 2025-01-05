@@ -9,9 +9,9 @@ export default function NotFound() {
 
   useEffect(() => {
     if (window.location.pathname !== "/404") {
-      window.location.href = "/404";
+      window.location.href = "/404"
     }
-  }, []);
+  }, [])
 
   return (
     <div className="flex  flex-col items-center justify-center">
