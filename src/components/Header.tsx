@@ -54,7 +54,7 @@ function Header() {
   }, [customLogo])
 
   useEffect(() => {
-    document.title = siteName || "哪吒监控 Nezha Monitoring"
+    document.title = siteName || "不要温和地走入那个良夜"
   }, [siteName])
 
   return (
@@ -76,7 +76,7 @@ function Header() {
               className="relative m-0! border-2 border-transparent h-6 w-6 object-cover object-top p-0!"
             />
           </div>
-          {isLoading ? <Skeleton className="h-6 w-20 rounded-[5px] bg-muted-foreground/10 animate-none" /> : siteName || "NEZHA"}
+          {isLoading ? <Skeleton className="h-6 w-20 rounded-[5px] bg-muted-foreground/10 animate-none" /> : siteName || "Interstellar"}
           <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
@@ -262,7 +262,7 @@ function Overview() {
   }, 1000)
   return (
     <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
-      <p className="text-base font-semibold">👋 {t("overview")}</p>
+      <p className="text-base font-semibold">🌟 {t("overview")}</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
         {mouted ? (

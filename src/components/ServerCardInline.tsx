@@ -96,14 +96,18 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
             <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("serverCard.upload")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` : up >= 1 ? `${up.toFixed(2)}M/s` : `${(up * 1024).toFixed(2)}K/s`}
-              </div>
+                {up >= 1024 ? `${(up / 1024).toFixed(2)}G/s` :
+                  up >= 1 ? `${up.toFixed(2)}M/s` :
+                    up >= 0.001 ? `${(up * 1024).toFixed(2)}K/s` :
+                      `${(up * 1024 * 1024).toFixed(2)}B/s`}              </div>
             </div>
             <div className={"flex w-16 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("serverCard.download")}</p>
               <div className="flex items-center text-xs font-semibold">
-                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` : down >= 1 ? `${down.toFixed(2)}M/s` : `${(down * 1024).toFixed(2)}K/s`}
-              </div>
+                {down >= 1024 ? `${(down / 1024).toFixed(2)}G/s` :
+                  down >= 1 ? `${down.toFixed(2)}M/s` :
+                    down >= 0.001 ? `${(down * 1024).toFixed(2)}K/s` :
+                      `${(down * 1024 * 1024).toFixed(2)}B/s`}              </div>
             </div>
             <div className={"flex w-20 flex-col"}>
               <p className="text-xs text-muted-foreground">{t("serverCard.totalUpload")}</p>
