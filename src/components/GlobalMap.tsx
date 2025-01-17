@@ -13,9 +13,7 @@ export default function GlobalMap({ serverList, now }: { serverList: NezhaServer
   const countryList: string[] = []
   const serverCounts: { [key: string]: number } = {}
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   serverList.forEach((server) => {
     if (server.country_code) {

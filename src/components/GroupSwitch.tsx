@@ -11,9 +11,7 @@ export default function GroupSwitch({
   currentTab: string
   setCurrentTab: (tab: string) => void
 }) {
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const tagRefs = useRef(tabs.map(() => createRef<HTMLDivElement>()))

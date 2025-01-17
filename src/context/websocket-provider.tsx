@@ -106,28 +106,15 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ url, child
   useEffect(() => {
     connect()
 
-    // 添加页面可见性变化监听
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // 页面隐藏时断开连接
-        cleanup()
-      } else {
-        // 页面可见时重新连接
-        connect()
-      }
-    }
-
     // 添加页面卸载事件监听
     const handleBeforeUnload = () => {
       cleanup()
     }
 
-    document.addEventListener("visibilitychange", handleVisibilityChange)
     window.addEventListener("beforeunload", handleBeforeUnload)
 
     return () => {
       cleanup()
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
       window.removeEventListener("beforeunload", handleBeforeUnload)
     }
   }, [url])

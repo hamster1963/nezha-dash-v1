@@ -27,9 +27,7 @@ export default function ServerCard({ now, serverInfo }: { now: number; serverInf
 
   const showFlag = true
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   // @ts-expect-error ShowNetTransfer is a global variable
   const showNetTransfer = window.ShowNetTransfer as boolean

@@ -9,9 +9,7 @@ import { useTranslation } from "react-i18next"
 export function LanguageSwitcher() {
   const { t, i18n } = useTranslation()
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const locale = i18n.languages[0]
 

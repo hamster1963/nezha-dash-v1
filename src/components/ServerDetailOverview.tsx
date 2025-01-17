@@ -75,9 +75,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
     last_active_time_string,
   } = formatNezhaInfo(nezhaWsData.now, server)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   countries.registerLocale(enLocale)
 

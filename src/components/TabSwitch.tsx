@@ -4,9 +4,7 @@ import { useTranslation } from "react-i18next"
 
 export default function TabSwitch({ tabs, currentTab, setCurrentTab }: { tabs: string[]; currentTab: string; setCurrentTab: (tab: string) => void }) {
   const { t } = useTranslation()
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div className="z-50 flex flex-col items-start rounded-[50px] server-info-tab">
       <div

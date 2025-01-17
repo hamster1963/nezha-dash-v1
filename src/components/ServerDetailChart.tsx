@@ -128,9 +128,7 @@ function GpuChart({
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   // 初始化历史数据
   useEffect(() => {
@@ -237,9 +235,7 @@ function CpuChart({ now, data, messageHistory }: { now: number; data: NezhaServe
 
   const { cpu } = formatNezhaInfo(now, data)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   // 初始化历史数据
   useEffect(() => {
@@ -343,9 +339,7 @@ function ProcessChart({ now, data, messageHistory }: { now: number; data: NezhaS
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const { process } = formatNezhaInfo(now, data)
 
@@ -457,9 +451,7 @@ function MemChart({ now, data, messageHistory }: { now: number; data: NezhaServe
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const { mem, swap } = formatNezhaInfo(now, data)
 
@@ -602,9 +594,7 @@ function DiskChart({ now, data, messageHistory }: { now: number; data: NezhaServ
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const { disk } = formatNezhaInfo(now, data)
 
@@ -715,9 +705,7 @@ function NetworkChart({ now, data, messageHistory }: { now: number; data: NezhaS
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const { up, down } = formatNezhaInfo(now, data)
 
@@ -858,9 +846,7 @@ function ConnectChart({ now, data, messageHistory }: { now: number; data: NezhaS
   const hasInitialized = useRef(false)
   const [historyLoaded, setHistoryLoaded] = useState(false)
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const { tcp, udp } = formatNezhaInfo(now, data)
 

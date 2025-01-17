@@ -6,6 +6,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import ErrorBoundary from "./components/ErrorBoundary"
 import Footer from "./components/Footer"
 import Header, { RefreshToast } from "./components/Header"
+import { useBackground } from "./hooks/use-background"
 import { useTheme } from "./hooks/use-theme"
 import { InjectContext } from "./lib/inject"
 import { fetchSetting } from "./lib/nezha-api"
@@ -25,6 +26,7 @@ const App: React.FC = () => {
   const { i18n } = useTranslation()
   const { setTheme } = useTheme()
   const [isCustomCodeInjected, setIsCustomCodeInjected] = useState(false)
+  const { backgroundImage: customBackgroundImage } = useBackground()
 
   // 检测是否强制指定了主题颜色
   const forceTheme =
@@ -59,10 +61,6 @@ const App: React.FC = () => {
   if (settingData?.data?.config?.language && !localStorage.getItem("language")) {
     i18n.changeLanguage(settingData?.data?.config?.language)
   }
-
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const customMobileBackgroundImage =
     // @ts-expect-error CustomMobileBackgroundImage is a global variable

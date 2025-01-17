@@ -27,9 +27,7 @@ export default function ServerCardInline({ now, serverInfo }: { now: number; ser
 
   const showFlag = true
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const parsedData = parsePublicNote(public_note)
 

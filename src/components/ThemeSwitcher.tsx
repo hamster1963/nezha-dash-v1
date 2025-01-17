@@ -12,9 +12,7 @@ export function ModeToggle() {
   const { t } = useTranslation()
   const { setTheme, theme } = useTheme()
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const handleSelect = (e: Event, newTheme: Theme) => {
     e.preventDefault()

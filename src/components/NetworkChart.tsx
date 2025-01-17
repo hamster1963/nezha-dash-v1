@@ -93,9 +93,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const defaultChart = "All"
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const [activeChart, setActiveChart] = React.useState(defaultChart)
   const [isPeakEnabled, setIsPeakEnabled] = React.useState(false)

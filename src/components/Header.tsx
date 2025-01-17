@@ -1,11 +1,13 @@
 import { ModeToggle } from "@/components/ThemeSwitcher"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useBackground } from "@/hooks/use-background"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
 import { cn } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
+import { ImageMinus } from "lucide-react"
 import { DateTime } from "luxon"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -18,6 +20,7 @@ import { Button } from "./ui/button"
 function Header() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { backgroundImage, updateBackground } = useBackground()
 
   const { data: settingData, isLoading } = useQuery({
     queryKey: ["setting"],
@@ -38,10 +41,6 @@ function Header() {
   // @ts-expect-error CustomDesc is a global variable
   const customDesc = window.CustomDesc || t("nezha")
 
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
-
   useEffect(() => {
     const link = document.querySelector("link[rel*='icon']") || document.createElement("link")
     // @ts-expect-error set link.type
@@ -56,6 +55,22 @@ function Header() {
   useEffect(() => {
     document.title = siteName || "不要温和地走入那个良夜"
   }, [siteName])
+
+  const handleBackgroundToggle = () => {
+    if (window.CustomBackgroundImage) {
+      // Store the current background image before removing it
+      sessionStorage.setItem("savedBackgroundImage", window.CustomBackgroundImage)
+      updateBackground(undefined)
+    } else {
+      // Restore the saved background image
+      const savedImage = sessionStorage.getItem("savedBackgroundImage")
+      if (savedImage) {
+        updateBackground(savedImage)
+      }
+    }
+  }
+
+  const customBackgroundImage = backgroundImage
 
   return (
     <div className="mx-auto w-full max-w-5xl">
@@ -87,6 +102,18 @@ function Header() {
           </div>
           <LanguageSwitcher />
           <ModeToggle />
+          {(customBackgroundImage || sessionStorage.getItem("savedBackgroundImage")) && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBackgroundToggle}
+              className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
+                "bg-white/70 dark:bg-black/70": customBackgroundImage,
+              })}
+            >
+              <ImageMinus className="w-4 h-4" />
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
@@ -234,32 +261,23 @@ function DashboardLink() {
   )
 }
 
-// https://github.com/streamich/react-use/blob/master/src/useInterval.ts
-const useInterval = (callback: () => void, delay: number | null) => {
-  const savedCallback = useRef<() => void>(() => {})
-  useEffect(() => {
-    savedCallback.current = callback
-  })
-  useEffect(() => {
-    if (delay !== null) {
-      const interval = setInterval(() => savedCallback.current(), delay || 0)
-      return () => clearInterval(interval)
-    }
-    return undefined
-  }, [delay])
-}
 function Overview() {
   const { t } = useTranslation()
   const [mouted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
   }, [])
-  const timeOption = DateTime.TIME_SIMPLE
+  const timeOption = DateTime.TIME_WITH_SECONDS
   timeOption.hour12 = true
   const [timeString, setTimeString] = useState(DateTime.now().setLocale("en-US").toLocaleString(timeOption))
-  useInterval(() => {
-    setTimeString(DateTime.now().setLocale("en-US").toLocaleString(timeOption))
-  }, 1000)
+  useEffect(() => {
+    const updateTime = () => {
+      const now = DateTime.now().setLocale("en-US").toLocaleString(timeOption)
+      setTimeString(now)
+      requestAnimationFrame(updateTime)
+    }
+    requestAnimationFrame(updateTime)
+  }, [])
   return (
     <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
       <p className="text-base font-semibold">🌟 {t("overview")}</p>

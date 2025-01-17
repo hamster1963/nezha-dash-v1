@@ -22,9 +22,7 @@ interface CycleTransferStatsClientProps {
 
 export const CycleTransferStatsClient: React.FC<CycleTransferStatsClientProps> = ({ name, from, to, max, serverStats, className }) => {
   const { t } = useTranslation()
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
       className={cn(

@@ -17,9 +17,7 @@ interface ServiceTrackerProps {
 
 export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, className, title, uptime = 100, avgDelay = 0 }) => {
   const { t } = useTranslation()
-  const customBackgroundImage =
-    // @ts-expect-error CustomBackgroundImage is a global variable
-    (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
+  const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
   return (
     <div
       className={cn(
