@@ -1,0 +1,120 @@
+{
+  "nezha": "கண்காணிப்பு",
+  "overview": "கண்ணோட்டம்",
+  "dashboard": "முகப்புப்பெட்டி",
+  "login": "புகுபதிவு",
+  "serverCard": {
+    "mem": "மெம்",
+    "stg": "Stg",
+    "days": "நாட்கள்",
+    "hours": "மணி",
+    "upload": "பதிவேற்றும்",
+    "download": "பதிவிறக்கம்",
+    "system": "மண்டலம்",
+    "uptime": "நேரம்",
+    "totalUpload": "பதிவேற்றும்",
+    "totalDownload": "பதிவிறக்கம்"
+  },
+  "online": "ஆன்லைனில்",
+  "offline": "இணையமில்லாமல்",
+  "whereTheTimeIs": "நேரம் இருக்கும் இடம்",
+  "refreshing": "புத்துணர்ச்சி",
+  "info": {
+    "websocketConnecting": "வெப்சாக்கெட் இணைத்தல்",
+    "websocketConnected": "வெப்சாக்கெட் இணைக்கப்பட்டுள்ளது",
+    "websocketDisconnected": "வெப்சாக்கெட் துண்டிக்கப்பட்டது",
+    "processing": "செயலாக்கம் ..."
+  },
+  "serverOverview": {
+    "totalServers": "மொத்த சேவையகங்கள்",
+    "onlineServers": "நிகழ்நிலை சேவையகங்கள்",
+    "offlineServers": "இணைப்பில்லாத சேவையகங்கள்",
+    "totalBandwidth": "மொத்த அலைவரிசை",
+    "speed": "வேகம்",
+    "network": "பிணையம்"
+  },
+  "map": {
+    "Distributions": "சேவையகங்கள் விநியோகிக்கப்படுகின்றன",
+    "Regions": "பகுதிகள்",
+    "Servers": "சேவையகங்கள்"
+  },
+  "cycleTransfer": {
+    "used": "பயன்படுத்தப்பட்டது",
+    "total": "மொத்தம்",
+    "nextUpdate": "அடுத்த புதுப்பிப்பு"
+  },
+  "serverDetail": {
+    "offline": "இணையமில்லாமல்",
+    "unknown": "தெரியவில்லை",
+    "uptime": "நேரம்",
+    "version": "பதிப்பு",
+    "arch": "மான்",
+    "mem": "மெம்",
+    "disk": "வட்டு",
+    "region": "பகுதி",
+    "system": "மண்டலம்",
+    "status": "நிலை",
+    "online": "ஆன்லைனில்",
+    "days": "நாட்கள்",
+    "upload": "பதிவேற்றும்",
+    "download": "பதிவிறக்கம்",
+    "lastActive": "கடைசி செயலில் நேரம்",
+    "temperature": "வெப்பநிலை"
+  },
+  "serverDetailChart": {
+    "swap": "இடமாற்றம்",
+    "upload": "பதிவேற்றும்",
+    "download": "பதிவிறக்கம்",
+    "process": "செயல்முறை",
+    "disk": "வட்டு",
+    "mem": "மெம்"
+  },
+  "footer": {
+    "themeBy": "மூலம் கருப்பொருள் "
+  },
+  "language": {
+    "zh-CN": "எளிமைப்படுத்தப்பட்ட சீன",
+    "zh-TW": "பாரம்பரிய சீன",
+    "en-US": "ஆங்கிலம்"
+  },
+  "theme": {
+    "light": "ஒளி",
+    "dark": "இருண்ட",
+    "system": "மண்டலம்"
+  },
+  "error": {
+    "pageNotFound": "பக்கம் கிடைக்கவில்லை",
+    "backToHome": "வீட்டிற்கு திரும்பவும்"
+  },
+  "tabSwitch": {
+    "Detail": "விவரம்",
+    "Network": "பிணையம்"
+  },
+  "monitor": {
+    "noData": "சேவையக மானிட்டர் தரவு இல்லை, முதலில் ஒரு பணி மானிட்டரைச் சேர்க்கவும்",
+    "avgDelay": "சுணக்கம்",
+    "monitorCount": "சேவைகள்"
+  },
+  "pwa": {
+    "offlineReady": "ஆஃப்லைனில் வேலை செய்ய பயன்பாடு தயாராக உள்ளது",
+    "newContent": "புதிய உள்ளடக்கம் கிடைக்கிறது",
+    "reload": "புதுப்பிப்பு"
+  },
+  "billingInfo": {
+    "remaining": "மீதமுள்ள",
+    "error": "பிழை",
+    "indefinite": "காலவரையற்றது",
+    "expired": "காலாவதியான",
+    "days": "நாட்கள்",
+    "price": "விலை",
+    "free": "இலவசம்",
+    "usage-baseed": "பயன்பாடு அடிப்படையிலானது"
+  },
+  "serviceTracker": {
+    "noService": "பணி தரவு இல்லை",
+    "uptime": "நேரம்",
+    "daysAgo": "சில நாட்களுக்கு முன்பு",
+    "today": "இன்று",
+    "loading": "ஏற்றுகிறது ..."
+  }
+}
