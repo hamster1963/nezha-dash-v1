@@ -41,6 +41,8 @@ function Header() {
   // @ts-expect-error CustomDesc is a global variable
   const customDesc = window.CustomDesc || t("nezha")
 
+  const customMobileBackgroundImage = window.CustomMobileBackgroundImage !== "" ? window.CustomMobileBackgroundImage : undefined
+
   useEffect(() => {
     const link = document.querySelector("link[rel*='icon']") || document.createElement("link")
     // @ts-expect-error set link.type
@@ -109,6 +111,7 @@ function Header() {
               onClick={handleBackgroundToggle}
               className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
                 "bg-white/70 dark:bg-black/70": customBackgroundImage,
+                "hidden sm:block": customMobileBackgroundImage,
               })}
             >
               <ImageMinus className="w-4 h-4" />

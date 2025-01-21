@@ -72,7 +72,16 @@ export default function Servers() {
     restoreScrollPosition()
   }, [])
 
-  const groupTabs = ["All", ...(groupData?.data?.map((item: ServerGroup) => item.group.name) || [])]
+  const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
+
+  const groupTabs = [
+    "All",
+    ...(groupData?.data
+      ?.filter((item: ServerGroup) => {
+        return Array.isArray(item.servers) && item.servers.some((serverId) => nezhaWsData?.servers?.some((server) => server.id === serverId))
+      })
+      ?.map((item: ServerGroup) => item.group.name) || []),
+  ]
 
   if (!connected && !lastMessage) {
     return (
@@ -84,8 +93,6 @@ export default function Servers() {
       </div>
     )
   }
-
-  const nezhaWsData = lastMessage ? (JSON.parse(lastMessage.data) as NezhaWebsocketResponse) : null
 
   if (!nezhaWsData) {
     return (
