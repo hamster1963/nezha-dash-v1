@@ -116,5 +116,13 @@
     "price": "价格",
     "free": "免费",
     "usage-baseed": "按量计费"
-  }
+  },
+  "TypeCommand": "输入命令或搜索",
+  "NoResults": "结果为空",
+  "Servers": "服务器",
+  "Shortcuts": "快捷键",
+  "ToggleLightMode": "切换亮色模式",
+  "ToggleDarkMode": "切换暗色模式",
+  "ToggleSystemMode": "切换系统模式",
+  "Home": "首页"
 }

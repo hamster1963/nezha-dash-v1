@@ -116,5 +116,13 @@
     "price": "Price",
     "free": "Free",
     "usage-baseed": "Usage-based"
-  }
+  },
+  "TypeCommand": "Type a command or search...",
+  "NoResults": "No results found.",
+  "Servers": "Servers",
+  "Shortcuts": "Shortcuts",
+  "ToggleLightMode": "Toggle Light Mode",
+  "ToggleDarkMode": "Toggle Dark Mode",
+  "ToggleSystemMode": "Toggle System Mode",
+  "Home": "Home"
 }

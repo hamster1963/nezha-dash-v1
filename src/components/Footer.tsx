@@ -24,17 +24,24 @@ const Footer: React.FC = () => {
             </a>
             <p>{settingData?.data?.version || ""}</p>
           </div>
-          <p className="server-footer-theme">
-            {t("footer.themeBy")}
-            <a href={"https://github.com/hamster1963/nezha-dash"} target="_blank">
-              nezha-dash
-            </a>
-            {import.meta.env.VITE_GIT_HASH && (
-              <a href={"https://github.com/hamster1963/nezha-dash-v1/commit/" + import.meta.env.VITE_GIT_HASH} className="ml-1">
-                ({import.meta.env.VITE_GIT_HASH})
+          <div className="server-footer-theme flex flex-col items-center sm:items-end">
+            <p className="mt-1 text-[13px] font-light tracking-tight text-neutral-600/50 dark:text-neutral-300/50">
+              <kbd className="pointer-events-none mx-1 inline-flex h-4 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </p>
+            <section>
+              {t("footer.themeBy")}
+              <a href={"https://github.com/hamster1963/nezha-dash"} target="_blank">
+                nezha-dash
               </a>
-            )}
-          </p>
+              {import.meta.env.VITE_GIT_HASH && (
+                <a href={"https://github.com/hamster1963/nezha-dash-v1/commit/" + import.meta.env.VITE_GIT_HASH} className="ml-1">
+                  ({import.meta.env.VITE_GIT_HASH})
+                </a>
+              )}
+            </section>
+          </div>
         </section>
       </section>
     </footer>
