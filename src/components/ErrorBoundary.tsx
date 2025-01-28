@@ -24,6 +24,10 @@ class ErrorBoundary extends React.Component<Props, State> {
     }
   }
 
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("ErrorBoundary caught an error", error, errorInfo)
+  }
+
   render() {
     if (this.state.hasError) {
       return <ErrorPage code={500} message={this.state.error?.message || "应用程序发生错误"} />
