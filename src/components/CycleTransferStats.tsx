@@ -17,7 +17,7 @@ export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({ serv
   const serverIdList = serverList.map((server) => server.id.toString())
 
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+    <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
       {Object.entries(cycleStats).map(([cycleId, cycleData]) => {
         if (!cycleData.server_name) {
           return null

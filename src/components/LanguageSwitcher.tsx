@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { CheckCircleIcon } from "@heroicons/react/20/solid"
+import { CheckCircleIcon, LanguageIcon } from "@heroicons/react/20/solid"
 import { useTranslation } from "react-i18next"
 
 export function LanguageSwitcher() {
@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
             "bg-white/70 dark:bg-black/70": customBackgroundImage,
           })}
         >
-          {localeItems.find((item) => item.code === locale)?.name}
+          <LanguageIcon className="size-4" />
           <span className="sr-only">Change language</span>
         </Button>
       </DropdownMenuTrigger>

@@ -5,6 +5,7 @@ import { useBackground } from "@/hooks/use-background"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { fetchLoginUser, fetchSetting } from "@/lib/nezha-api"
 import { cn } from "@/lib/utils"
+import NumberFlow, { NumberFlowGroup } from "@number-flow/react"
 import { useQuery } from "@tanstack/react-query"
 import { AnimatePresence, m } from "framer-motion"
 import { ImageMinus } from "lucide-react"
@@ -266,31 +267,35 @@ function DashboardLink() {
 
 function Overview() {
   const { t } = useTranslation()
-  const [mouted, setMounted] = useState(false)
+  const [time, setTime] = useState({
+    hh: DateTime.now().setLocale("en-US").hour,
+    mm: DateTime.now().setLocale("en-US").minute,
+    ss: DateTime.now().setLocale("en-US").second,
+  })
+
   useEffect(() => {
-    setMounted(true)
-  }, [])
-  const timeOption = DateTime.TIME_WITH_SECONDS
-  timeOption.hour12 = true
-  const [timeString, setTimeString] = useState(DateTime.now().setLocale("en-US").toLocaleString(timeOption))
-  useEffect(() => {
-    const updateTime = () => {
-      const now = DateTime.now().setLocale("en-US").toLocaleString(timeOption)
-      setTimeString(now)
-      requestAnimationFrame(updateTime)
-    }
-    requestAnimationFrame(updateTime)
+    const timer = setInterval(() => {
+      setTime({
+        hh: DateTime.now().setLocale("en-US").hour,
+        mm: DateTime.now().setLocale("en-US").minute,
+        ss: DateTime.now().setLocale("en-US").second,
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
   }, [])
   return (
     <section className={"mt-10 flex flex-col md:mt-16 header-timer"}>
       <p className="text-base font-semibold">🌟 {t("overview")}</p>
       <div className="flex items-center gap-1.5">
         <p className="text-sm font-medium opacity-50">{t("whereTheTimeIs")}</p>
-        {mouted ? (
-          <p className="text-sm font-medium">{timeString}</p>
-        ) : (
-          <Skeleton className="h-[20px] w-[50px] rounded-[5px] bg-muted-foreground/10 animate-none"></Skeleton>
-        )}
+        <NumberFlowGroup>
+          <div style={{ fontVariantNumeric: "tabular-nums" }} className="flex text-sm font-medium mt-0.5">
+            <NumberFlow trend={1} value={time.hh} format={{ minimumIntegerDigits: 2 }} />
+            <NumberFlow prefix=":" trend={1} value={time.mm} digits={{ 1: { max: 5 } }} format={{ minimumIntegerDigits: 2 }} />
+            <p className="mt-[0.5px]">:{time.ss.toString().padStart(2, "0")}</p>
+          </div>
+        </NumberFlowGroup>
       </div>
     </section>
   )

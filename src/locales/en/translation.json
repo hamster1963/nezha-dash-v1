@@ -46,6 +46,7 @@
   "serviceTracker": {
     "noService": "No service data",
     "uptime": "Uptime",
+    "delay": "Delay",
     "daysAgo": "days ago",
     "today": "Today",
     "loading": "Loading..."

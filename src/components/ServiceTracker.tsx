@@ -19,10 +19,16 @@ export function ServiceTracker({ serverList }: { serverList: NezhaServer[] }) {
   })
 
   const processServiceData = (serviceData: ServiceData) => {
-    const days = serviceData.up.map((up, index) => ({
-      completed: up > serviceData.down[index],
-      date: new Date(Date.now() - (29 - index) * 24 * 60 * 60 * 1000),
-    }))
+    const days = serviceData.up.map((up, index) => {
+      const totalChecks = up + serviceData.down[index]
+      const dailyUptime = totalChecks > 0 ? (up / totalChecks) * 100 : 0
+      return {
+        completed: up > serviceData.down[index],
+        date: new Date(Date.now() - (29 - index) * 24 * 60 * 60 * 1000),
+        uptime: dailyUptime,
+        delay: serviceData.delay[index] || 0,
+      }
+    })
 
     const totalUp = serviceData.up.reduce((a, b) => a + b, 0)
     const totalChecks = serviceData.up.reduce((a, b) => a + b, 0) + serviceData.down.reduce((a, b) => a + b, 0)

@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
 
 export default function ServerDetailOverview({ server_id }: { server_id: string }) {
   const { t } = useTranslation()
@@ -165,17 +166,26 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
         ) : null}
 
         {country_code && (
-          <Card className="rounded-[10px] bg-transparent border-none shadow-none">
-            <CardContent className="px-1.5 py-1">
-              <section className="flex flex-col items-start gap-0.5">
-                <p className="text-xs text-muted-foreground">{t("serverDetail.region")}</p>
-                <section className="flex items-start gap-1">
-                  <div className="text-xs text-start">{countries.getName(country_code?.toUpperCase(), "en")}</div>
-                  {country_code && <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />}
-                </section>
-              </section>
-            </CardContent>
-          </Card>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+                  <CardContent className="px-1.5 py-1">
+                    <section className="flex flex-col items-start gap-0.5">
+                      <p className="text-xs text-muted-foreground">{t("serverDetail.region")}</p>
+                      <section className="flex items-start gap-1">
+                        <div className="text-xs text-start">{country_code?.toUpperCase()}</div>
+                        {country_code && <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />}
+                      </section>
+                    </section>
+                  </CardContent>
+                </Card>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{countries.getName(country_code?.toUpperCase(), "en")}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         )}
       </section>
       <section className="flex flex-wrap gap-2 mt-1">

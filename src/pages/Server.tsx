@@ -53,15 +53,28 @@ export default function Servers() {
 
   useEffect(() => {
     const showServicesState = localStorage.getItem("showServices")
-    if (showServicesState !== null) {
+    if (window.ForceShowServices) {
+      setShowServices("1")
+    } else if (showServicesState !== null) {
       setShowServices(showServicesState)
     }
   }, [])
 
   useEffect(() => {
     const inlineState = localStorage.getItem("inline")
-    if (inlineState !== null) {
+    if (window.ForceCardInline) {
+      setInline("1")
+    } else if (inlineState !== null) {
       setInline(inlineState)
+    }
+  }, [])
+
+  useEffect(() => {
+    const showMapState = localStorage.getItem("showMap")
+    if (window.ForceShowMap) {
+      setShowMap("1")
+    } else if (showMapState !== null) {
+      setShowMap(showMapState)
     }
   }, [])
 
@@ -212,18 +225,24 @@ export default function Servers() {
           <button
             onClick={() => {
               setShowMap(showMap === "0" ? "1" : "0")
+              localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showMap === "1",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "text-white": showMap === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <MapIcon className="size-[13px]" />
+            <MapIcon
+              className={cn("size-[13px]", {
+                "text-white": showMap === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -231,16 +250,21 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": showServices === "1",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "text-white": showServices === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <ChartBarSquareIcon className="size-[13px]" />
+            <ChartBarSquareIcon
+              className={cn("size-[13px]", {
+                "text-white": showServices === "1",
+              })}
+            />
           </button>
           <button
             onClick={() => {
@@ -248,16 +272,21 @@ export default function Servers() {
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] text-white cursor-pointer [text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] bg-blue-600  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-500": inline === "1",
+                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "text-white": inline === "1",
               },
               {
-                "bg-opacity-70": customBackgroundImage,
+                "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <ViewColumnsIcon className="size-[13px]" />
+            <ViewColumnsIcon
+              className={cn("size-[13px]", {
+                "text-white": inline === "1",
+              })}
+            />
           </button>
           <GroupSwitch tabs={groupTabs} currentTab={currentGroup} setCurrentTab={handleTagChange} />
         </section>

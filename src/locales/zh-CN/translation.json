@@ -44,8 +44,9 @@
     "nextUpdate": "下次更新"
   },
   "serviceTracker": {
-    "noService": "没有服务监测数据",
-    "uptime": "可用率",
+    "noService": "无服务数据",
+    "uptime": "在线率",
+    "delay": "延迟",
     "daysAgo": "天前",
     "today": "今天",
     "loading": "加载中..."
