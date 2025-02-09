@@ -7,6 +7,7 @@ import { ServiceTracker } from "@/components/ServiceTracker"
 import { Loader } from "@/components/loading/Loader"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { SORT_ORDERS, SORT_TYPES } from "@/context/sort-context"
 import { useSort } from "@/hooks/use-sort"
 import { useStatus } from "@/hooks/use-status"
@@ -228,9 +229,9 @@ export default function Servers() {
               localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
                 "text-white": showMap === "1",
               },
               {
@@ -250,9 +251,9 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
                 "text-white": showServices === "1",
               },
               {
@@ -272,9 +273,9 @@ export default function Servers() {
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700",
+              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "!bg-blue-500 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
                 "text-white": inline === "1",
               },
               {
@@ -294,7 +295,7 @@ export default function Servers() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-stone-100  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
                 },
@@ -313,47 +314,38 @@ export default function Servers() {
               )}
             </button>
           </PopoverTrigger>
-          <PopoverContent className="py-2 px-2 w-fit max-w-60 rounded-[8px]">
-            <div className="flex flex-col gap-2">
-              <section className="flex flex-col gap-1">
-                <Label className=" text-stone-500  text-xs">Sort by</Label>
-                <section className="flex items-center gap-1 flex-wrap">
-                  {SORT_TYPES.map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setSortType(type)}
-                      className={cn(
-                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all dark:shadow-none  ",
-                        {
-                          "bg-black text-white dark:bg-white dark:text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]": sortType === type,
-                        },
-                      )}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </section>
-              </section>
-              <section className="flex flex-col gap-1">
-                <Label className=" text-stone-500  text-xs">Sort order</Label>
-                <section className="flex items-center gap-1">
-                  {SORT_ORDERS.map((order) => (
-                    <button
-                      disabled={sortType === "default"}
-                      key={order}
-                      onClick={() => setSortOrder(order)}
-                      className={cn(
-                        "rounded-[5px] text-[11px] w-fit px-1 py-0.5 cursor-pointer bg-transparent border transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  dark:shadow-none",
-                        {
-                          "bg-black text-white dark:bg-white dark:text-black": sortOrder === order && sortType !== "default",
-                        },
-                      )}
-                    >
-                      {order}
-                    </button>
-                  ))}
-                </section>
-              </section>
+          <PopoverContent className="p-4 w-[240px] rounded-lg">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-muted-foreground">Sort by</Label>
+                <Select value={sortType} onValueChange={setSortType}>
+                  <SelectTrigger className="w-full text-xs h-8">
+                    <SelectValue placeholder="Choose type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SORT_TYPES.map((type) => (
+                      <SelectItem key={type} value={type} className="text-xs">
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-muted-foreground">Sort order</Label>
+                <Select value={sortOrder} onValueChange={setSortOrder} disabled={sortType === "default"}>
+                  <SelectTrigger className="w-full text-xs h-8">
+                    <SelectValue placeholder="Choose order" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SORT_ORDERS.map((order) => (
+                      <SelectItem key={order} value={order} className="text-xs">
+                        {order.charAt(0).toUpperCase() + order.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </PopoverContent>
         </Popover>
