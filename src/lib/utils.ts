@@ -72,6 +72,8 @@ export function getDaysBetweenDatesWithAutoRenewal({ autoRenewal, cycle, startDa
       months = 12
       break
     case "季":
+    case "q":
+    case "qr":
     case "quarterly":
       cycleLabel = "季"
       months = 3
