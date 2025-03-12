@@ -62,12 +62,29 @@ export default function Servers() {
   }, [])
 
   useEffect(() => {
-    const inlineState = localStorage.getItem("inline")
-    if (window.ForceCardInline) {
-      setInline("1")
-    } else if (inlineState !== null) {
-      setInline(inlineState)
-    }
+    const checkInlineSettings = () => {
+      const isMobile = window.innerWidth < 768;
+      
+      if (!isMobile) {
+         const inlineState = localStorage.getItem("inline")
+         if (window.ForceCardInline) {
+           setInline("1")
+         } else if (inlineState !== null) {
+           setInline(inlineState)
+         }
+      }
+    };
+    
+  
+    checkInlineSettings();
+    
+  
+    window.addEventListener('resize', checkInlineSettings);
+    
+  
+    return () => {
+      window.removeEventListener('resize', checkInlineSettings);
+    };
   }, [])
 
   useEffect(() => {
