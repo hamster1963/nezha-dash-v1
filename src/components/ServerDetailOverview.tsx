@@ -74,6 +74,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
     net_out_transfer,
     net_in_transfer,
     last_active_time_string,
+    boot_time_string,
   } = formatNezhaInfo(nezhaWsData.now, server)
 
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
@@ -285,6 +286,14 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
       </section>
 
       <section className="flex flex-wrap gap-2 mt-1">
+      <Card className="rounded-[10px] bg-transparent border-none shadow-none">
+          <CardContent className="px-1.5 py-1">
+            <section className="flex flex-col items-start gap-0.5">
+              <p className="text-xs text-muted-foreground">{t("serverDetail.bootTime")}</p>
+              <div className="text-xs">{boot_time_string ? boot_time_string : "N/A"}</div>
+            </section>
+          </CardContent>
+        </Card>
         <Card className="rounded-[10px] bg-transparent border-none shadow-none">
           <CardContent className="px-1.5 py-1">
             <section className="flex flex-col items-start gap-0.5">

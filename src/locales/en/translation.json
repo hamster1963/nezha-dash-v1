@@ -67,7 +67,8 @@
     "upload": "Upload",
     "download": "Download",
     "lastActive": "Last active time",
-    "temperature": "Temperature"
+    "temperature": "Temperature",
+    "bootTime": "Boot time"
   },
   "serverDetailChart": {
     "process": "Process",

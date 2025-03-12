@@ -67,7 +67,8 @@
     "upload": "上傳",
     "download": "下載",
     "lastActive": "最後上報時間",
-    "temperature": "溫度"
+    "temperature": "溫度",
+    "bootTime": "啟動時間"
   },
   "serverDetailChart": {
     "process": "進程數",
