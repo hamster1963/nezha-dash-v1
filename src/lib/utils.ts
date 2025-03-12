@@ -35,9 +35,7 @@ export function formatNezhaInfo(now: number, serverInfo: NezhaServer) {
     swap_total: serverInfo.host.swap_total || 0,
     disk_total: serverInfo.host.disk_total || 0,
     boot_time: serverInfo.host.boot_time || 0,
-    boot_time_string: serverInfo.host.boot_time
-      ? dayjs(serverInfo.host.boot_time * 1000).format("YYYY-MM-DD HH:mm:ss")
-      : "",
+    boot_time_string: serverInfo.host.boot_time ? dayjs(serverInfo.host.boot_time * 1000).format("YYYY-MM-DD HH:mm:ss") : "",
     platform_version: serverInfo.host.platform_version || "",
     cpu_info: serverInfo.host.cpu || [],
     gpu_info: serverInfo.host.gpu || [],
