@@ -118,8 +118,8 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
                 <div className="text-xs">
                   {" "}
                   {uptime / 86400 >= 1
-                  ? `${Math.floor(uptime / 86400)} ${t("serverDetail.days")} ${Math.floor((uptime % 86400) / 3600)} ${t("serverDetail.hours")}`
-                  : `${Math.floor(uptime / 3600)} ${t("serverDetail.hours")}`}
+                    ? `${Math.floor(uptime / 86400)} ${t("serverDetail.days")} ${Math.floor((uptime % 86400) / 3600)} ${t("serverDetail.hours")}`
+                    : `${Math.floor(uptime / 3600)} ${t("serverDetail.hours")}`}
                 </div>
               </section>
             </CardContent>
