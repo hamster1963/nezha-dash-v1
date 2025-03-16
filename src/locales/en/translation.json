@@ -55,6 +55,7 @@
     "status": "Status",
     "online": "Online",
     "days": "Days",
+    "hours": "Hours",
     "offline": "Offline",
     "unknown": "Unknown",
     "uptime": "Uptime",

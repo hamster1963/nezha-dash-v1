@@ -55,6 +55,7 @@
     "status": "狀態",
     "online": "線上",
     "days": "天",
+    "hours": "小時",
     "offline": "離線",
     "unknown": "未知",
     "uptime": "運行時間",

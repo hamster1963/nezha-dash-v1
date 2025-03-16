@@ -55,6 +55,7 @@
     "status": "状态",
     "online": "在线",
     "days": "天",
+    "hours": "小时",
     "offline": "离线",
     "unknown": "未知",
     "uptime": "运行时间",
