@@ -4,6 +4,10 @@ import { initReactI18next } from "react-i18next"
 import enTranslation from "./locales/en/translation.json"
 import zhCNTranslation from "./locales/zh-CN/translation.json"
 import zhTWTranslation from "./locales/zh-TW/translation.json"
+import deTranslation from "./locales/de/translation.json"
+import esTranslation from "./locales/es/translation.json"
+import ruTranslation from "./locales/ru/translation.json"
+import taTranslation from "./locales/ta/translation.json"
 
 const resources = {
   "en-US": {
@@ -14,6 +18,18 @@ const resources = {
   },
   "zh-TW": {
     translation: zhTWTranslation,
+  },
+  "de-DE": {
+    translation: deTranslation,
+  },
+  "es-ES": {
+    translation: esTranslation,
+  },
+  "ru-RU": {
+    translation: ruTranslation,
+  },
+  "ta-IN": {
+    translation: taTranslation,
   },
 }
 

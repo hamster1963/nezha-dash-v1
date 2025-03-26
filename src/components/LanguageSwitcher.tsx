@@ -22,6 +22,10 @@ export function LanguageSwitcher() {
     { name: t("language.zh-CN"), code: "zh-CN" },
     { name: t("language.zh-TW"), code: "zh-TW" },
     { name: t("language.en-US"), code: "en-US" },
+    { name: t("language.ru-RU"), code: "ru-RU" },
+    { name: t("language.es-ES"), code: "es-ES" },
+    { name: t("language.de-DE"), code: "de-DE" },
+    { name: t("language.ta-IN"), code: "ta-IN" },
   ]
 
   return (
