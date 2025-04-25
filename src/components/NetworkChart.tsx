@@ -100,23 +100,20 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   // Function to clear all selected charts
   const clearAllSelections = useCallback(() => {
-    setActiveCharts([]);
-  }, []);
+    setActiveCharts([])
+  }, [])
 
   // Updated to handle multiple selections
-  const handleButtonClick = useCallback(
-    (chart: string) => {
-      setActiveCharts((prev) => {
-        // If chart is already selected, remove it
-        if (prev.includes(chart)) {
-          return prev.filter(c => c !== chart)
-        }
-        // Otherwise, add it to selected charts
-        return [...prev, chart]
-      })
-    },
-    [],
-  )
+  const handleButtonClick = useCallback((chart: string) => {
+    setActiveCharts((prev) => {
+      // If chart is already selected, remove it
+      if (prev.includes(chart)) {
+        return prev.filter((c) => c !== chart)
+      }
+      // Otherwise, add it to selected charts
+      return [...prev, chart]
+    })
+  }, [])
 
   const getColorByIndex = useCallback(
     (chart: string) => {
@@ -145,15 +142,15 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   const chartLines = useMemo(() => {
     // If we have active charts selected, render only those
     if (activeCharts.length > 0) {
-      return activeCharts.map(chart => (
-        <Line 
+      return activeCharts.map((chart) => (
+        <Line
           key={chart}
-          isAnimationActive={false} 
-          strokeWidth={1} 
-          type="linear" 
-          dot={false} 
+          isAnimationActive={false}
+          strokeWidth={1}
+          type="linear"
+          dot={false}
           dataKey={chart} // Change from "avg_delay" to the actual chart key name
-          stroke={getColorByIndex(chart)} 
+          stroke={getColorByIndex(chart)}
           name={chart}
           connectNulls={true}
         />
@@ -177,11 +174,11 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   const processedData = useMemo(() => {
     if (!isPeakEnabled) {
       // Always use formattedData when multiple charts are selected or none selected
-      return formattedData;
+      return formattedData
     }
 
     // For peak cutting, always use the formatted data which contains all series
-    const data = formattedData;
+    const data = formattedData
 
     const windowSize = 11 // 增加窗口大小以获取更好的统计效果
     const alpha = 0.3 // EWMA平滑因子
@@ -229,10 +226,10 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       const smoothed = { ...point } as ResultItem
 
       // Process all chart keys or just the selected ones
-      const keysToProcess = activeCharts.length > 0 ? activeCharts : chartDataKey;
-      
+      const keysToProcess = activeCharts.length > 0 ? activeCharts : chartDataKey
+
       keysToProcess.forEach((key) => {
-        const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[];
+        const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[]
 
         if (values.length > 0) {
           const processed = processValues(values)
@@ -246,7 +243,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
             smoothed[key] = ewmaHistory[key]
           }
         }
-      });
+      })
 
       return smoothed
     })
@@ -276,7 +273,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       <CardContent className="pr-2 pl-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-2">
         <div className="relative">
           {activeCharts.length > 0 && (
-            <button 
+            <button
               className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 backdrop-blur-sm rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
               onClick={clearAllSelections}
             >
