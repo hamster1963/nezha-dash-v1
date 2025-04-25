@@ -98,6 +98,11 @@ export const NetworkChartClient = React.memo(function NetworkChart({
   const [activeCharts, setActiveCharts] = React.useState<string[]>([])
   const [isPeakEnabled, setIsPeakEnabled] = React.useState(forcePeakCutEnabled)
 
+  // Function to clear all selected charts
+  const clearAllSelections = useCallback(() => {
+    setActiveCharts([]);
+  }, []);
+
   // Updated to handle multiple selections
   const handleButtonClick = useCallback(
     (chart: string) => {
@@ -269,59 +274,69 @@ export const NetworkChartClient = React.memo(function NetworkChart({
         <div className="flex flex-wrap w-full">{chartButtons}</div>
       </CardHeader>
       <CardContent className="pr-2 pl-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-2">
-        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
-          <LineChart accessibilityLayer data={processedData} margin={{ left: 12, right: 12 }}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="created_at"
-              tickLine={true}
-              tickSize={3}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={80}
-              ticks={processedData
-                .filter((item, index, array) => {
-                  if (array.length < 6) {
-                    return index === 0 || index === array.length - 1
-                  }
+        <div className="relative">
+          {activeCharts.length > 0 && (
+            <button 
+              className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 backdrop-blur-sm rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
+              onClick={clearAllSelections}
+            >
+              {t("monitor.clearSelections", "Clear")} ({activeCharts.length})
+            </button>
+          )}
+          <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+            <LineChart accessibilityLayer data={processedData} margin={{ left: 12, right: 12 }}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="created_at"
+                tickLine={true}
+                tickSize={3}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={80}
+                ticks={processedData
+                  .filter((item, index, array) => {
+                    if (array.length < 6) {
+                      return index === 0 || index === array.length - 1
+                    }
 
-                  // 计算数据的总时间跨度（毫秒）
-                  const timeSpan = array[array.length - 1].created_at - array[0].created_at
-                  const hours = timeSpan / (1000 * 60 * 60)
+                    // 计算数据的总时间跨度（毫秒）
+                    const timeSpan = array[array.length - 1].created_at - array[0].created_at
+                    const hours = timeSpan / (1000 * 60 * 60)
 
-                  // 根据时间跨度调整显示间隔
-                  if (hours <= 12) {
-                    // 12小时内，每60分钟显示一个刻度
-                    return index === 0 || index === array.length - 1 || new Date(item.created_at).getMinutes() % 60 === 0
-                  }
-                  // 超过12小时，每2小时显示一个刻度
-                  const date = new Date(item.created_at)
-                  return date.getMinutes() === 0 && date.getHours() % 2 === 0
-                })
-                .map((item) => item.created_at)}
-              tickFormatter={(value) => {
-                const date = new Date(value)
-                const minutes = date.getMinutes()
-                return minutes === 0 ? `${date.getHours()}:00` : `${date.getHours()}:${minutes}`
-              }}
-            />
-            <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
-            <ChartTooltip
-              isAnimationActive={false}
-              content={
-                <ChartTooltipContent
-                  indicator={"line"}
-                  labelKey="created_at"
-                  labelFormatter={(_, payload) => {
-                    return formatTime(payload[0].payload.created_at)
-                  }}
-                />
-              }
-            />
-            <ChartLegend content={<ChartLegendContent />} />
-            {chartLines}
-          </LineChart>
-        </ChartContainer>
+                    // 根据时间跨度调整显示间隔
+                    if (hours <= 12) {
+                      // 12小时内，每60分钟显示一个刻度
+                      return index === 0 || index === array.length - 1 || new Date(item.created_at).getMinutes() % 60 === 0
+                    }
+                    // 超过12小时，每2小时显示一个刻度
+                    const date = new Date(item.created_at)
+                    return date.getMinutes() === 0 && date.getHours() % 2 === 0
+                  })
+                  .map((item) => item.created_at)}
+                tickFormatter={(value) => {
+                  const date = new Date(value)
+                  const minutes = date.getMinutes()
+                  return minutes === 0 ? `${date.getHours()}:00` : `${date.getHours()}:${minutes}`
+                }}
+              />
+              <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
+              <ChartTooltip
+                isAnimationActive={false}
+                content={
+                  <ChartTooltipContent
+                    indicator={"line"}
+                    labelKey="created_at"
+                    labelFormatter={(_, payload) => {
+                      return formatTime(payload[0].payload.created_at)
+                    }}
+                  />
+                }
+              />
+              <ChartLegend content={<ChartLegendContent />} />
+              {chartLines}
+            </LineChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   )
