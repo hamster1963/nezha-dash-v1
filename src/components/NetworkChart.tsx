@@ -90,20 +90,27 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 }) {
   const { t } = useTranslation()
 
-  const defaultChart = "All"
-
   const customBackgroundImage = (window.CustomBackgroundImage as string) !== "" ? window.CustomBackgroundImage : undefined
 
   const forcePeakCutEnabled = (window.ForcePeakCutEnabled as boolean) ?? false
 
-  const [activeChart, setActiveChart] = React.useState(defaultChart)
+  // Change from string to string array for multi-selection
+  const [activeCharts, setActiveCharts] = React.useState<string[]>([])
   const [isPeakEnabled, setIsPeakEnabled] = React.useState(forcePeakCutEnabled)
 
+  // Updated to handle multiple selections
   const handleButtonClick = useCallback(
     (chart: string) => {
-      setActiveChart((prev) => (prev === chart ? defaultChart : chart))
+      setActiveCharts((prev) => {
+        // If chart is already selected, remove it
+        if (prev.includes(chart)) {
+          return prev.filter(c => c !== chart)
+        }
+        // Otherwise, add it to selected charts
+        return [...prev, chart]
+      })
     },
-    [defaultChart],
+    [],
   )
 
   const getColorByIndex = useCallback(
@@ -119,7 +126,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       chartDataKey.map((key) => (
         <button
           key={key}
-          data-active={activeChart === key}
+          data-active={activeCharts.includes(key)}
           className={`relative z-30 flex cursor-pointer grow basis-0 flex-col justify-center gap-1 border-b border-neutral-200 dark:border-neutral-800 px-6 py-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6`}
           onClick={() => handleButtonClick(key)}
         >
@@ -127,13 +134,27 @@ export const NetworkChartClient = React.memo(function NetworkChart({
           <span className="text-md font-bold leading-none sm:text-lg">{chartData[key][chartData[key].length - 1].avg_delay.toFixed(2)}ms</span>
         </button>
       )),
-    [chartDataKey, activeChart, chartData, handleButtonClick],
+    [chartDataKey, activeCharts, chartData, handleButtonClick],
   )
 
   const chartLines = useMemo(() => {
-    if (activeChart !== defaultChart) {
-      return <Line isAnimationActive={false} strokeWidth={1} type="linear" dot={false} dataKey="avg_delay" stroke={getColorByIndex(activeChart)} />
+    // If we have active charts selected, render only those
+    if (activeCharts.length > 0) {
+      return activeCharts.map(chart => (
+        <Line 
+          key={chart}
+          isAnimationActive={false} 
+          strokeWidth={1} 
+          type="linear" 
+          dot={false} 
+          dataKey={chart} // Change from "avg_delay" to the actual chart key name
+          stroke={getColorByIndex(chart)} 
+          name={chart}
+          connectNulls={true}
+        />
+      ))
     }
+    // Otherwise show all charts (default view)
     return chartDataKey.map((key) => (
       <Line
         key={key}
@@ -146,14 +167,16 @@ export const NetworkChartClient = React.memo(function NetworkChart({
         connectNulls={true}
       />
     ))
-  }, [activeChart, defaultChart, chartDataKey, getColorByIndex])
+  }, [activeCharts, chartDataKey, getColorByIndex])
 
   const processedData = useMemo(() => {
     if (!isPeakEnabled) {
-      return activeChart === defaultChart ? formattedData : chartData[activeChart]
+      // Always use formattedData when multiple charts are selected or none selected
+      return formattedData;
     }
 
-    const data = (activeChart === defaultChart ? formattedData : chartData[activeChart]) as ResultItem[]
+    // For peak cutting, always use the formatted data which contains all series
+    const data = formattedData;
 
     const windowSize = 11 // 增加窗口大小以获取更好的统计效果
     const alpha = 0.3 // EWMA平滑因子
@@ -200,43 +223,29 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       const window = data.slice(index - windowSize + 1, index + 1)
       const smoothed = { ...point } as ResultItem
 
-      if (activeChart === defaultChart) {
-        chartDataKey.forEach((key) => {
-          const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[]
-
-          if (values.length > 0) {
-            const processed = processValues(values)
-            if (processed !== null) {
-              // 应用EWMA平滑
-              if (ewmaHistory[key] === undefined) {
-                ewmaHistory[key] = processed
-              } else {
-                ewmaHistory[key] = alpha * processed + (1 - alpha) * ewmaHistory[key]
-              }
-              smoothed[key] = ewmaHistory[key]
-            }
-          }
-        })
-      } else {
-        const values = window.map((w) => w.avg_delay).filter((v) => v !== undefined && v !== null) as number[]
+      // Process all chart keys or just the selected ones
+      const keysToProcess = activeCharts.length > 0 ? activeCharts : chartDataKey;
+      
+      keysToProcess.forEach((key) => {
+        const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[];
 
         if (values.length > 0) {
           const processed = processValues(values)
           if (processed !== null) {
-            // 应用EWMA平滑
-            if (ewmaHistory["current"] === undefined) {
-              ewmaHistory["current"] = processed
+            // Apply EWMA smoothing
+            if (ewmaHistory[key] === undefined) {
+              ewmaHistory[key] = processed
             } else {
-              ewmaHistory["current"] = alpha * processed + (1 - alpha) * ewmaHistory["current"]
+              ewmaHistory[key] = alpha * processed + (1 - alpha) * ewmaHistory[key]
             }
-            smoothed.avg_delay = ewmaHistory["current"]
+            smoothed[key] = ewmaHistory[key]
           }
         }
-      }
+      });
 
       return smoothed
     })
-  }, [isPeakEnabled, activeChart, formattedData, chartData, chartDataKey, defaultChart])
+  }, [isPeakEnabled, activeCharts, formattedData, chartDataKey])
 
   return (
     <Card
@@ -309,7 +318,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
                 />
               }
             />
-            {activeChart === defaultChart && <ChartLegend content={<ChartLegendContent />} />}
+            <ChartLegend content={<ChartLegendContent />} />
             {chartLines}
           </LineChart>
         </ChartContainer>
