@@ -200,10 +200,10 @@ export default function Servers() {
         comparison = (a.state?.cpu ?? 0) - (b.state?.cpu ?? 0)
         break
       case "mem":
-        comparison = (a.state?.mem_used ?? 0) - (b.state?.mem_used ?? 0)
+        comparison = (formatNezhaInfo(nezhaWsData.now, a).mem ?? 0) - (formatNezhaInfo(nezhaWsData.now, b).mem ?? 0)
         break
       case "disk":
-        comparison = (a.state?.disk_used ?? 0) - (b.state?.disk_used ?? 0)
+        comparison = (formatNezhaInfo(nezhaWsData.now, a).disk ?? 0) - (formatNezhaInfo(nezhaWsData.now, b).disk ?? 0)
         break
       case "up":
         comparison = (a.state?.net_out_speed ?? 0) - (b.state?.net_out_speed ?? 0)
