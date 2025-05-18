@@ -85,7 +85,12 @@
   "language": {
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文",
-    "en": "English"
+    "en": "English",
+    "en-US": "English",
+    "de-DE": "Deutsch",
+    "es-ES": "Español",
+    "ta-IN": "தமிழ்",
+    "ru-RU": "Русский"
   },
   "theme": {
     "light": "亮色",

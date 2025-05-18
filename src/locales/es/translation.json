@@ -38,7 +38,11 @@
   "language": {
     "en-US": "Inglés",
     "zh-TW": "Chino Tradicional",
-    "zh-CN": "Chino simplificado"
+    "zh-CN": "Chino simplificado",
+    "de-DE": "Deutsch",
+    "es-ES": "Español",
+    "ru-RU": "Русский",
+    "ta-IN": "தமிழ்"
   },
   "TypeCommand": "Escriba un comando o busca...",
   "Shortcuts": "Atajos",
@@ -73,7 +77,7 @@
     "uptime": "Tiempo de actividad",
     "totalUpload": "Subida",
     "totalDownload": "Bajada",
-    "stg": "Almacenamiento"
+    "stg": "Alm."
   },
   "cycleTransfer": {
     "used": "Usado",
