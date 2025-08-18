@@ -85,7 +85,10 @@
   "language": {
     "zh-CN": "简体中文",
     "zh-TW": "繁體中文",
-    "en-US": "English"
+    "en-US": "English",
+    "de-DE": "德文",
+    "es-ES": "西班牙文",
+    "ru-RU": "俄文"
   },
   "theme": {
     "light": "亮色",
@@ -98,7 +101,9 @@
   },
   "tabSwitch": {
     "detail": "詳細資訊",
-    "network": "網路"
+    "network": "網路",
+    "Detail": "詳細資訊",
+    "Network": "網路"
   },
   "monitor": {
     "noData": "沒有服務監控數據，請在管理後台服務新增監控任務",
@@ -123,5 +128,10 @@
   "ToggleLightMode": "切換亮色模式",
   "ToggleDarkMode": "切換暗色模式",
   "ToggleSystemMode": "切換系統模式",
-  "Home": "首頁"
+  "Home": "首頁",
+  "pwa": {
+    "offlineReady": "可離線使用之應用程式",
+    "newContent": "有新内容可用",
+    "reload": "更新"
+  }
 }
