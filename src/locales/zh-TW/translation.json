@@ -8,23 +8,23 @@
   "whereTheTimeIs": "目前時間",
   "refreshing": "刷新中",
   "info": {
-    "websocketConnecting": "WebSocket 連接中",
-    "websocketConnected": "WebSocket 連接成功",
-    "websocketDisconnected": "WebSocket 連接斷開",
+    "websocketConnecting": "WebSocket 連線中",
+    "websocketConnected": "WebSocket 連線成功",
+    "websocketDisconnected": "WebSocket 連線中斷",
     "processing": "處理中..."
   },
   "serverOverview": {
-    "totalServers": "總服務器",
-    "onlineServers": "線上服務器",
-    "offlineServers": "離線服務器",
+    "totalServers": "總伺服器",
+    "onlineServers": "線上伺服器",
+    "offlineServers": "離線伺服器",
     "totalBandwidth": "總帶寬",
     "speed": "速率",
     "network": "網路"
   },
   "map": {
-    "Distributions": "服務器分布在",
+    "Distributions": "伺服器分布在",
     "Regions": "個區域",
-    "Servers": "個服務器"
+    "Servers": "個伺服器"
   },
   "serverCard": {
     "mem": "內存",
@@ -88,7 +88,8 @@
     "en-US": "English",
     "de-DE": "德文",
     "es-ES": "西班牙文",
-    "ru-RU": "俄文"
+    "ru-RU": "俄文",
+    "ta-IN": "தமிழ்"
   },
   "theme": {
     "light": "亮色",
