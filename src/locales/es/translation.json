@@ -91,7 +91,9 @@
   "monitor": {
     "avgDelay": "Latencia",
     "noData": "No hay datos de servidores, primero agregue un monitor de servicio",
-    "monitorCount": "Servicios"
+    "monitorCount": "Servicios",
+    "packetLoss": "Pérdida de paquetes",
+    "clearSelections": "Limpiar"
   },
   "error": {
     "pageNotFound": "Página no encontrada",

@@ -108,7 +108,9 @@
   "monitor": {
     "noData": "没有服务监控数据，请在管理后台服务页添加监控任务",
     "avgDelay": "延迟",
-    "monitorCount": "个监控服务"
+    "monitorCount": "个监控服务",
+    "packetLoss": "丢包率",
+    "clearSelections": "清除"
   },
   "pwa": {
     "offlineReady": "应用可以离线使用了",

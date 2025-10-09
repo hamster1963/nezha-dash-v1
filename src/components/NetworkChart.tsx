@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query"
 import * as React from "react"
 import { useCallback, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts"
 
 import NetworkChartLoading from "./NetworkChartLoading"
 import { Label } from "./ui/label"
@@ -18,6 +18,63 @@ import { Switch } from "./ui/switch"
 interface ResultItem {
   created_at: number
   [key: string]: number
+}
+
+/**
+ * Helper method to calculate packet loss from delay data
+ */
+const calculatePacketLoss = (delays: number[]): number[] => {
+  if (!delays || delays.length === 0) return []
+
+  const packetLossRates: number[] = []
+  const windowSize = Math.min(10, Math.max(3, Math.floor(delays.length / 10)))
+  const timeoutThreshold = 3000
+  const extremeDelayThreshold = 10000
+
+  for (let i = 0; i < delays.length; i++) {
+    const currentDelay = delays[i]
+    let lossRate = 0
+
+    if (currentDelay === 0 || currentDelay === null || currentDelay === undefined) {
+      lossRate = 100
+    } else if (currentDelay >= extremeDelayThreshold) {
+      lossRate = Math.min(95, 60 + (currentDelay - extremeDelayThreshold) / 1000)
+    } else if (currentDelay >= timeoutThreshold) {
+      lossRate = Math.min(50, (currentDelay - timeoutThreshold) / 200)
+    } else {
+      const start = Math.max(0, i - Math.floor(windowSize / 2))
+      const end = Math.min(delays.length, i + Math.ceil(windowSize / 2))
+      const windowDelays = delays.slice(start, end).filter((d) => d > 0)
+
+      if (windowDelays.length > 2) {
+        const mean = windowDelays.reduce((sum, d) => sum + d, 0) / windowDelays.length
+        const variance = windowDelays.reduce((sum, d) => sum + (d - mean) ** 2, 0) / windowDelays.length
+        const standardDeviation = Math.sqrt(variance)
+        const coefficientOfVariation = standardDeviation / mean
+
+        if (coefficientOfVariation > 0.8) {
+          lossRate = Math.min(25, coefficientOfVariation * 15)
+        } else if (coefficientOfVariation > 0.5) {
+          lossRate = Math.min(10, coefficientOfVariation * 8)
+        } else if (coefficientOfVariation > 0.3) {
+          lossRate = Math.min(5, coefficientOfVariation * 5)
+        }
+
+        if (currentDelay > mean * 2.5) {
+          lossRate += Math.min(15, (currentDelay / mean - 2.5) * 10)
+        }
+      }
+    }
+
+    if (i > 0) {
+      const alpha = 0.3
+      lossRate = alpha * lossRate + (1 - alpha) * packetLossRates[i - 1]
+    }
+
+    packetLossRates.push(Math.max(0, Math.min(100, lossRate)))
+  }
+
+  return packetLossRates.map((rate) => Number(rate.toFixed(2)))
 }
 
 export function NetworkChart({ server_id, show }: { server_id: number; show: boolean }) {
@@ -125,60 +182,118 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
   const chartButtons = useMemo(
     () =>
-      chartDataKey.map((key) => (
-        <button
-          key={key}
-          data-active={activeCharts.includes(key)}
-          className={`relative z-30 flex cursor-pointer grow basis-0 flex-col justify-center gap-1 border-b border-neutral-200 dark:border-neutral-800 px-6 py-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6`}
-          onClick={() => handleButtonClick(key)}
-        >
-          <span className="whitespace-nowrap text-xs text-muted-foreground">{key}</span>
-          <span className="text-md font-bold leading-none sm:text-lg">{chartData[key][chartData[key].length - 1].avg_delay.toFixed(2)}ms</span>
-        </button>
-      )),
+      chartDataKey.map((key) => {
+        const monitorData = chartData[key]
+        const lastDelay = monitorData[monitorData.length - 1].avg_delay
+
+        // Calculate average packet loss if available
+        const packetLossData = monitorData.filter((item) => item.packet_loss !== undefined).map((item) => item.packet_loss!)
+        const avgPacketLoss = packetLossData.length > 0 ? packetLossData.reduce((sum, loss) => sum + loss, 0) / packetLossData.length : null
+
+        return (
+          <button
+            key={key}
+            data-active={activeCharts.includes(key)}
+            className={`relative z-30 flex cursor-pointer grow basis-0 flex-col justify-center gap-1 border-b border-neutral-200 dark:border-neutral-800 px-6 py-4 text-left data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6`}
+            onClick={() => handleButtonClick(key)}
+          >
+            <span className="whitespace-nowrap text-xs text-muted-foreground">{key}</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-md font-bold leading-none sm:text-lg">{lastDelay.toFixed(2)}ms</span>
+              {avgPacketLoss !== null && <span className="text-xs text-muted-foreground">{avgPacketLoss.toFixed(2)}% avg loss</span>}
+            </div>
+          </button>
+        )
+      }),
     [chartDataKey, activeCharts, chartData, handleButtonClick],
   )
 
-  const chartLines = useMemo(() => {
-    // If we have active charts selected, render only those
-    if (activeCharts.length > 0) {
-      return activeCharts.map((chart) => (
+  const chartElements = useMemo(() => {
+    const elements = []
+
+    // If exactly one chart is selected, show delay line and packet loss area
+    if (activeCharts.length === 1) {
+      const chart = activeCharts[0]
+      elements.push(
+        <Area
+          key="packet-loss-area"
+          isAnimationActive={false}
+          dataKey="packet_loss"
+          stroke="none"
+          fill="hsl(45, 100%, 60%)"
+          fillOpacity={0.3}
+          yAxisId="packet-loss"
+        />,
         <Line
-          key={chart}
+          key="delay-line"
           isAnimationActive={false}
           strokeWidth={1}
           type="linear"
           dot={false}
-          dataKey={chart} // Change from "avg_delay" to the actual chart key name
+          dataKey="avg_delay"
           stroke={getColorByIndex(chart)}
-          name={chart}
+          yAxisId="delay"
           connectNulls={true}
-        />
-      ))
+        />,
+      )
+    } else if (activeCharts.length > 1) {
+      // Multiple charts selected - show only delay lines for selected monitors
+      elements.push(
+        ...activeCharts.map((chart) => (
+          <Line
+            key={chart}
+            isAnimationActive={false}
+            strokeWidth={1}
+            type="linear"
+            dot={false}
+            dataKey={chart}
+            stroke={getColorByIndex(chart)}
+            name={chart}
+            connectNulls={true}
+            yAxisId="delay"
+          />
+        )),
+      )
+    } else {
+      // No selection - show all charts (default view)
+      elements.push(
+        ...chartDataKey.map((key) => (
+          <Line
+            key={key}
+            isAnimationActive={false}
+            strokeWidth={1}
+            type="linear"
+            dot={false}
+            dataKey={key}
+            stroke={getColorByIndex(key)}
+            connectNulls={true}
+            yAxisId="delay"
+          />
+        )),
+      )
     }
-    // Otherwise show all charts (default view)
-    return chartDataKey.map((key) => (
-      <Line
-        key={key}
-        isAnimationActive={false}
-        strokeWidth={1}
-        type="linear"
-        dot={false}
-        dataKey={key}
-        stroke={getColorByIndex(key)}
-        connectNulls={true}
-      />
-    ))
+
+    return elements
   }, [activeCharts, chartDataKey, getColorByIndex])
 
   const processedData = useMemo(() => {
-    if (!isPeakEnabled) {
-      // Always use formattedData when multiple charts are selected or none selected
-      return formattedData
+    // Special handling for single chart selection
+    let baseData = formattedData
+    if (activeCharts.length === 1) {
+      const selectedChart = activeCharts[0]
+      baseData = chartData[selectedChart].map((item) => ({
+        created_at: item.created_at,
+        avg_delay: item.avg_delay,
+        packet_loss: item.packet_loss ?? 0,
+      }))
     }
 
-    // For peak cutting, always use the formatted data which contains all series
-    const data = formattedData
+    if (!isPeakEnabled) {
+      return baseData
+    }
+
+    // For peak cutting, use the base data
+    const data = baseData
 
     const windowSize = 11 // 增加窗口大小以获取更好的统计效果
     const alpha = 0.3 // EWMA平滑因子
@@ -225,29 +340,47 @@ export const NetworkChartClient = React.memo(function NetworkChart({
       const window = data.slice(index - windowSize + 1, index + 1)
       const smoothed = { ...point } as ResultItem
 
-      // Process all chart keys or just the selected ones
-      const keysToProcess = activeCharts.length > 0 ? activeCharts : chartDataKey
-
-      keysToProcess.forEach((key) => {
-        const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[]
+      // Special handling for single chart selection
+      if (activeCharts.length === 1) {
+        // Process avg_delay for single chart
+        const values = window.map((w) => w.avg_delay as number).filter((v) => v !== undefined && v !== null)
 
         if (values.length > 0) {
           const processed = processValues(values)
           if (processed !== null) {
-            // Apply EWMA smoothing
-            if (ewmaHistory[key] === undefined) {
-              ewmaHistory[key] = processed
+            if (ewmaHistory.avg_delay === undefined) {
+              ewmaHistory.avg_delay = processed
             } else {
-              ewmaHistory[key] = alpha * processed + (1 - alpha) * ewmaHistory[key]
+              ewmaHistory.avg_delay = alpha * processed + (1 - alpha) * ewmaHistory.avg_delay
             }
-            smoothed[key] = ewmaHistory[key]
+            smoothed.avg_delay = ewmaHistory.avg_delay
           }
         }
-      })
+      } else {
+        // Process all chart keys or just the selected ones
+        const keysToProcess = activeCharts.length > 0 ? activeCharts : chartDataKey
+
+        keysToProcess.forEach((key) => {
+          const values = window.map((w) => w[key]).filter((v) => v !== undefined && v !== null) as number[]
+
+          if (values.length > 0) {
+            const processed = processValues(values)
+            if (processed !== null) {
+              // Apply EWMA smoothing
+              if (ewmaHistory[key] === undefined) {
+                ewmaHistory[key] = processed
+              } else {
+                ewmaHistory[key] = alpha * processed + (1 - alpha) * ewmaHistory[key]
+              }
+              smoothed[key] = ewmaHistory[key]
+            }
+          }
+        })
+      }
 
       return smoothed
     })
-  }, [isPeakEnabled, activeCharts, formattedData, chartDataKey])
+  }, [isPeakEnabled, activeCharts, formattedData, chartData, chartDataKey])
 
   return (
     <Card
@@ -281,7 +414,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
             </button>
           )}
           <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
-            <LineChart accessibilityLayer data={processedData} margin={{ left: 12, right: 12 }}>
+            <ComposedChart accessibilityLayer data={processedData} margin={{ left: 12, right: 12 }}>
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="created_at"
@@ -316,7 +449,18 @@ export const NetworkChartClient = React.memo(function NetworkChart({
                   return minutes === 0 ? `${date.getHours()}:00` : `${date.getHours()}:${minutes}`
                 }}
               />
-              <YAxis tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
+              <YAxis yAxisId="delay" tickLine={false} axisLine={false} tickMargin={15} minTickGap={20} tickFormatter={(value) => `${value}ms`} />
+              {activeCharts.length === 1 && (
+                <YAxis
+                  yAxisId="packet-loss"
+                  orientation="right"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={15}
+                  minTickGap={20}
+                  tickFormatter={(value) => `${value}%`}
+                />
+              )}
               <ChartTooltip
                 isAnimationActive={false}
                 content={
@@ -326,12 +470,35 @@ export const NetworkChartClient = React.memo(function NetworkChart({
                     labelFormatter={(_, payload) => {
                       return formatTime(payload[0].payload.created_at)
                     }}
+                    formatter={(value, name) => {
+                      let formattedValue: string
+                      let label: string
+
+                      if (name === "packet_loss") {
+                        formattedValue = `${Number(value).toFixed(2)}%`
+                        label = t("monitor.packetLoss", "Packet Loss")
+                      } else if (name === "avg_delay") {
+                        formattedValue = `${Number(value).toFixed(2)}ms`
+                        label = t("monitor.avgDelay", "Avg Delay")
+                      } else {
+                        // For monitor names (in multi-chart view) - delay data
+                        formattedValue = `${Number(value).toFixed(2)}ms`
+                        label = name as string
+                      }
+
+                      return (
+                        <div className="flex flex-1 items-center justify-between leading-none">
+                          <span className="text-muted-foreground">{label}</span>
+                          <span className="ml-2 font-medium text-foreground tabular-nums">{formattedValue}</span>
+                        </div>
+                      )
+                    }}
                   />
                 }
               />
-              <ChartLegend content={<ChartLegendContent />} />
-              {chartLines}
-            </LineChart>
+              {activeCharts.length !== 1 && <ChartLegend content={<ChartLegendContent />} />}
+              {chartElements}
+            </ComposedChart>
           </ChartContainer>
         </div>
       </CardContent>
@@ -349,10 +516,14 @@ const transformData = (data: NezhaMonitor[]) => {
       monitorData[monitorName] = []
     }
 
+    // Calculate packet loss from delay data if not provided
+    const packetLoss = item.packet_loss || calculatePacketLoss(item.avg_delay)
+
     for (let i = 0; i < item.created_at.length; i++) {
       monitorData[monitorName].push({
         created_at: item.created_at[i],
         avg_delay: item.avg_delay[i],
+        packet_loss: packetLoss[i],
       })
     }
   })
@@ -373,6 +544,9 @@ const formatData = (rawData: NezhaMonitor[]) => {
   rawData.forEach((item) => {
     const { monitor_name, created_at, avg_delay } = item
 
+    // Calculate packet loss if not provided
+    const packetLoss = item.packet_loss || calculatePacketLoss(avg_delay)
+
     allTimeArray.forEach((time) => {
       if (!result[time]) {
         result[time] = { created_at: time }
@@ -381,6 +555,11 @@ const formatData = (rawData: NezhaMonitor[]) => {
       const timeIndex = created_at.indexOf(time)
       // @ts-expect-error - avg_delay is an array
       result[time][monitor_name] = timeIndex !== -1 ? avg_delay[timeIndex] : null
+      // Add packet loss data if available
+      if (packetLoss) {
+        // @ts-expect-error - packet_loss is calculated
+        result[time][`${monitor_name}_packet_loss`] = timeIndex !== -1 ? packetLoss[timeIndex] : null
+      }
     })
   })
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command"
+import { useCommand } from "@/hooks/use-command"
 import { useTheme } from "@/hooks/use-theme"
 import { useWebSocketContext } from "@/hooks/use-websocket-context"
 import { formatNezhaInfo } from "@/lib/utils"
@@ -11,7 +12,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 export function DashCommand() {
-  const [open, setOpen] = useState(false)
+  const { isOpen, closeCommand, toggleCommand } = useCommand()
   const [search, setSearch] = useState("")
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -25,13 +26,13 @@ export function DashCommand() {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
-        setOpen((open) => !open)
+        toggleCommand()
       }
     }
 
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
-  }, [])
+  }, [toggleCommand])
 
   if (!connected || !nezhaWsData) return null
 
@@ -67,7 +68,7 @@ export function DashCommand() {
 
   return (
     <>
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={isOpen} onOpenChange={closeCommand}>
         <CommandInput placeholder={t("TypeCommand")} value={search} onValueChange={setSearch} />
         <CommandList className="border-t">
           <CommandEmpty>{t("NoResults")}</CommandEmpty>
@@ -80,7 +81,7 @@ export function DashCommand() {
                     value={server.name}
                     onSelect={() => {
                       navigate(`/server/${server.id}`)
-                      setOpen(false)
+                      closeCommand()
                     }}
                   >
                     {formatNezhaInfo(nezhaWsData.now, server).online ? (
@@ -103,7 +104,7 @@ export function DashCommand() {
                 value={item.value}
                 onSelect={() => {
                   item.action()
-                  setOpen(false)
+                  closeCommand()
                 }}
               >
                 {item.icon}

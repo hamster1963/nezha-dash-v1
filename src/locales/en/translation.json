@@ -107,7 +107,9 @@
   "monitor": {
     "noData": "No server monitor data, please add a service monitor first",
     "avgDelay": "Latency",
-    "monitorCount": "Services"
+    "monitorCount": "Services",
+    "packetLoss": "Packet Loss",
+    "clearSelections": "Clear"
   },
   "pwa": {
     "offlineReady": "App ready to work offline",

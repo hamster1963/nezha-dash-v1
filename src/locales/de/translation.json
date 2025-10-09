@@ -45,7 +45,9 @@
   "monitor": {
     "monitorCount": "Services",
     "noData": "Kein Server Monitoring Daten, bitte fügen sie zuerst einen Monitor hinzu",
-    "avgDelay": "Latenz"
+    "avgDelay": "Latenz",
+    "packetLoss": "Paketverlust",
+    "clearSelections": "Löschen"
   },
   "billingInfo": {
     "error": "Fehler",

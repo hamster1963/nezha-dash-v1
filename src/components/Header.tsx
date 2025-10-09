@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 import { LanguageSwitcher } from "./LanguageSwitcher"
+import { SearchButton } from "./SearchButton"
 import { Loader, LoadingSpinner } from "./loading/Loader"
 import { Button } from "./ui/button"
 
@@ -103,6 +104,7 @@ function Header() {
             <Links />
             <DashboardLink />
           </div>
+          <SearchButton />
           <LanguageSwitcher />
           <ModeToggle />
           {(customBackgroundImage || sessionStorage.getItem("savedBackgroundImage")) && (
