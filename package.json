@@ -48,20 +48,20 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-i18next": "15.4.1",
-    "react-router-dom": "7.2.0",
+    "react-router-dom": "7.10.1",
     "recharts": "2.15.1",
     "sonner": "1.7.4",
     "tailwind-merge": "2.6.0",
     "tailwindcss-animate": "1.0.7"
   },
   "devDependencies": {
-    "@eslint/js": "9.20.0",
+    "@eslint/js": "9.39.1",
     "@types/node": "22.13.4",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react-swc": "3.8.0",
     "autoprefixer": "10.4.20",
-    "eslint": "9.20.1",
+    "eslint": "9.39.1",
     "eslint-plugin-react-hooks": "5.1.0",
     "eslint-plugin-react-refresh": "0.4.19",
     "globals": "15.15.0",
@@ -69,6 +69,6 @@
     "tailwindcss": "3.4.17",
     "typescript": "~5.6.3",
     "typescript-eslint": "8.24.1",
-    "vite": "6.1.1"
+    "vite": "6.4.1"
   }
 }
