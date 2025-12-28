@@ -407,7 +407,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
         <div className="relative">
           {activeCharts.length > 0 && (
             <button
-              className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 backdrop-blur-sm rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 backdrop-blur-xs rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
               onClick={clearAllSelections}
             >
               {t("monitor.clearSelections", "Clear")} ({activeCharts.length})

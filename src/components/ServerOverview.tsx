@@ -121,7 +121,7 @@ export default function ServerOverview({ online, offline, total, up, down, upSpe
               </section>
               <section className="flex flex-col sm:flex-row -mr-1 sm:items-center items-start gap-1">
                 <p className="text-[11px] flex items-center text-nowrap font-semibold">
-                  <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-[1px]" />
+                  <ArrowUpCircleIcon className="size-3 mr-0.5 sm:mb-px" />
                   {formatBytes(upSpeed)}/s
                 </p>
                 <p className="text-[11px] flex items-center  text-nowrap font-semibold">

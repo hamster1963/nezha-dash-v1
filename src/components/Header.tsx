@@ -96,7 +96,7 @@ function Header() {
             />
           </div>
           {isLoading ? <Skeleton className="h-6 w-20 rounded-[5px] bg-muted-foreground/10 animate-none" /> : siteName || "NEZHA"}
-          <Separator orientation="vertical" className="mx-2 hidden h-4 w-[1px] md:block" />
+          <Separator orientation="vertical" className="mx-2 hidden h-4 w-px md:block" />
           <p className="hidden text-sm font-medium opacity-40 md:block">{customDesc}</p>
         </section>
         <section className="flex items-center gap-2 header-handles">
@@ -202,7 +202,7 @@ export function RefreshToast() {
         animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
         exit={{ opacity: 0, filter: "blur(10px)", scale: 0.8 }}
         transition={{ type: "spring", duration: 0.8 }}
-        className="fixed left-1/2 -translate-x-1/2 top-8 z-[999] flex items-center justify-between gap-4 rounded-[50px] border-[1px] border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
+        className="fixed left-1/2 -translate-x-1/2 top-8 z-999 flex items-center justify-between gap-4 rounded-[50px] border border-solid bg-white px-2 py-1.5 shadow-xl shadow-black/5 dark:border-stone-700 dark:bg-stone-800 dark:shadow-none"
       >
         <section className="flex items-center gap-1.5">
           <LoadingSpinner />

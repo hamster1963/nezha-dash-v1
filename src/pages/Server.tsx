@@ -245,7 +245,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-600! hover:bg-blue-600! border-blue-600 dark:border-blue-600": showMap === "1",
                 "text-white": showMap === "1",
               },
               {
@@ -267,7 +267,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-600! hover:bg-blue-600! border-blue-600 dark:border-blue-600": showServices === "1",
                 "text-white": showServices === "1",
               },
               {
@@ -289,7 +289,7 @@ export default function Servers() {
             className={cn(
               "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
+                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] bg-blue-600! hover:bg-blue-600! border-blue-600 dark:border-blue-600": inline === "1",
                 "text-white": inline === "1",
               },
               {
@@ -309,7 +309,7 @@ export default function Servers() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:0_1px_0_rgb(0_0_0/20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
                 },

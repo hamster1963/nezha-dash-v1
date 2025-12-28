@@ -63,7 +63,7 @@ export default function AnimatedCircularProgressBar({ max = 100, min = 0, value 
           strokeLinecap="round"
           strokeLinejoin="round"
           className={cn("opacity-100 stroke-current", {
-            "stroke-[var(--stroke-primary-color)]": primaryColor,
+            "stroke-(--stroke-primary-color)": primaryColor,
           })}
           style={
             {

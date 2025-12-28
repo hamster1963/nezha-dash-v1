@@ -83,7 +83,7 @@ export function InteractiveMap({ countries, serverCounts, width, height, filtere
   const path = geoPath().projection(projection)
 
   return (
-    <div className="relative w-full aspect-[2/1]" onMouseLeave={() => setTooltipData(null)}>
+    <div className="relative w-full aspect-2/1" onMouseLeave={() => setTooltipData(null)}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <defs>
           <pattern id="dots" width="2" height="2" patternUnits="userSpaceOnUse">
