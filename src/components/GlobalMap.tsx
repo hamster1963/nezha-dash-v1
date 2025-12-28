@@ -117,6 +117,7 @@ export function InteractiveMap({ countries, serverCounts, width, height, filtere
                     const countryServers = nezhaServerList
                       .filter((server: NezhaServer) => server.country_code?.toUpperCase() === countryCode)
                       .map((server: NezhaServer) => ({
+                        id: server.id,
                         name: server.name,
                         status: formatNezhaInfo(now, server).online,
                       }))
@@ -155,6 +156,7 @@ export function InteractiveMap({ countries, serverCounts, width, height, filtere
                   const countryServers = nezhaServerList
                     .filter((server: NezhaServer) => server.country_code?.toUpperCase() === countryCode.toUpperCase())
                     .map((server: NezhaServer) => ({
+                      id: server.id,
                       name: server.name,
                       status: formatNezhaInfo(now, server).online,
                     }))

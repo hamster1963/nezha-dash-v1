@@ -2,9 +2,11 @@ import useTooltip from "@/hooks/use-tooltip"
 import { AnimatePresence, m } from "framer-motion"
 import { memo } from "react"
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom"
 
 const MapTooltip = memo(function MapTooltip() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { tooltipData } = useTooltip()
 
   if (!tooltipData) return null
@@ -28,7 +30,7 @@ const MapTooltip = memo(function MapTooltip() {
       >
         <div>
           <p className="font-medium">{tooltipData.country === "China" ? "Mainland China" : tooltipData.country}</p>
-          <p className="text-neutral-600 dark:text-neutral-400 mb-1">
+          <p className="text-neutral-600 dark:text-neutral-400 text-xs font-light mb-1">
             {tooltipData.count} {t("map.Servers")}
           </p>
         </div>
@@ -39,11 +41,19 @@ const MapTooltip = memo(function MapTooltip() {
             overflowY: "auto",
           }}
         >
-          {tooltipData.servers.map((server, index: number) => (
-            <div key={index} className="flex items-center gap-1.5 py-0.5">
-              <span className={`w-1.5 h-1.5 shrink-0 rounded-full ${server.status ? "bg-green-500" : "bg-red-500"}`}></span>
+          {tooltipData.servers.map((server) => (
+            <button
+              key={server.id}
+              type="button"
+              className="flex items-center gap-1.5 py-0.5 text-neutral-500 transition-colors hover:text-black dark:text-neutral-400 dark:hover:text-white"
+              onClick={() => {
+                sessionStorage.setItem("fromMainPage", "true")
+                navigate(`/server/${server.id}`)
+              }}
+            >
+              <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${server.status ? "bg-green-500" : "bg-red-500"}`} />
               <span className="text-xs">{server.name}</span>
-            </div>
+            </button>
           ))}
         </div>
       </m.div>
