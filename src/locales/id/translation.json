@@ -1,27 +1,27 @@
 {
-  "nezha": "Monitor Nezha",
-  "overview": "Ringkasan",
-  "dashboard": "Dasbor",
-  "login": "Masuk",
-  "online": "Online",
-  "offline": "Offline",
-  "whereTheTimeIs": "Dimana waktunya",
-  "refreshing": "Menyegarkan",
-  "info": {
-    "websocketConnecting": "WebSocket menghubungkan",
-    "processing": "Memproses...",
-    "websocketDisconnected": "WebSocket terputus",
-    "websocketConnected": "WebSocket terhubung"
-  },
-  "serverOverview": {
-    "totalServers": "Jumlah Server",
-    "onlineServers": "Online Server",
-    "offlineServers": "Offline Server",
-    "speed": "Kecepatan",
-    "totalBandwidth": "Jumlah Bandwidth"
-  },
-  "theme": {
-    "light": "Terang",
-    "dark": "Gelap"
-  }
+	"nezha": "Monitor Nezha",
+	"overview": "Ringkasan",
+	"dashboard": "Dasbor",
+	"login": "Masuk",
+	"online": "Online",
+	"offline": "Offline",
+	"whereTheTimeIs": "Dimana waktunya",
+	"refreshing": "Menyegarkan",
+	"info": {
+		"websocketConnecting": "WebSocket menghubungkan",
+		"processing": "Memproses...",
+		"websocketDisconnected": "WebSocket terputus",
+		"websocketConnected": "WebSocket terhubung"
+	},
+	"serverOverview": {
+		"totalServers": "Jumlah Server",
+		"onlineServers": "Online Server",
+		"offlineServers": "Offline Server",
+		"speed": "Kecepatan",
+		"totalBandwidth": "Jumlah Bandwidth"
+	},
+	"theme": {
+		"light": "Terang",
+		"dark": "Gelap"
+	}
 }

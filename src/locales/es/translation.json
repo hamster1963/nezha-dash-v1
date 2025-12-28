@@ -1,137 +1,137 @@
 {
-  "serviceTracker": {
-    "delay": "Latencia",
-    "noService": "No hay datos de servicio",
-    "uptime": "Tiempo de actividad",
-    "daysAgo": "días atrás",
-    "today": "Hoy",
-    "loading": "Cargando..."
-  },
-  "serverDetail": {
-    "disk": "Disco",
-    "region": "Región",
-    "system": "Sistema Operativo",
-    "lastActive": "Última vez activo",
-    "temperature": "Temperatura",
-    "bootTime": "Inicio del sistema",
-    "arch": "Arch",
-    "status": "Estado",
-    "online": "En línea",
-    "version": "Versión",
-    "offline": "Fuera de línea",
-    "unknown": "Desconocido",
-    "days": "Días",
-    "hours": "Horas",
-    "download": "Bajada",
-    "uptime": "Tiempo de actividad",
-    "mem": "Memoria",
-    "upload": "Subida"
-  },
-  "serverDetailChart": {
-    "process": "Procesos",
-    "disk": "Disco",
-    "mem": "Memoria",
-    "swap": "Swap",
-    "upload": "Subida",
-    "download": "Bajada"
-  },
-  "language": {
-    "en-US": "Inglés",
-    "zh-TW": "Chino Tradicional",
-    "zh-CN": "Chino simplificado",
-    "de-DE": "Deutsch",
-    "es-ES": "Español",
-    "ru-RU": "Русский",
-    "ta-IN": "தமிழ்"
-  },
-  "TypeCommand": "Escriba un comando o busca...",
-  "Shortcuts": "Atajos",
-  "Home": "Inicio",
-  "login": "Iniciar sesión",
-  "online": "En línea",
-  "offline": "Fuerda de línea",
-  "whereTheTimeIs": "Hora actual",
-  "serverOverview": {
-    "totalBandwidth": "Ancho de banda total",
-    "speed": "Velocidad",
-    "network": "Red",
-    "onlineServers": "Servidores en línea",
-    "totalServers": "Total de Servidores",
-    "offlineServers": "Servidores fuera de línea"
-  },
-  "map": {
-    "Regions": "Regiones",
-    "Servers": "Servidores",
-    "Distributions": "Servidores distribuidos en"
-  },
-  "overview": "Descripción general",
-  "dashboard": "Panel",
-  "nezha": "Monitor Nezha",
-  "serverCard": {
-    "mem": "Ram",
-    "days": "Días",
-    "hours": "Horas",
-    "upload": "Subida",
-    "download": "Bajada",
-    "system": "Sistema operativo",
-    "uptime": "Tiempo de actividad",
-    "totalUpload": "Subida",
-    "totalDownload": "Bajada",
-    "stg": "Alm."
-  },
-  "cycleTransfer": {
-    "used": "Usado",
-    "total": "total",
-    "nextUpdate": "próxima actualización"
-  },
-  "tabSwitch": {
-    "Detail": "Detalle",
-    "Network": "Red"
-  },
-  "monitor": {
-    "avgDelay": "Latencia",
-    "noData": "No hay datos de servidores, primero agregue un monitor de servicio",
-    "monitorCount": "Servicios",
-    "packetLoss": "Pérdida de paquetes",
-    "clearSelections": "Limpiar"
-  },
-  "error": {
-    "pageNotFound": "Página no encontrada",
-    "backToHome": "Volver al Inicio"
-  },
-  "theme": {
-    "system": "Sistema",
-    "dark": "Oscuro",
-    "light": "Claro"
-  },
-  "billingInfo": {
-    "remaining": "Restante",
-    "error": "error",
-    "days": "días",
-    "price": "Precio",
-    "free": "Gratis",
-    "indefinite": "Indedinido",
-    "expired": "Expirado",
-    "usage-baseed": "Basado en el uso"
-  },
-  "pwa": {
-    "offlineReady": "Aplicacion lista para trabajar fuera de línea",
-    "newContent": "Nuevo contenido disponible",
-    "reload": "Actualizar"
-  },
-  "info": {
-    "websocketConnecting": "Conexión WebSocket",
-    "websocketDisconnected": "WebSocket desconectado",
-    "websocketConnected": "WebSocket conectado",
-    "processing": "Procesando..."
-  },
-  "NoResults": "No se encontraron resultados.",
-  "refreshing": "Actualizando",
-  "Servers": "Servidores",
-  "ToggleLightMode": "Activar el modo claro",
-  "ToggleDarkMode": "Activar el modo oscuro",
-  "ToggleSystemMode": "Activar modo del sistema",
-  "footer": {
-    "themeBy": "Tema por. "
-  }
+	"serviceTracker": {
+		"delay": "Latencia",
+		"noService": "No hay datos de servicio",
+		"uptime": "Tiempo de actividad",
+		"daysAgo": "días atrás",
+		"today": "Hoy",
+		"loading": "Cargando..."
+	},
+	"serverDetail": {
+		"disk": "Disco",
+		"region": "Región",
+		"system": "Sistema Operativo",
+		"lastActive": "Última vez activo",
+		"temperature": "Temperatura",
+		"bootTime": "Inicio del sistema",
+		"arch": "Arch",
+		"status": "Estado",
+		"online": "En línea",
+		"version": "Versión",
+		"offline": "Fuera de línea",
+		"unknown": "Desconocido",
+		"days": "Días",
+		"hours": "Horas",
+		"download": "Bajada",
+		"uptime": "Tiempo de actividad",
+		"mem": "Memoria",
+		"upload": "Subida"
+	},
+	"serverDetailChart": {
+		"process": "Procesos",
+		"disk": "Disco",
+		"mem": "Memoria",
+		"swap": "Swap",
+		"upload": "Subida",
+		"download": "Bajada"
+	},
+	"language": {
+		"en-US": "Inglés",
+		"zh-TW": "Chino Tradicional",
+		"zh-CN": "Chino simplificado",
+		"de-DE": "Deutsch",
+		"es-ES": "Español",
+		"ru-RU": "Русский",
+		"ta-IN": "தமிழ்"
+	},
+	"TypeCommand": "Escriba un comando o busca...",
+	"Shortcuts": "Atajos",
+	"Home": "Inicio",
+	"login": "Iniciar sesión",
+	"online": "En línea",
+	"offline": "Fuerda de línea",
+	"whereTheTimeIs": "Hora actual",
+	"serverOverview": {
+		"totalBandwidth": "Ancho de banda total",
+		"speed": "Velocidad",
+		"network": "Red",
+		"onlineServers": "Servidores en línea",
+		"totalServers": "Total de Servidores",
+		"offlineServers": "Servidores fuera de línea"
+	},
+	"map": {
+		"Regions": "Regiones",
+		"Servers": "Servidores",
+		"Distributions": "Servidores distribuidos en"
+	},
+	"overview": "Descripción general",
+	"dashboard": "Panel",
+	"nezha": "Monitor Nezha",
+	"serverCard": {
+		"mem": "Ram",
+		"days": "Días",
+		"hours": "Horas",
+		"upload": "Subida",
+		"download": "Bajada",
+		"system": "Sistema operativo",
+		"uptime": "Tiempo de actividad",
+		"totalUpload": "Subida",
+		"totalDownload": "Bajada",
+		"stg": "Alm."
+	},
+	"cycleTransfer": {
+		"used": "Usado",
+		"total": "total",
+		"nextUpdate": "próxima actualización"
+	},
+	"tabSwitch": {
+		"Detail": "Detalle",
+		"Network": "Red"
+	},
+	"monitor": {
+		"avgDelay": "Latencia",
+		"noData": "No hay datos de servidores, primero agregue un monitor de servicio",
+		"monitorCount": "Servicios",
+		"packetLoss": "Pérdida de paquetes",
+		"clearSelections": "Limpiar"
+	},
+	"error": {
+		"pageNotFound": "Página no encontrada",
+		"backToHome": "Volver al Inicio"
+	},
+	"theme": {
+		"system": "Sistema",
+		"dark": "Oscuro",
+		"light": "Claro"
+	},
+	"billingInfo": {
+		"remaining": "Restante",
+		"error": "error",
+		"days": "días",
+		"price": "Precio",
+		"free": "Gratis",
+		"indefinite": "Indedinido",
+		"expired": "Expirado",
+		"usage-baseed": "Basado en el uso"
+	},
+	"pwa": {
+		"offlineReady": "Aplicacion lista para trabajar fuera de línea",
+		"newContent": "Nuevo contenido disponible",
+		"reload": "Actualizar"
+	},
+	"info": {
+		"websocketConnecting": "Conexión WebSocket",
+		"websocketDisconnected": "WebSocket desconectado",
+		"websocketConnected": "WebSocket conectado",
+		"processing": "Procesando..."
+	},
+	"NoResults": "No se encontraron resultados.",
+	"refreshing": "Actualizando",
+	"Servers": "Servidores",
+	"ToggleLightMode": "Activar el modo claro",
+	"ToggleDarkMode": "Activar el modo oscuro",
+	"ToggleSystemMode": "Activar modo del sistema",
+	"footer": {
+		"themeBy": "Tema por. "
+	}
 }
