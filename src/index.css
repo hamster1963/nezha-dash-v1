@@ -201,6 +201,15 @@
   }
 }
 
+@layer base {
+  /* Avoid color fade when toggling themes. */
+  html.disable-transitions *,
+  html.disable-transitions *::before,
+  html.disable-transitions *::after {
+    transition: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   .container {
     @apply px-4;

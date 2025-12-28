@@ -26,6 +26,7 @@ export function ThemeProvider({ children, storageKey = "vite-ui-theme" }: ThemeP
   useEffect(() => {
     const root = window.document.documentElement
 
+    root.classList.add("disable-transitions")
     root.classList.remove("light", "dark")
 
     if (theme === "system") {
@@ -34,12 +35,19 @@ export function ThemeProvider({ children, storageKey = "vite-ui-theme" }: ThemeP
       root.classList.add(systemTheme)
       const themeColor = systemTheme === "dark" ? "hsl(30 15% 8%)" : "hsl(0 0% 98%)"
       document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor)
-      return
+      const timeoutId = window.setTimeout(() => {
+        root.classList.remove("disable-transitions")
+      }, 0)
+      return () => window.clearTimeout(timeoutId)
     }
 
     root.classList.add(theme)
     const themeColor = theme === "dark" ? "hsl(30 15% 8%)" : "hsl(0 0% 98%)"
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor)
+    const timeoutId = window.setTimeout(() => {
+      root.classList.remove("disable-transitions")
+    }, 0)
+    return () => window.clearTimeout(timeoutId)
   }, [theme])
 
   const value = {
