@@ -14,7 +14,6 @@
   "dependencies": {
     "@fontsource/inter": "5.1.1",
     "@heroicons/react": "2.2.0",
-    "@number-flow/react": "0.5.5",
     "@radix-ui/react-accordion": "1.2.3",
     "@radix-ui/react-checkbox": "1.1.4",
     "@radix-ui/react-dialog": "1.1.6",
@@ -52,7 +51,7 @@
     "recharts": "2.15.1",
     "sonner": "1.7.4",
     "tailwind-merge": "2.6.0",
-    "tailwindcss-animate": "1.0.7"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "9.20.0",
