@@ -178,7 +178,7 @@ export default function ServerDetailOverview({ server_id }: { server_id: string 
                       <p className="text-xs text-muted-foreground">{t("serverDetail.region")}</p>
                       <section className="flex items-start gap-1">
                         <div className="text-xs text-start">{country_code?.toUpperCase()}</div>
-                        {country_code && <ServerFlag className="text-[11px] -mt-[1px]" country_code={country_code} />}
+                        {country_code && <ServerFlag className="text-[11px] -mt-px" country_code={country_code} />}
                       </section>
                     </section>
                   </CardContent>

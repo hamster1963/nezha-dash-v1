@@ -17,7 +17,7 @@ export default function TabSwitch({ tabs, currentTab, setCurrentTab }: { tabs: s
             key={tab}
             onClick={() => setCurrentTab(tab)}
             className={cn(
-              "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-[13px] font-[600] transition-all duration-500",
+              "relative cursor-pointer rounded-3xl px-2.5 py-[8px] text-[13px] font-semibold transition-all duration-500",
               currentTab === tab ? "text-black dark:text-white" : "text-stone-400 dark:text-stone-500",
             )}
           >

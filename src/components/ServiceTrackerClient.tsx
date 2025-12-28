@@ -73,10 +73,10 @@ export const ServiceTrackerClient: React.FC<ServiceTrackerProps> = ({ days, clas
                   className={cn(
                     "relative flex-1 h-7 rounded-[4px] transition-all duration-200 cursor-help",
                     "before:absolute before:inset-0 before:rounded-[4px] before:opacity-0 hover:before:opacity-100 before:bg-white/10 before:transition-opacity",
-                    "after:absolute after:inset-0 after:rounded-[4px] after:shadow-[inset_0_1px_theme(colors.white/10%)]",
+                    "after:absolute after:inset-0 after:rounded-[4px] after:shadow-[inset_0_1px_--theme(--color-white/10%)]",
                     day.completed
-                      ? "bg-gradient-to-b from-green-500/90 to-green-600 shadow-[0_1px_2px_theme(colors.green.600/30%)]"
-                      : "bg-gradient-to-b from-red-500/80 to-red-600/90 shadow-[0_1px_2px_theme(colors.red.600/30%)]",
+                      ? "bg-linear-to-b from-green-500/90 to-green-600 shadow-[0_1px_2px_--theme(--color-green-600/30%)]"
+                      : "bg-linear-to-b from-red-500/80 to-red-600/90 shadow-[0_1px_2px_--theme(--color-red-600/30%)]",
                   )}
                 />
               </TooltipTrigger>

@@ -1,6 +1,7 @@
 import { NetworkChart } from "@/components/NetworkChart"
 import ServerDetailChart from "@/components/ServerDetailChart"
 import ServerDetailOverview from "@/components/ServerDetailOverview"
+import ServerDetailSummary from "@/components/ServerDetailSummary"
 import TabSwitch from "@/components/TabSwitch"
 import { Separator } from "@/components/ui/separator"
 import { useEffect, useState } from "react"
@@ -33,6 +34,11 @@ export default function ServerDetail() {
         </div>
         <Separator className="flex-1" />
       </section>
+
+      <section>
+        <ServerDetailSummary server_id={Number(server_id)} />
+      </section>
+
       <div style={{ display: currentTab === tabs[0] ? "block" : "none" }}>
         <ServerDetailChart server_id={server_id} />
       </div>

@@ -243,21 +243,16 @@ export default function Servers() {
               localStorage.setItem("showMap", showMap === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+              "inset-shadow-2xs inset-shadow-white/20 flex cursor-pointer flex-col items-center gap-0 rounded-[50px] bg-blue-100 p-2.5 text-blue-600 transition-all dark:bg-blue-900 dark:text-blue-100",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showMap === "1",
-                "text-white": showMap === "1",
+                "inset-shadow-black/20 bg-blue-600 text-white dark:bg-blue-100 dark:text-blue-600": showMap === "1",
               },
               {
                 "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <MapIcon
-              className={cn("size-[13px]", {
-                "text-white": showMap === "1",
-              })}
-            />
+            <MapIcon className={cn("size-[13px]")} />
           </button>
           <button
             onClick={() => {
@@ -265,21 +260,16 @@ export default function Servers() {
               localStorage.setItem("showServices", showServices === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+              "inset-shadow-2xs inset-shadow-white/20 flex cursor-pointer flex-col items-center gap-0 rounded-[50px] bg-blue-100 p-2.5 text-blue-600 transition-all dark:bg-blue-900 dark:text-blue-100",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": showServices === "1",
-                "text-white": showServices === "1",
+                "inset-shadow-black/20 bg-blue-600 text-white dark:bg-blue-100 dark:text-blue-600": showServices === "1",
               },
               {
                 "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
               },
             )}
           >
-            <ChartBarSquareIcon
-              className={cn("size-[13px]", {
-                "text-white": showServices === "1",
-              })}
-            />
+            <ChartBarSquareIcon className={cn("size-[13px]")} />
           </button>
           <button
             onClick={() => {
@@ -287,10 +277,9 @@ export default function Servers() {
               localStorage.setItem("inline", inline === "0" ? "1" : "0")
             }}
             className={cn(
-              "rounded-[50px] bg-white dark:bg-stone-800 cursor-pointer p-[10px] transition-all border dark:border-none border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]",
+              "inset-shadow-2xs inset-shadow-white/20 flex cursor-pointer flex-col items-center gap-0 rounded-[50px] bg-blue-100 p-2.5 text-blue-600 transition-all dark:bg-blue-900 dark:text-blue-100",
               {
-                "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] !bg-blue-600 hover:!bg-blue-600 border-blue-600 dark:border-blue-600": inline === "1",
-                "text-white": inline === "1",
+                "inset-shadow-black/20 bg-blue-600 text-white dark:bg-blue-100 dark:text-blue-600": inline === "1",
               },
               {
                 "bg-opacity-70 dark:bg-opacity-70": customBackgroundImage,
@@ -309,7 +298,7 @@ export default function Servers() {
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:_0_1px_0_rgb(0_0_0_/_20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
+                "rounded-[50px] flex items-center gap-1 dark:text-white border dark:border-none text-black cursor-pointer dark:[text-shadow:0_1px_0_rgb(0_0_0/20%)] dark:bg-stone-800 bg-white  p-[10px] transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]  ",
                 {
                   "shadow-[inset_0_1px_0_rgba(0,0,0,0.2)] dark:bg-stone-700 bg-stone-200": settingsOpen,
                 },

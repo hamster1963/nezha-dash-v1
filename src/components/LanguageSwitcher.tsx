@@ -43,8 +43,22 @@ export function LanguageSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="flex flex-col gap-0.5" align="end">
-        {localeItems.map((item) => (
-          <DropdownMenuItem key={item.code} onSelect={(e) => handleSelect(e, item.code)} className={locale === item.code ? "bg-muted gap-3" : ""}>
+        {localeItems.map((item, index) => (
+          <DropdownMenuItem
+            key={item.code}
+            onSelect={(e) => handleSelect(e, item.code)}
+            className={cn(
+              "text-xs",
+              {
+                "gap-3 bg-muted font-semibold": locale === item.code,
+              },
+              {
+                "rounded-t-[5px]": index === localeItems.length - 1,
+                "rounded-[5px]": index !== 0 && index !== localeItems.length - 1,
+                "rounded-b-[5px]": index === 0,
+              },
+            )}
+          >
             {item.name} {locale === item.code && <CheckCircleIcon className="size-4" />}
           </DropdownMenuItem>
         ))}
