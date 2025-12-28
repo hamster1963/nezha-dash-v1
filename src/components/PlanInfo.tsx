@@ -15,6 +15,9 @@ export default function PlanInfo({
 			: parsedData.planDataMod.extra.split(",")[0] === ""
 				? []
 				: [parsedData.planDataMod.extra];
+	const networkRoutes = parsedData.planDataMod.networkRoute
+		? parsedData.planDataMod.networkRoute.split(",")
+		: [];
 
 	return (
 		<section className="flex gap-1 items-center flex-wrap mt-0.5">
@@ -60,17 +63,9 @@ export default function PlanInfo({
 						"text-[9px] bg-blue-600 text-blue-200 dark:bg-blue-800 dark:text-blue-300  w-fit rounded-[5px] px-[3px] py-[1.5px]",
 					)}
 				>
-					{parsedData.planDataMod.networkRoute
-						.split(",")
-						.map((route, index) => {
-							return (
-								route +
-								(index ===
-								parsedData.planDataMod?.networkRoute.split(",").length - 1
-									? ""
-									: "｜")
-							);
-						})}
+					{networkRoutes.map((route, index) => {
+						return route + (index === networkRoutes.length - 1 ? "" : "｜");
+					})}
 				</p>
 			)}
 			{extraList.map((extra, index) => {
