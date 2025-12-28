@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { m } from "framer-motion"
+import { s } from "node_modules/framer-motion/dist/types.d-6pKw1mTI"
 import { createRef, useEffect, useRef } from "react"
 
 export default function GroupSwitch({
@@ -36,6 +37,10 @@ export default function GroupSwitch({
   }, [])
 
   useEffect(() => {
+    if (tabs.length === 1 && tabs[0] === "All") {
+      setCurrentTab("All")
+      return
+    }
     const savedGroup = sessionStorage.getItem("selectedGroup")
     if (savedGroup && tabs.includes(savedGroup)) {
       setCurrentTab(savedGroup)
@@ -53,6 +58,10 @@ export default function GroupSwitch({
       })
     }
   }, [currentTab])
+
+  if (tabs.length === 1 && tabs[0] === "All") {
+    return null
+  }
 
   return (
     <div ref={scrollRef} className="scrollbar-hidden z-50 flex flex-col items-start overflow-x-scroll rounded-[50px]">
