@@ -1,138 +1,138 @@
 {
-  "nezha": "哪吒监控",
-  "overview": "概览",
-  "dashboard": "管理后台",
-  "login": "登录",
-  "online": "在线",
-  "offline": "离线",
-  "whereTheTimeIs": "当前时间",
-  "refreshing": "刷新中",
-  "info": {
-    "websocketConnecting": "WebSocket 连接中",
-    "websocketConnected": "WebSocket 连接成功",
-    "websocketDisconnected": "WebSocket 连接断开",
-    "processing": "处理中..."
-  },
-  "serverOverview": {
-    "totalServers": "服务器总数",
-    "onlineServers": "在线服务器",
-    "offlineServers": "离线服务器",
-    "totalBandwidth": "总流量",
-    "speed": "速率",
-    "network": "网络"
-  },
-  "map": {
-    "Distributions": "服务器分布在",
-    "Regions": "个区域",
-    "Servers": "个服务器"
-  },
-  "serverCard": {
-    "mem": "内存",
-    "stg": "存储",
-    "days": "天",
-    "hours": "小时",
-    "upload": "上传",
-    "download": "下载",
-    "system": "系统",
-    "uptime": "运行时间",
-    "totalUpload": "总上传",
-    "totalDownload": "总下载"
-  },
-  "cycleTransfer": {
-    "used": "已使用",
-    "total": "总计",
-    "nextUpdate": "下次更新"
-  },
-  "serviceTracker": {
-    "noService": "无服务数据",
-    "uptime": "在线率",
-    "delay": "延迟",
-    "daysAgo": "天前",
-    "today": "今天",
-    "loading": "加载中..."
-  },
-  "serverDetail": {
-    "status": "状态",
-    "online": "在线",
-    "days": "天",
-    "hours": "小时",
-    "offline": "离线",
-    "unknown": "未知",
-    "uptime": "运行时间",
-    "version": "版本",
-    "arch": "架构",
-    "mem": "内存",
-    "disk": "磁盘",
-    "region": "区域",
-    "system": "系统",
-    "upload": "上传",
-    "download": "下载",
-    "lastActive": "最后上报时间",
-    "temperature": "温度",
-    "bootTime": "启动时间"
-  },
-  "serverDetailChart": {
-    "process": "进程数",
-    "disk": "磁盘",
-    "mem": "内存",
-    "swap": "虚拟内存",
-    "upload": "上传",
-    "download": "下载"
-  },
-  "footer": {
-    "themeBy": "主题-"
-  },
-  "language": {
-    "zh-CN": "简体中文",
-    "zh-TW": "繁體中文",
-    "en": "English",
-    "en-US": "English",
-    "de-DE": "Deutsch",
-    "es-ES": "Español",
-    "ta-IN": "தமிழ்",
-    "ru-RU": "Русский"
-  },
-  "theme": {
-    "light": "亮色",
-    "dark": "暗色",
-    "system": "跟随系统"
-  },
-  "error": {
-    "pageNotFound": "页面不存在",
-    "backToHome": "回到主页"
-  },
-  "tabSwitch": {
-    "Detail": "详情",
-    "Network": "网络"
-  },
-  "monitor": {
-    "noData": "没有服务监控数据，请在管理后台服务页添加监控任务",
-    "avgDelay": "延迟",
-    "monitorCount": "个监控服务",
-    "packetLoss": "丢包率",
-    "clearSelections": "清除"
-  },
-  "pwa": {
-    "offlineReady": "应用可以离线使用了",
-    "newContent": "发现新版本",
-    "reload": "更新"
-  },
-  "billingInfo": {
-    "remaining": "剩余天数",
-    "error": "计算错误",
-    "indefinite": "永久",
-    "expired": "已过期",
-    "days": "天",
-    "price": "价格",
-    "free": "免费",
-    "usage-baseed": "按量计费"
-  },
-  "TypeCommand": "输入命令或搜索",
-  "NoResults": "结果为空",
-  "Servers": "服务器",
-  "Shortcuts": "快捷键",
-  "ToggleLightMode": "切换亮色模式",
-  "ToggleDarkMode": "切换暗色模式",
-  "ToggleSystemMode": "切换系统模式",
-  "Home": "首页"
+	"nezha": "哪吒监控",
+	"overview": "概览",
+	"dashboard": "管理后台",
+	"login": "登录",
+	"online": "在线",
+	"offline": "离线",
+	"whereTheTimeIs": "当前时间",
+	"refreshing": "刷新中",
+	"info": {
+		"websocketConnecting": "WebSocket 连接中",
+		"websocketConnected": "WebSocket 连接成功",
+		"websocketDisconnected": "WebSocket 连接断开",
+		"processing": "处理中..."
+	},
+	"serverOverview": {
+		"totalServers": "服务器总数",
+		"onlineServers": "在线服务器",
+		"offlineServers": "离线服务器",
+		"totalBandwidth": "总流量",
+		"speed": "速率",
+		"network": "网络"
+	},
+	"map": {
+		"Distributions": "服务器分布在",
+		"Regions": "个区域",
+		"Servers": "个服务器"
+	},
+	"serverCard": {
+		"mem": "内存",
+		"stg": "存储",
+		"days": "天",
+		"hours": "小时",
+		"upload": "上传",
+		"download": "下载",
+		"system": "系统",
+		"uptime": "运行时间",
+		"totalUpload": "总上传",
+		"totalDownload": "总下载"
+	},
+	"cycleTransfer": {
+		"used": "已使用",
+		"total": "总计",
+		"nextUpdate": "下次更新"
+	},
+	"serviceTracker": {
+		"noService": "无服务数据",
+		"uptime": "在线率",
+		"delay": "延迟",
+		"daysAgo": "天前",
+		"today": "今天",
+		"loading": "加载中..."
+	},
+	"serverDetail": {
+		"status": "状态",
+		"online": "在线",
+		"days": "天",
+		"hours": "小时",
+		"offline": "离线",
+		"unknown": "未知",
+		"uptime": "运行时间",
+		"version": "版本",
+		"arch": "架构",
+		"mem": "内存",
+		"disk": "磁盘",
+		"region": "区域",
+		"system": "系统",
+		"upload": "上传",
+		"download": "下载",
+		"lastActive": "最后上报时间",
+		"temperature": "温度",
+		"bootTime": "启动时间"
+	},
+	"serverDetailChart": {
+		"process": "进程数",
+		"disk": "磁盘",
+		"mem": "内存",
+		"swap": "虚拟内存",
+		"upload": "上传",
+		"download": "下载"
+	},
+	"footer": {
+		"themeBy": "主题-"
+	},
+	"language": {
+		"zh-CN": "简体中文",
+		"zh-TW": "繁體中文",
+		"en": "English",
+		"en-US": "English",
+		"de-DE": "Deutsch",
+		"es-ES": "Español",
+		"ta-IN": "தமிழ்",
+		"ru-RU": "Русский"
+	},
+	"theme": {
+		"light": "亮色",
+		"dark": "暗色",
+		"system": "跟随系统"
+	},
+	"error": {
+		"pageNotFound": "页面不存在",
+		"backToHome": "回到主页"
+	},
+	"tabSwitch": {
+		"Detail": "详情",
+		"Network": "网络"
+	},
+	"monitor": {
+		"noData": "没有服务监控数据，请在管理后台服务页添加监控任务",
+		"avgDelay": "延迟",
+		"monitorCount": "个监控服务",
+		"packetLoss": "丢包率",
+		"clearSelections": "清除"
+	},
+	"pwa": {
+		"offlineReady": "应用可以离线使用了",
+		"newContent": "发现新版本",
+		"reload": "更新"
+	},
+	"billingInfo": {
+		"remaining": "剩余天数",
+		"error": "计算错误",
+		"indefinite": "永久",
+		"expired": "已过期",
+		"days": "天",
+		"price": "价格",
+		"free": "免费",
+		"usage-baseed": "按量计费"
+	},
+	"TypeCommand": "输入命令或搜索",
+	"NoResults": "结果为空",
+	"Servers": "服务器",
+	"Shortcuts": "快捷键",
+	"ToggleLightMode": "切换亮色模式",
+	"ToggleDarkMode": "切换暗色模式",
+	"ToggleSystemMode": "切换系统模式",
+	"Home": "首页"
 }
