@@ -23,6 +23,9 @@ export default function BillingInfo({
 		cycleLabel: "",
 		remainingPercentage: 0,
 	};
+	const hasBillingDates =
+		Boolean(parsedData.billingDataMod.startDate) ||
+		Boolean(parsedData.billingDataMod.endDate);
 
 	if (parsedData?.billingDataMod?.endDate) {
 		if (parsedData.billingDataMod.endDate.startsWith("0000-00-00")) {
@@ -61,13 +64,15 @@ export default function BillingInfo({
 					{t("billingInfo.usage-baseed")}
 				</p>
 			) : null}
-			<div className={cn("text-[10px] text-muted-foreground")}>
-				{t("billingInfo.remaining")}:{" "}
-				{isNeverExpire
-					? t("billingInfo.indefinite")
-					: `${daysLeftObject.days} ${t("billingInfo.days")}`}
-			</div>
-			{!isNeverExpire && (
+			{hasBillingDates && (
+				<div className={cn("text-[10px] text-muted-foreground")}>
+					{t("billingInfo.remaining")}:{" "}
+					{isNeverExpire
+						? t("billingInfo.indefinite")
+						: `${daysLeftObject.days} ${t("billingInfo.days")}`}
+				</div>
+			)}
+			{hasBillingDates && !isNeverExpire && (
 				<RemainPercentBar
 					className="mt-0.5"
 					value={daysLeftObject.remainingPercentage * 100}
