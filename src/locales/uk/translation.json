@@ -2,6 +2,23 @@
 	"nezha": "Nezha Моніторинг",
 	"theme": {
 		"light": "Світла тема",
-		"dark": "Темна тема"
-	}
+		"dark": "Темна тема",
+		"system": "Система"
+	},
+	"NoResults": "Немає результатів",
+	"Servers": "Сервери",
+	"map": {
+		"Servers": "сервери"
+	},
+	"serverCard": {
+		"mem": "МЕМ"
+	},
+	"serverDetail": {
+		"mem": "МЕМ"
+	},
+	"serverDetailChart": {
+		"mem": "МЕМ"
+	},
+	"overview": "Огляд",
+	"dashboard": "Інформаційна панель"
 }
