@@ -39,7 +39,7 @@
 		"country-flag-icons": "1.5.18",
 		"d3-geo": "3.1.1",
 		"dayjs": "1.11.13",
-		"framer-motion": "12.4.5",
+		"framer-motion": "12.23.26",
 		"i18n-iso-countries": "7.14.0",
 		"i18next": "24.2.2",
 		"lucide-react": "0.460.0",
