@@ -29,7 +29,7 @@ export default function ServerDetail() {
 			<ServerDetailOverview server_id={server_id} />
 			<section className="flex items-center my-2 w-full">
 				<Separator className="flex-1" />
-				<div className="flex justify-center w-full max-w-[200px]">
+				<div className="flex justify-center w-full max-w-50">
 					<TabSwitch
 						tabs={tabs}
 						currentTab={currentTab}
