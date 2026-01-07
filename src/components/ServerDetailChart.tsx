@@ -117,7 +117,7 @@ export default function ServerDetailChart({
 							/>
 						))
 					: null}
-			<ProcessChart
+			<MemChart
 				now={nezhaWsData.now}
 				data={server}
 				messageHistory={messageHistory}
@@ -127,7 +127,7 @@ export default function ServerDetailChart({
 				data={server}
 				messageHistory={messageHistory}
 			/>
-			<MemChart
+			<ProcessChart
 				now={nezhaWsData.now}
 				data={server}
 				messageHistory={messageHistory}
