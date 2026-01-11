@@ -27,9 +27,26 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
-import { fetchMonitor } from "@/lib/nezha-api";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { fetchMonitor, fetchServiceSummary } from "@/lib/nezha-api";
 import { cn, formatTime } from "@/lib/utils";
-import type { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api";
+import type {
+	NezhaMonitor,
+	ServerMonitorChart,
+	ServiceSummaryItem,
+} from "@/types/nezha-api";
 
 import NetworkChartLoading from "./NetworkChartLoading";
 import { Label } from "./ui/label";
@@ -38,6 +55,24 @@ import { Switch } from "./ui/switch";
 interface ResultItem {
 	created_at: number;
 	[key: string]: number;
+}
+
+interface MonitorRangeOption {
+	value: string;
+	label: string;
+	seconds?: number;
+}
+
+interface SummaryDaysOption {
+	value: string;
+	label: string;
+	days: number;
+}
+
+interface DailySummaryItem extends ServiceSummaryItem {
+	uptime: number;
+	total: number;
+	hasData: boolean;
 }
 
 /**
@@ -115,19 +150,79 @@ export function NetworkChart({
 	show: boolean;
 }) {
 	const { t } = useTranslation();
+	const rangeOptions = useMemo<MonitorRangeOption[]>(
+		() => [
+			{ value: "auto", label: t("monitor.rangeAuto", "Auto") },
+			{ value: "1h", label: t("monitor.range1h", "Last 1h"), seconds: 3600 },
+			{ value: "6h", label: t("monitor.range6h", "Last 6h"), seconds: 21600 },
+			{
+				value: "12h",
+				label: t("monitor.range12h", "Last 12h"),
+				seconds: 43200,
+			},
+			{
+				value: "24h",
+				label: t("monitor.range24h", "Last 24h"),
+				seconds: 86400,
+			},
+			{
+				value: "7d",
+				label: t("monitor.range7d", "Last 7d"),
+				seconds: 604800,
+			},
+			{
+				value: "30d",
+				label: t("monitor.range30d", "Last 30d"),
+				seconds: 2592000,
+			},
+		],
+		[t],
+	);
+	const [rangeValue, setRangeValue] = React.useState("auto");
+	const activeRange =
+		rangeOptions.find((option) => option.value === rangeValue) ??
+		rangeOptions[0];
+
+	const summaryDaysOptions = useMemo<SummaryDaysOption[]>(
+		() => [
+			{ value: "7", label: t("monitor.summary7d", "7d"), days: 7 },
+			{ value: "30", label: t("monitor.summary30d", "30d"), days: 30 },
+			{ value: "90", label: t("monitor.summary90d", "90d"), days: 90 },
+		],
+		[t],
+	);
+	const [summaryDaysValue, setSummaryDaysValue] = React.useState("30");
+	const activeSummaryDays =
+		summaryDaysOptions.find((option) => option.value === summaryDaysValue)
+			?.days ?? 30;
 
 	const { data: monitorData } = useQuery({
-		queryKey: ["monitor", server_id],
-		queryFn: () => fetchMonitor(server_id),
+		queryKey: ["monitor", server_id, rangeValue],
+		queryFn: () => {
+			if (activeRange.seconds === undefined) {
+				return fetchMonitor(server_id);
+			}
+			const end = Math.floor(Date.now() / 1000);
+			const start = end - activeRange.seconds;
+			return fetchMonitor(server_id, { start, end });
+		},
 		enabled: show,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,
 		refetchInterval: 10000,
 	});
 
+	const { data: summaryData } = useQuery({
+		queryKey: ["monitor-summary", server_id, summaryDaysValue],
+		queryFn: () => fetchServiceSummary(server_id, { days: activeSummaryDays }),
+		enabled: show,
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+	});
+
 	if (!monitorData) return <NetworkChartLoading />;
 
-	if (monitorData?.success && !monitorData.data) {
+	if (monitorData?.success && monitorData.data.length === 0) {
 		return (
 			<>
 				<div className="flex flex-col items-center justify-center">
@@ -166,6 +261,13 @@ export function NetworkChart({
 			chartData={transformedData}
 			serverName={monitorData.data[0].server_name}
 			formattedData={formattedData}
+			rangeOptions={rangeOptions}
+			rangeValue={rangeValue}
+			onRangeChange={setRangeValue}
+			summaryItems={summaryData?.success ? summaryData.data : []}
+			summaryDaysOptions={summaryDaysOptions}
+			summaryDaysValue={summaryDaysValue}
+			onSummaryDaysChange={setSummaryDaysValue}
 		/>
 	);
 }
@@ -176,12 +278,26 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 	chartData,
 	serverName,
 	formattedData,
+	rangeOptions,
+	rangeValue,
+	onRangeChange,
+	summaryItems,
+	summaryDaysOptions,
+	summaryDaysValue,
+	onSummaryDaysChange,
 }: {
 	chartDataKey: string[];
 	chartConfig: ChartConfig;
 	chartData: ServerMonitorChart;
 	serverName: string;
 	formattedData: ResultItem[];
+	rangeOptions: MonitorRangeOption[];
+	rangeValue: string;
+	onRangeChange: (value: string) => void;
+	summaryItems: ServiceSummaryItem[];
+	summaryDaysOptions: SummaryDaysOption[];
+	summaryDaysValue: string;
+	onSummaryDaysChange: (value: string) => void;
 }) {
 	const { t } = useTranslation();
 
@@ -449,6 +565,86 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 		});
 	}, [isPeakEnabled, activeCharts, formattedData, chartData, chartDataKey]);
 
+	const summaryDays = useMemo<DailySummaryItem[]>(() => {
+		return summaryItems
+			.map((item) => {
+				const total = item.up + item.down;
+				const uptime = total > 0 ? (item.up / total) * 100 : 0;
+				return {
+					...item,
+					uptime,
+					total,
+					hasData: total > 0,
+				};
+			})
+			.sort((a, b) => a.date.localeCompare(b.date));
+	}, [summaryItems]);
+
+	const summaryTotals = useMemo(() => {
+		return summaryDays.reduce(
+			(acc, day) => {
+				if (!day.hasData) {
+					return acc;
+				}
+				acc.up += day.up;
+				acc.down += day.down;
+				acc.delaySum += day.avg_delay;
+				acc.days += 1;
+				return acc;
+			},
+			{ up: 0, down: 0, delaySum: 0, days: 0 },
+		);
+	}, [summaryDays]);
+
+	const summaryUptime =
+		summaryTotals.up + summaryTotals.down > 0
+			? (summaryTotals.up / (summaryTotals.up + summaryTotals.down)) * 100
+			: 0;
+	const summaryAvgDelay =
+		summaryTotals.days > 0 ? summaryTotals.delaySum / summaryTotals.days : 0;
+
+	const summaryDaysCount = useMemo(() => {
+		const match = summaryDaysOptions.find(
+			(option) => option.value === summaryDaysValue,
+		);
+		if (match) {
+			return match.days;
+		}
+		const parsed = Number(summaryDaysValue);
+		return Number.isNaN(parsed) ? 0 : parsed;
+	}, [summaryDaysOptions, summaryDaysValue]);
+
+	const formatSummaryDate = useCallback((dateValue: string) => {
+		const date = new Date(`${dateValue}T00:00:00`);
+		if (Number.isNaN(date.getTime())) {
+			return dateValue;
+		}
+		return date.toLocaleDateString();
+	}, []);
+
+	const getSummaryColor = useCallback((uptime: number, hasData: boolean) => {
+		if (!hasData) {
+			return "bg-muted/40";
+		}
+		if (uptime >= 99) {
+			return "bg-linear-to-b from-emerald-500/90 to-emerald-600 shadow-[0_1px_2px_--theme(--color-emerald-600/30%)]";
+		}
+		if (uptime >= 95) {
+			return "bg-linear-to-b from-amber-500/90 to-amber-600 shadow-[0_1px_2px_--theme(--color-amber-600/30%)]";
+		}
+		return "bg-linear-to-b from-rose-500/80 to-rose-600/90 shadow-[0_1px_2px_--theme(--color-rose-600/30%)]";
+	}, []);
+
+	const getSummaryTextColor = useCallback((uptime: number) => {
+		if (uptime >= 99) {
+			return "text-emerald-500";
+		}
+		if (uptime >= 95) {
+			return "text-amber-500";
+		}
+		return "text-rose-500";
+	}, []);
+
 	return (
 		<Card
 			className={cn({
@@ -472,6 +668,23 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 						<Label className="text-xs" htmlFor="Peak">
 							Peak cut
 						</Label>
+					</div>
+					<div className="flex items-center mt-2 space-x-2">
+						<Label className="text-xs text-muted-foreground" htmlFor="range">
+							{t("monitor.range", "Range")}
+						</Label>
+						<Select value={rangeValue} onValueChange={onRangeChange}>
+							<SelectTrigger className="h-7 w-[130px] text-xs" id="range">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{rangeOptions.map((option) => (
+									<SelectItem key={option.value} value={option.value}>
+										{option.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 					</div>
 				</div>
 				<div className="flex flex-wrap w-full">{chartButtons}</div>
@@ -599,6 +812,121 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 						</ComposedChart>
 					</ChartContainer>
 				</div>
+				{summaryDays.length > 0 && (
+					<div className="mt-4 border-t border-border/60 pt-4">
+						<div className="flex flex-wrap items-center justify-between gap-3">
+							<div className="flex flex-col">
+								<span className="text-sm font-medium">
+									{t("monitor.dailyAvailability", "Daily availability")}
+								</span>
+								<span className="text-xs text-muted-foreground">
+									{t("monitor.lastDays", "Last {{days}} days", {
+										days: summaryDaysCount,
+									})}
+								</span>
+							</div>
+							<div className="flex flex-wrap items-center gap-3 text-xs">
+								<span
+									className={cn(
+										"font-medium",
+										getSummaryTextColor(summaryUptime),
+									)}
+								>
+									{summaryUptime.toFixed(2)}% {t("monitor.uptime", "Uptime")}
+								</span>
+								<span className="text-muted-foreground">
+									{summaryAvgDelay.toFixed(0)}ms{" "}
+									{t("monitor.avgDelay", "Avg Delay")}
+								</span>
+								<Select
+									value={summaryDaysValue}
+									onValueChange={onSummaryDaysChange}
+								>
+									<SelectTrigger className="h-7 w-[90px] text-xs">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										{summaryDaysOptions.map((option) => (
+											<SelectItem key={option.value} value={option.value}>
+												{option.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</div>
+						</div>
+						<div className="mt-3 flex gap-[3px] rounded-lg bg-muted/30 p-1">
+							<TooltipProvider delayDuration={50}>
+								{summaryDays.map((day, index) => (
+									<Tooltip key={`${day.date}-${index}`}>
+										<TooltipTrigger asChild>
+											<div
+												className={cn(
+													"relative flex-1 h-7 rounded-[4px] transition-all duration-200 cursor-help",
+													"before:absolute before:inset-0 before:rounded-[4px] before:opacity-0 hover:before:opacity-100 before:bg-white/10 before:transition-opacity",
+													"after:absolute after:inset-0 after:rounded-[4px] after:shadow-[inset_0_1px_--theme(--color-white/10%)]",
+													getSummaryColor(day.uptime, day.hasData),
+												)}
+											/>
+										</TooltipTrigger>
+										<TooltipContent className="p-0 overflow-hidden">
+											<div className="px-3 py-2 bg-popover">
+												<p className="font-medium text-sm mb-2">
+													{formatSummaryDate(day.date)}
+												</p>
+												{day.hasData ? (
+													<div className="space-y-1.5">
+														<div className="flex items-center justify-between gap-3">
+															<span className="text-xs text-muted-foreground">
+																{t("monitor.uptime", "Uptime")}:
+															</span>
+															<span
+																className={cn(
+																	"text-xs font-medium",
+																	getSummaryTextColor(day.uptime),
+																)}
+															>
+																{day.uptime.toFixed(2)}%
+															</span>
+														</div>
+														<div className="flex items-center justify-between gap-3">
+															<span className="text-xs text-muted-foreground">
+																{t("monitor.avgDelay", "Avg Delay")}:
+															</span>
+															<span className="text-xs font-medium text-foreground">
+																{day.avg_delay.toFixed(0)}ms
+															</span>
+														</div>
+														<div className="flex items-center justify-between gap-3">
+															<span className="text-xs text-muted-foreground">
+																{t("monitor.checks", "Checks")}:
+															</span>
+															<span className="text-xs font-medium text-foreground">
+																{day.up}/{day.down}
+															</span>
+														</div>
+													</div>
+												) : (
+													<span className="text-xs text-muted-foreground">
+														{t("monitor.summaryNoData", "No data")}
+													</span>
+												)}
+											</div>
+										</TooltipContent>
+									</Tooltip>
+								))}
+							</TooltipProvider>
+						</div>
+						<div className="mt-2 flex justify-between text-xs text-muted-foreground">
+							<span>
+								{t("monitor.daysAgo", "{{days}} days ago", {
+									days: summaryDaysCount,
+								})}
+							</span>
+							<span>{t("monitor.today", "Today")}</span>
+						</div>
+					</div>
+				)}
 			</CardContent>
 		</Card>
 	);

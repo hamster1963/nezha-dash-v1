@@ -82,6 +82,35 @@ export interface MonitorResponse {
 	data: NezhaMonitor[];
 }
 
+export interface ServiceHistoryResponse {
+	success: boolean;
+	data: ServiceHistoryData | null;
+	error?: string;
+}
+
+export interface ServiceHistoryData {
+	avg_delay: number[];
+	down: number[];
+	resolution: string;
+	service_id: number;
+	service_name: string;
+	timestamps: number[];
+	up: number[];
+}
+
+export interface ServiceSummaryResponse {
+	success: boolean;
+	data: ServiceSummaryItem[];
+	error?: string;
+}
+
+export interface ServiceSummaryItem {
+	avg_delay: number;
+	date: string;
+	down: number;
+	up: number;
+}
+
 export type ServerMonitorChart = {
 	[key: string]: {
 		created_at: number;
