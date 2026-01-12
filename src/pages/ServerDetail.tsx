@@ -39,9 +39,9 @@ export default function ServerDetail() {
 				<Separator className="flex-1" />
 			</section>
 
-			<section>
+			{/* <section>
 				<ServerDetailSummary server_id={Number(server_id)} />
-			</section>
+			</section> */}
 
 			<div style={{ display: currentTab === tabs[0] ? "block" : "none" }}>
 				<ServerDetailChart server_id={server_id} />
