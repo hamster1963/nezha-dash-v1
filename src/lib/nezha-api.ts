@@ -37,10 +37,14 @@ export const fetchLoginUser = async (): Promise<LoginUserResponse> => {
 	return data;
 };
 
+export type MonitorPeriod = "1d" | "7d" | "30d";
+
 export const fetchMonitor = async (
 	server_id: number,
+	period?: MonitorPeriod,
 ): Promise<MonitorResponse> => {
-	const response = await fetch(`/api/v1/service/${server_id}`);
+	const query = period ? `?period=${period}` : "";
+	const response = await fetch(`/api/v1/server/${server_id}/service${query}`);
 	const data = await response.json();
 	if (data.error) {
 		throw new Error(data.error);

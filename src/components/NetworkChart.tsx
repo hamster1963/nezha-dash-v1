@@ -27,7 +27,11 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
-import { fetchMonitor } from "@/lib/nezha-api";
+import {
+	fetchLoginUser,
+	fetchMonitor,
+	type MonitorPeriod,
+} from "@/lib/nezha-api";
 import { cn, formatTime } from "@/lib/utils";
 import type { NezhaMonitor, ServerMonitorChart } from "@/types/nezha-api";
 
@@ -39,6 +43,12 @@ interface ResultItem {
 	created_at: number;
 	[key: string]: number;
 }
+
+const TIME_RANGE_OPTIONS: { value: MonitorPeriod; label: string }[] = [
+	{ value: "1d", label: "1D" },
+	{ value: "7d", label: "7D" },
+	{ value: "30d", label: "30D" },
+];
 
 /**
  * Helper method to calculate packet loss from delay data
@@ -115,10 +125,31 @@ export function NetworkChart({
 	show: boolean;
 }) {
 	const { t } = useTranslation();
+	const [period, setPeriod] = React.useState<MonitorPeriod>("30d");
+	const { data: userData, isError: isLoginError } = useQuery({
+		queryKey: ["login-user"],
+		queryFn: () => fetchLoginUser(),
+		refetchOnMount: false,
+		refetchOnWindowFocus: true,
+		refetchIntervalInBackground: true,
+		refetchInterval: 1000 * 30,
+		retry: 0,
+	});
+	const isLogin = isLoginError
+		? false
+		: userData
+			? !!userData?.data?.id && !!document.cookie
+			: false;
+
+	React.useEffect(() => {
+		if (!isLogin && period !== "1d") {
+			setPeriod("1d");
+		}
+	}, [isLogin, period]);
 
 	const { data: monitorData } = useQuery({
-		queryKey: ["monitor", server_id],
-		queryFn: () => fetchMonitor(server_id),
+		queryKey: ["monitor", server_id, period],
+		queryFn: () => fetchMonitor(server_id, period),
 		enabled: show,
 		refetchOnMount: true,
 		refetchOnWindowFocus: true,
@@ -145,7 +176,19 @@ export function NetworkChart({
 
 	const formattedData = formatData(monitorData.data);
 
-	const chartDataKey = Object.keys(transformedData);
+	const monitorIdByName = new Map(
+		monitorData.data.map((item) => [item.monitor_name, item.monitor_id]),
+	);
+	const chartDataKey = Object.keys(transformedData).sort((a, b) => {
+		const aId = monitorIdByName.get(a);
+		const bId = monitorIdByName.get(b);
+		if (aId === undefined && bId === undefined) {
+			return a.localeCompare(b);
+		}
+		if (aId === undefined) return 1;
+		if (bId === undefined) return -1;
+		return aId - bId;
+	});
 
 	const initChartConfig = {
 		avg_delay: {
@@ -166,6 +209,9 @@ export function NetworkChart({
 			chartData={transformedData}
 			serverName={monitorData.data[0].server_name}
 			formattedData={formattedData}
+			period={period}
+			onPeriodChange={setPeriod}
+			isLogin={isLogin}
 		/>
 	);
 }
@@ -176,12 +222,18 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 	chartData,
 	serverName,
 	formattedData,
+	period,
+	onPeriodChange,
+	isLogin,
 }: {
 	chartDataKey: string[];
 	chartConfig: ChartConfig;
 	chartData: ServerMonitorChart;
 	serverName: string;
 	formattedData: ResultItem[];
+	period: MonitorPeriod;
+	onPeriodChange: (period: MonitorPeriod) => void;
+	isLogin: boolean;
 }) {
 	const { t } = useTranslation();
 
@@ -221,11 +273,30 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 		[chartDataKey],
 	);
 
+	const chartStats = useMemo(() => {
+		const stats: { [key: string]: { minDelay: number; maxDelay: number } } = {};
+
+		for (const key of chartDataKey) {
+			const data = chartData[key] || [];
+			if (data.length > 0) {
+				const delays = data.map((item) => item.avg_delay);
+				const minDelay = Math.min(...delays);
+				const maxDelay = Math.max(...delays);
+				stats[key] = { minDelay, maxDelay };
+			} else {
+				stats[key] = { minDelay: 0, maxDelay: 0 };
+			}
+		}
+
+		return stats;
+	}, [chartDataKey, chartData]);
+
 	const chartButtons = useMemo(
 		() =>
 			chartDataKey.map((key) => {
 				const monitorData = chartData[key];
 				const lastDelay = monitorData[monitorData.length - 1].avg_delay;
+				const stats = chartStats[key];
 
 				// Calculate average packet loss if available
 				const packetLossData = monitorData.reduce<number[]>((acc, item) => {
@@ -251,19 +322,27 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 							{key}
 						</span>
 						<div className="flex flex-col gap-0.5">
-							<span className="text-md font-bold leading-none sm:text-lg">
+							<span className="text-md font-semibold leading-none sm:text-xl">
 								{lastDelay.toFixed(2)}ms
 							</span>
-							{avgPacketLoss !== null && (
-								<span className="text-xs text-muted-foreground">
-									{avgPacketLoss.toFixed(2)}% avg loss
+							<div className="flex items-center gap-2 text-[12px]">
+								<span className="text-green-600 dark:text-green-400">
+									↓{stats.minDelay.toFixed(0)}
 								</span>
-							)}
+								<span className="text-red-600 dark:text-red-500">
+									↑{stats.maxDelay.toFixed(0)}
+								</span>
+								{avgPacketLoss !== null && (
+									<span className="text-muted-foreground">
+										{avgPacketLoss.toFixed(2)}% avg loss
+									</span>
+								)}
+							</div>
 						</div>
 					</button>
 				);
 			}),
-		[chartDataKey, activeCharts, chartData, handleButtonClick],
+		[chartDataKey, activeCharts, chartData, chartStats, handleButtonClick],
 	);
 
 	const chartElements = useMemo(() => {
@@ -463,15 +542,41 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 					<CardDescription className="text-xs">
 						{chartDataKey.length} {t("monitor.monitorCount")}
 					</CardDescription>
-					<div className="flex items-center mt-0.5 space-x-2">
-						<Switch
-							id="Peak"
-							checked={isPeakEnabled}
-							onCheckedChange={setIsPeakEnabled}
-						/>
-						<Label className="text-xs" htmlFor="Peak">
-							Peak cut
-						</Label>
+					<div className="mt-0.5 flex items-center gap-3">
+						<div className="flex items-center gap-1 rounded-lg bg-muted/50 p-1">
+							{TIME_RANGE_OPTIONS.map((option) => {
+								const isLocked = !isLogin && option.value !== "1d";
+								return (
+									<button
+										key={option.value}
+										type="button"
+										disabled={isLocked}
+										onClick={() => {
+											if (!isLocked) {
+												onPeriodChange(option.value);
+											}
+										}}
+										className={`rounded-md px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
+											period === option.value
+												? "bg-primary text-primary-foreground shadow-sm"
+												: "text-muted-foreground hover:bg-muted hover:text-foreground"
+										} ${isLocked ? "cursor-not-allowed opacity-50" : ""}`}
+									>
+										{option.label}
+									</button>
+								);
+							})}
+						</div>
+						<div className="flex items-center space-x-2">
+							<Switch
+								id="Peak"
+								checked={isPeakEnabled}
+								onCheckedChange={setIsPeakEnabled}
+							/>
+							<Label className="text-xs" htmlFor="Peak">
+								Peak cut
+							</Label>
+						</div>
 					</div>
 				</div>
 				<div className="flex flex-wrap w-full">{chartButtons}</div>
