@@ -96,7 +96,7 @@ function PeriodSelector({
 	];
 
 	return (
-		<div className="flex gap-0.5 mb-3 flex-wrap -mt-5 p-0.5 bg-muted dark:bg-muted/40 rounded-full w-fit border border-border/60 dark:border-border">
+		<div className="flex gap-0.5 mb-3 flex-wrap sm:-mt-5 -mt-3 p-0.5 bg-muted dark:bg-muted/40 rounded-full w-fit border border-border/60 dark:border-border">
 			{periods.map((period) => {
 				// Only realtime and 1d are available for non-logged-in users
 				const isLocked =

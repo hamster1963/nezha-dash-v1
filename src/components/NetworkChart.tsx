@@ -334,8 +334,9 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 									↑{stats.maxDelay.toFixed(0)}
 								</span>
 								{avgPacketLoss !== null && (
-									<span className="text-muted-foreground">
-										{avgPacketLoss.toFixed(2)}% avg loss
+									<span className="text-muted-foreground flex items-center gap-1">
+										{avgPacketLoss.toFixed(2)}%
+										<p className=" hidden sm:block">avg loss</p>
 									</span>
 								)}
 							</div>
@@ -531,7 +532,7 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 
 	return (
 		<div className="flex flex-col gap-3">
-			<div className="flex items-center gap-3 -mt-5 flex-wrap">
+			<div className="flex items-center gap-3 sm:-mt-5 -mt-3 flex-wrap">
 				<div className="flex items-center gap-1 rounded-full bg-muted dark:bg-muted/40 p-0.5 border border-border/60 dark:border-border">
 					{TIME_RANGE_OPTIONS.map((option) => {
 						const isLocked = !isLogin && option.value !== "1d";
