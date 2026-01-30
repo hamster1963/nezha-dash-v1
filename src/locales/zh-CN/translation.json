@@ -77,7 +77,11 @@
 		"mem": "内存",
 		"swap": "虚拟内存",
 		"upload": "上传",
-		"download": "下载"
+		"download": "下载",
+		"realtime": "实时",
+		"period1d": "1 天",
+		"period7d": "7 天",
+		"period30d": "30 天"
 	},
 	"footer": {
 		"themeBy": "主题-"

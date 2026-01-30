@@ -1,7 +1,10 @@
 import type {
 	LoginUserResponse,
+	MetricPeriod,
+	MetricType,
 	MonitorResponse,
 	ServerGroupResponse,
+	ServerMetricsResponse,
 	ServiceResponse,
 	SettingResponse,
 } from "@/types/nezha-api";
@@ -63,6 +66,22 @@ export const fetchService = async (): Promise<ServiceResponse> => {
 
 export const fetchSetting = async (): Promise<SettingResponse> => {
 	const response = await fetch("/api/v1/setting");
+	const data = await response.json();
+	if (data.error) {
+		throw new Error(data.error);
+	}
+	return data;
+};
+
+export const fetchServerMetrics = async (
+	server_id: number,
+	metric: MetricType,
+	period?: MetricPeriod,
+): Promise<ServerMetricsResponse> => {
+	const query = period
+		? `?metric=${metric}&period=${period}`
+		: `?metric=${metric}`;
+	const response = await fetch(`/api/v1/server/${server_id}/metrics${query}`);
 	const data = await response.json();
 	if (data.error) {
 		throw new Error(data.error);

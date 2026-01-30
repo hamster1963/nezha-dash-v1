@@ -77,7 +77,11 @@
 		"mem": "Mem",
 		"swap": "Swap",
 		"upload": "Upload",
-		"download": "Download"
+		"download": "Download",
+		"realtime": "Realtime",
+		"period1d": "1 Day",
+		"period7d": "7 Days",
+		"period30d": "30 Days"
 	},
 	"footer": {
 		"themeBy": "Theme by "

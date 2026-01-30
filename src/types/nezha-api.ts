@@ -158,3 +158,41 @@ export interface SettingResponse {
 		version: string;
 	};
 }
+
+export type MetricType =
+	| "cpu"
+	| "memory"
+	| "swap"
+	| "disk"
+	| "net_in_speed"
+	| "net_out_speed"
+	| "net_in_transfer"
+	| "net_out_transfer"
+	| "load1"
+	| "load5"
+	| "load15"
+	| "tcp_conn"
+	| "udp_conn"
+	| "process_count"
+	| "temperature"
+	| "uptime"
+	| "gpu";
+
+export type MetricPeriod = "1d" | "7d" | "30d";
+
+export interface MetricDataPoint {
+	ts: number;
+	value: number;
+}
+
+export interface ServerMetricsData {
+	server_id: number;
+	server_name: string;
+	metric: string;
+	data_points: MetricDataPoint[];
+}
+
+export interface ServerMetricsResponse {
+	success: boolean;
+	data: ServerMetricsData;
+}

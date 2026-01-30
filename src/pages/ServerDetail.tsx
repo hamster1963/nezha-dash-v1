@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { NetworkChart } from "@/components/NetworkChart";
 import ServerDetailChart from "@/components/ServerDetailChart";
 import ServerDetailOverview from "@/components/ServerDetailOverview";
-import ServerDetailSummary from "@/components/ServerDetailSummary";
 import TabSwitch from "@/components/TabSwitch";
 import { Separator } from "@/components/ui/separator";
 
@@ -39,9 +38,9 @@ export default function ServerDetail() {
 				<Separator className="flex-1" />
 			</section>
 
-			<section>
+			{/* <section>
 				<ServerDetailSummary server_id={Number(server_id)} />
-			</section>
+			</section> */}
 
 			<div style={{ display: currentTab === tabs[0] ? "block" : "none" }}>
 				<ServerDetailChart server_id={server_id} />
