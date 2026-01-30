@@ -11,11 +11,21 @@ import {
 	YAxis,
 } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
-import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+	type ChartConfig,
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
+} from "@/components/ui/chart";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { formatBytes } from "@/lib/format";
 import { fetchLoginUser, fetchServerMetrics } from "@/lib/nezha-api";
-import { cn, formatNezhaInfo, formatRelativeTime } from "@/lib/utils";
+import {
+	cn,
+	formatNezhaInfo,
+	formatRelativeTime,
+	formatTime,
+} from "@/lib/utils";
 import type {
 	MetricPeriod,
 	NezhaServer,
@@ -84,7 +94,7 @@ function PeriodSelector({
 	];
 
 	return (
-		<div className="flex gap-1 mb-3 flex-wrap">
+		<div className="flex gap-1 mb-3 flex-wrap -mt-5">
 			{periods.map((period) => {
 				// Only realtime and 1d are available for non-logged-in users
 				const isLocked =
@@ -427,6 +437,7 @@ function GpuChart({
 							</div>
 						) : (
 							<AreaChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -452,6 +463,27 @@ function GpuChart({
 									tickMargin={-15}
 									domain={[0, 100]}
 									tickFormatter={(value) => `${value}%`}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value) => (
+												<div className="flex flex-1 items-center justify-between leading-none">
+													<span className="text-muted-foreground">GPU</span>
+													<span className="ml-2 font-medium text-foreground tabular-nums">
+														{Number(value).toFixed(1)}%
+													</span>
+												</div>
+											)}
+										/>
+									}
 								/>
 								<Area
 									isAnimationActive={false}
@@ -607,6 +639,7 @@ function CpuChart({
 							</div>
 						) : (
 							<AreaChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -632,6 +665,27 @@ function CpuChart({
 									tickMargin={-15}
 									domain={[0, 100]}
 									tickFormatter={(value) => `${value}%`}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value) => (
+												<div className="flex flex-1 items-center justify-between leading-none">
+													<span className="text-muted-foreground">CPU</span>
+													<span className="ml-2 font-medium text-foreground tabular-nums">
+														{Number(value).toFixed(1)}%
+													</span>
+												</div>
+											)}
+										/>
+									}
 								/>
 								<Area
 									isAnimationActive={false}
@@ -783,6 +837,7 @@ function ProcessChart({
 							</div>
 						) : (
 							<AreaChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -806,6 +861,29 @@ function ProcessChart({
 									axisLine={false}
 									mirror={true}
 									tickMargin={-15}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator={"dot"}
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value) => (
+												<div className="flex flex-1 items-center justify-between leading-none">
+													<span className="text-muted-foreground">
+														{t("serverDetailChart.process")}
+													</span>
+													<span className="ml-2 font-medium text-foreground tabular-nums">
+														{Number(value).toFixed(0)}
+													</span>
+												</div>
+											)}
+										/>
+									}
 								/>
 								<Area
 									isAnimationActive={false}
@@ -1043,6 +1121,7 @@ function MemChart({
 							</div>
 						) : (
 							<AreaChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -1068,6 +1147,35 @@ function MemChart({
 									tickMargin={-15}
 									domain={[0, 100]}
 									tickFormatter={(value) => `${value}%`}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value, name) => {
+												const label =
+													name === "mem"
+														? t("serverDetailChart.mem")
+														: t("serverDetailChart.swap");
+												return (
+													<div className="flex flex-1 items-center justify-between leading-none">
+														<span className="text-muted-foreground">
+															{label}
+														</span>
+														<span className="ml-2 font-medium text-foreground tabular-nums">
+															{Number(value).toFixed(1)}%
+														</span>
+													</div>
+												);
+											}}
+										/>
+									}
 								/>
 								<Area
 									isAnimationActive={false}
@@ -1243,6 +1351,7 @@ function DiskChart({
 							</div>
 						) : (
 							<AreaChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -1268,6 +1377,29 @@ function DiskChart({
 									tickMargin={-15}
 									domain={[0, 100]}
 									tickFormatter={(value) => `${value}%`}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value) => (
+												<div className="flex flex-1 items-center justify-between leading-none">
+													<span className="text-muted-foreground">
+														{t("serverDetailChart.disk")}
+													</span>
+													<span className="ml-2 font-medium text-foreground tabular-nums">
+														{Number(value).toFixed(1)}%
+													</span>
+												</div>
+											)}
+										/>
+									}
 								/>
 								<Area
 									isAnimationActive={false}
@@ -1490,6 +1622,7 @@ function NetworkChart({
 							</div>
 						) : (
 							<LineChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -1518,6 +1651,35 @@ function NetworkChart({
 									interval="preserveStartEnd"
 									domain={[1, maxDownload]}
 									tickFormatter={(value) => `${value.toFixed(0)}M/s`}
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value, name) => {
+												const label =
+													name === "upload"
+														? t("serverDetailChart.upload")
+														: t("serverDetailChart.download");
+												return (
+													<div className="flex flex-1 items-center justify-between leading-none">
+														<span className="text-muted-foreground">
+															{label}
+														</span>
+														<span className="ml-2 font-medium text-foreground tabular-nums">
+															{Number(value).toFixed(2)} MB/s
+														</span>
+													</div>
+												);
+											}}
+										/>
+									}
 								/>
 								<Line
 									isAnimationActive={false}
@@ -1721,6 +1883,7 @@ function ConnectChart({
 							</div>
 						) : (
 							<LineChart
+								syncId="serverDetailCharts"
 								accessibilityLayer
 								data={displayData}
 								margin={{
@@ -1746,6 +1909,32 @@ function ConnectChart({
 									tickMargin={-15}
 									type="number"
 									interval="preserveStartEnd"
+								/>
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator="dot"
+											labelFormatter={(_, payload) => {
+												return formatTime(
+													Number(payload[0]?.payload?.timeStamp),
+												);
+											}}
+											formatter={(value, name) => {
+												const label = name === "tcp" ? "TCP" : "UDP";
+												return (
+													<div className="flex flex-1 items-center justify-between leading-none">
+														<span className="text-muted-foreground">
+															{label}
+														</span>
+														<span className="ml-2 font-medium text-foreground tabular-nums">
+															{Number(value).toFixed(0)}
+														</span>
+													</div>
+												);
+											}}
+										/>
+									}
 								/>
 								<Line
 									isAnimationActive={false}

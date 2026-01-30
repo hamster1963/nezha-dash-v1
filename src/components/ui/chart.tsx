@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 import { cn } from "@/lib/utils";
@@ -6,7 +8,7 @@ import { cn } from "@/lib/utils";
 const THEMES = { light: "", dark: ".dark" } as const;
 
 export type ChartConfig = {
-	[k in string]: {
+	[k: string]: {
 		label?: React.ReactNode;
 		icon?: React.ComponentType;
 	} & (
@@ -101,14 +103,26 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 
 const ChartTooltipContent = React.forwardRef<
 	HTMLDivElement,
-	React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-		React.ComponentProps<"div"> & {
-			hideLabel?: boolean;
-			hideIndicator?: boolean;
-			indicator?: "line" | "dot" | "dashed";
-			nameKey?: string;
-			labelKey?: string;
-		}
+	React.ComponentProps<"div"> & {
+		active?: boolean;
+		payload?: any[];
+		label?: any;
+		hideLabel?: boolean;
+		hideIndicator?: boolean;
+		indicator?: "line" | "dot" | "dashed";
+		nameKey?: string;
+		labelKey?: string;
+		labelFormatter?: (value: any, payload: any[]) => React.ReactNode;
+		formatter?: (
+			value: any,
+			name: any,
+			item: any,
+			index: number,
+			payload: any,
+		) => React.ReactNode;
+		color?: string;
+		labelClassName?: string;
+	}
 >(
 	(
 		{
@@ -170,18 +184,31 @@ const ChartTooltipContent = React.forwardRef<
 			return null;
 		}
 
+		payload.sort((a, b) => {
+			return Number(b.value) - Number(a.value);
+		});
+
 		const nestLabel = payload.length === 1 && indicator !== "dot";
 
 		return (
 			<div
 				ref={ref}
 				className={cn(
-					"grid min-w-32 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+					"grid min-w-32 items-start gap-1.5 overflow-hidden rounded-sm border border-border/50 bg-stone-100 text-xs dark:bg-stone-900",
 					className,
 				)}
 			>
-				{!nestLabel ? tooltipLabel : null}
-				<div className="grid gap-1.5">
+				{!nestLabel && (
+					<div className="mx-auto -mb-1 px-2.5 pt-1">
+						{!nestLabel ? tooltipLabel : null}
+					</div>
+				)}
+
+				<div
+					className={cn("grid gap-1.5 bg-white px-2.5 py-1.5 dark:bg-black", {
+						"border-t": !nestLabel,
+					})}
+				>
 					{payload.map((item, index) => {
 						const key = `${nameKey || item.name || item.dataKey || "value"}`;
 						const itemConfig = getPayloadConfigFromPayload(config, item, key);
@@ -236,8 +263,15 @@ const ChartTooltipContent = React.forwardRef<
 												</span>
 											</div>
 											{item.value && (
-												<span className="font-mono font-medium tabular-nums text-foreground">
-													{item.value.toLocaleString()}
+												<span
+													className={cn(
+														"ml-2 font-medium text-foreground tabular-nums",
+														payload.length === 1 && "-ml-9",
+													)}
+												>
+													{typeof item.value === "number"
+														? item.value.toFixed(2).toLocaleString()
+														: item.value}{" "}
 												</span>
 											)}
 										</div>
@@ -257,11 +291,12 @@ const ChartLegend = RechartsPrimitive.Legend;
 
 const ChartLegendContent = React.forwardRef<
 	HTMLDivElement,
-	React.ComponentProps<"div"> &
-		Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-			hideIcon?: boolean;
-			nameKey?: string;
-		}
+	React.ComponentProps<"div"> & {
+		payload?: any[];
+		verticalAlign?: "top" | "bottom" | "middle";
+		hideIcon?: boolean;
+		nameKey?: string;
+	}
 >(
 	(
 		{ className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
@@ -303,7 +338,7 @@ const ChartLegendContent = React.forwardRef<
 									}}
 								/>
 							)}
-							{itemConfig?.label}
+							{key}
 						</div>
 					);
 				})}
