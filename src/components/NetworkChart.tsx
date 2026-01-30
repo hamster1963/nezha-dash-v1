@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { m } from "framer-motion";
 import * as React from "react";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -43,12 +44,6 @@ interface ResultItem {
 	created_at: number;
 	[key: string]: number;
 }
-
-const TIME_RANGE_OPTIONS: { value: MonitorPeriod; label: string }[] = [
-	{ value: "1d", label: "1D" },
-	{ value: "7d", label: "7D" },
-	{ value: "30d", label: "30D" },
-];
 
 /**
  * Helper method to calculate packet loss from delay data
@@ -236,6 +231,12 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 	isLogin: boolean;
 }) {
 	const { t } = useTranslation();
+
+	const TIME_RANGE_OPTIONS: { value: MonitorPeriod; label: string }[] = [
+		{ value: "1d", label: t("monitor.period1d") },
+		{ value: "7d", label: t("monitor.period7d") },
+		{ value: "30d", label: t("monitor.period30d") },
+	];
 
 	const customBackgroundImage =
 		(window.CustomBackgroundImage as string) !== ""
@@ -529,183 +530,201 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 	}, [isPeakEnabled, activeCharts, formattedData, chartData, chartDataKey]);
 
 	return (
-		<Card
-			className={cn({
-				"bg-card/70": customBackgroundImage,
-			})}
-		>
-			<CardHeader className="flex flex-col items-stretch space-y-0 overflow-hidden rounded-t-lg p-0 sm:flex-row">
-				<div className="flex flex-none flex-col justify-center gap-1 border-b px-6 py-4">
-					<CardTitle className="flex flex-none items-center gap-0.5 text-md">
-						{serverName}
-					</CardTitle>
-					<CardDescription className="text-xs">
-						{chartDataKey.length} {t("monitor.monitorCount")}
-					</CardDescription>
-					<div className="mt-0.5 flex items-center gap-3">
-						<div className="flex items-center gap-1 rounded-lg bg-muted/50 p-1">
-							{TIME_RANGE_OPTIONS.map((option) => {
-								const isLocked = !isLogin && option.value !== "1d";
-								return (
-									<button
-										key={option.value}
-										type="button"
-										disabled={isLocked}
-										onClick={() => {
-											if (!isLocked) {
-												onPeriodChange(option.value);
-											}
-										}}
-										className={`rounded-md px-2.5 py-1 text-xs font-medium transition-all duration-200 ${
-											period === option.value
-												? "bg-primary text-primary-foreground shadow-sm"
-												: "text-muted-foreground hover:bg-muted hover:text-foreground"
-										} ${isLocked ? "cursor-not-allowed opacity-50" : ""}`}
-									>
-										{option.label}
-									</button>
-								);
-							})}
-						</div>
-						<div className="flex items-center space-x-2">
-							<Switch
-								id="Peak"
-								checked={isPeakEnabled}
-								onCheckedChange={setIsPeakEnabled}
-							/>
-							<Label className="text-xs" htmlFor="Peak">
-								Peak cut
-							</Label>
-						</div>
-					</div>
-				</div>
-				<div className="flex flex-wrap w-full">{chartButtons}</div>
-			</CardHeader>
-			<CardContent className="pr-2 pl-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-2">
-				<div className="relative">
-					{activeCharts.length > 0 && (
-						<button
-							className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 backdrop-blur-xs rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
-							onClick={clearAllSelections}
-						>
-							{t("monitor.clearSelections", "Clear")} ({activeCharts.length})
-						</button>
-					)}
-					<ChartContainer
-						config={chartConfig}
-						className="aspect-auto h-[250px] w-full"
-					>
-						<ComposedChart
-							accessibilityLayer
-							data={processedData}
-							margin={{ left: 12, right: 12 }}
-						>
-							<CartesianGrid vertical={false} />
-							<XAxis
-								dataKey="created_at"
-								tickLine={true}
-								tickSize={3}
-								axisLine={false}
-								tickMargin={8}
-								minTickGap={80}
-								ticks={processedData
-									.filter((item, index, array) => {
-										if (array.length < 6) {
-											return index === 0 || index === array.length - 1;
-										}
-
-										// 计算数据的总时间跨度（毫秒）
-										const timeSpan =
-											array[array.length - 1].created_at - array[0].created_at;
-										const hours = timeSpan / (1000 * 60 * 60);
-
-										// 根据时间跨度调整显示间隔
-										if (hours <= 12) {
-											// 12小时内，每60分钟显示一个刻度
-											return (
-												index === 0 ||
-												index === array.length - 1 ||
-												new Date(item.created_at).getMinutes() % 60 === 0
-											);
-										}
-										// 超过12小时，每2小时显示一个刻度
-										const date = new Date(item.created_at);
-										return date.getMinutes() === 0 && date.getHours() % 2 === 0;
-									})
-									.map((item) => item.created_at)}
-								tickFormatter={(value) => {
-									const date = new Date(value);
-									const minutes = date.getMinutes();
-									return minutes === 0
-										? `${date.getHours()}:00`
-										: `${date.getHours()}:${minutes}`;
+		<div className="flex flex-col gap-3">
+			<div className="flex items-center gap-3 -mt-5 flex-wrap">
+				<div className="flex items-center gap-1 rounded-full bg-muted dark:bg-muted/40 p-0.5 border border-border/60 dark:border-border">
+					{TIME_RANGE_OPTIONS.map((option) => {
+						const isLocked = !isLogin && option.value !== "1d";
+						return (
+							<div
+								key={option.value}
+								onClick={() => {
+									if (!isLocked) {
+										onPeriodChange(option.value);
+									}
 								}}
-							/>
-							<YAxis
-								yAxisId="delay"
-								tickLine={false}
-								axisLine={false}
-								tickMargin={15}
-								minTickGap={20}
-								tickFormatter={(value) => `${value}ms`}
-							/>
-							{activeCharts.length === 1 && (
+								className={cn(
+									"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
+									period === option.value
+										? "text-foreground"
+										: "text-muted-foreground hover:text-foreground",
+									isLocked && "cursor-not-allowed opacity-40 grayscale",
+								)}
+							>
+								{period === option.value && (
+									<m.div
+										layoutId="network-period-selector-active"
+										className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
+										transition={{
+											type: "spring",
+											stiffness: 400,
+											damping: 30,
+										}}
+									/>
+								)}
+								<span className="relative z-20">{option.label}</span>
+							</div>
+						);
+					})}
+				</div>
+				<div className="flex items-center space-x-2">
+					<Switch
+						id="Peak"
+						checked={isPeakEnabled}
+						onCheckedChange={setIsPeakEnabled}
+					/>
+					<Label className="text-xs" htmlFor="Peak">
+						{t("monitor.peakCut")}
+					</Label>
+				</div>
+			</div>
+			<Card
+				className={cn({
+					"bg-card/70": customBackgroundImage,
+				})}
+			>
+				<CardHeader className="flex flex-col items-stretch space-y-0 overflow-hidden rounded-t-lg p-0 sm:flex-row">
+					<div className="flex flex-none flex-col justify-center gap-1 border-b px-6 py-4">
+						<CardTitle className="flex flex-none items-center gap-0.5 text-md">
+							{serverName}
+						</CardTitle>
+						<CardDescription className="text-xs">
+							{chartDataKey.length} {t("monitor.monitorCount")}
+						</CardDescription>
+					</div>
+					<div className="flex flex-wrap w-full">{chartButtons}</div>
+				</CardHeader>
+				<CardContent className="pr-2 pl-0 py-4 sm:pt-6 sm:pb-6 sm:pr-6 sm:pl-2">
+					<div className="relative">
+						{activeCharts.length > 0 && (
+							<button
+								className="absolute -top-2 right-1 z-10 text-xs px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 backdrop-blur-xs rounded-[5px] text-muted-foreground hover:text-foreground transition-colors"
+								onClick={clearAllSelections}
+							>
+								{t("monitor.clearSelections", "Clear")} ({activeCharts.length})
+							</button>
+						)}
+						<ChartContainer
+							config={chartConfig}
+							className="aspect-auto h-[250px] w-full"
+						>
+							<ComposedChart
+								accessibilityLayer
+								data={processedData}
+								margin={{ left: 12, right: 12 }}
+							>
+								<CartesianGrid vertical={false} />
+								<XAxis
+									dataKey="created_at"
+									tickLine={true}
+									tickSize={3}
+									axisLine={false}
+									tickMargin={8}
+									minTickGap={80}
+									ticks={processedData
+										.filter((item, index, array) => {
+											if (array.length < 6) {
+												return index === 0 || index === array.length - 1;
+											}
+
+											// 计算数据的总时间跨度（毫秒）
+											const timeSpan =
+												array[array.length - 1].created_at -
+												array[0].created_at;
+											const hours = timeSpan / (1000 * 60 * 60);
+
+											// 根据时间跨度调整显示间隔
+											if (hours <= 12) {
+												// 12小时内，每60分钟显示一个刻度
+												return (
+													index === 0 ||
+													index === array.length - 1 ||
+													new Date(item.created_at).getMinutes() % 60 === 0
+												);
+											}
+											// 超过12小时，每2小时显示一个刻度
+											const date = new Date(item.created_at);
+											return (
+												date.getMinutes() === 0 && date.getHours() % 2 === 0
+											);
+										})
+										.map((item) => item.created_at)}
+									tickFormatter={(value) => {
+										const date = new Date(value);
+										const minutes = date.getMinutes();
+										return minutes === 0
+											? `${date.getHours()}:00`
+											: `${date.getHours()}:${minutes}`;
+									}}
+								/>
 								<YAxis
-									yAxisId="packet-loss"
-									orientation="right"
+									yAxisId="delay"
 									tickLine={false}
 									axisLine={false}
 									tickMargin={15}
 									minTickGap={20}
-									tickFormatter={(value) => `${value}%`}
+									tickFormatter={(value) => `${value}ms`}
 								/>
-							)}
-							<ChartTooltip
-								isAnimationActive={false}
-								content={
-									<ChartTooltipContent
-										indicator={"line"}
-										labelKey="created_at"
-										labelFormatter={(_, payload) => {
-											return formatTime(payload[0].payload.created_at);
-										}}
-										formatter={(value, name) => {
-											let formattedValue: string;
-											let label: string;
-
-											if (name === "packet_loss") {
-												formattedValue = `${Number(value).toFixed(2)}%`;
-												label = t("monitor.packetLoss", "Packet Loss");
-											} else if (name === "avg_delay") {
-												formattedValue = `${Number(value).toFixed(2)}ms`;
-												label = t("monitor.avgDelay", "Avg Delay");
-											} else {
-												// For monitor names (in multi-chart view) - delay data
-												formattedValue = `${Number(value).toFixed(2)}ms`;
-												label = name as string;
-											}
-
-											return (
-												<div className="flex flex-1 items-center justify-between leading-none">
-													<span className="text-muted-foreground">{label}</span>
-													<span className="ml-2 font-medium text-foreground tabular-nums">
-														{formattedValue}
-													</span>
-												</div>
-											);
-										}}
+								{activeCharts.length === 1 && (
+									<YAxis
+										yAxisId="packet-loss"
+										orientation="right"
+										tickLine={false}
+										axisLine={false}
+										tickMargin={15}
+										minTickGap={20}
+										tickFormatter={(value) => `${value}%`}
 									/>
-								}
-							/>
-							{activeCharts.length !== 1 && (
-								<ChartLegend content={<ChartLegendContent />} />
-							)}
-							{chartElements}
-						</ComposedChart>
-					</ChartContainer>
-				</div>
-			</CardContent>
-		</Card>
+								)}
+								<ChartTooltip
+									isAnimationActive={false}
+									content={
+										<ChartTooltipContent
+											indicator={"line"}
+											labelKey="created_at"
+											labelFormatter={(_, payload) => {
+												return formatTime(payload[0].payload.created_at);
+											}}
+											formatter={(value, name) => {
+												let formattedValue: string;
+												let label: string;
+
+												if (name === "packet_loss") {
+													formattedValue = `${Number(value).toFixed(2)}%`;
+													label = t("monitor.packetLoss", "Packet Loss");
+												} else if (name === "avg_delay") {
+													formattedValue = `${Number(value).toFixed(2)}ms`;
+													label = t("monitor.avgDelay", "Avg Delay");
+												} else {
+													// For monitor names (in multi-chart view) - delay data
+													formattedValue = `${Number(value).toFixed(2)}ms`;
+													label = name as string;
+												}
+
+												return (
+													<div className="flex flex-1 items-center justify-between leading-none">
+														<span className="text-muted-foreground">
+															{label}
+														</span>
+														<span className="ml-2 font-medium text-foreground tabular-nums">
+															{formattedValue}
+														</span>
+													</div>
+												);
+											}}
+										/>
+									}
+								/>
+								{activeCharts.length !== 1 && (
+									<ChartLegend content={<ChartLegendContent />} />
+								)}
+								{chartElements}
+							</ComposedChart>
+						</ChartContainer>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
 	);
 });
 

@@ -112,7 +112,11 @@
 		"avgDelay": "延遲",
 		"monitorCount": "個監控",
 		"packetLoss": "丟包率",
-		"clearSelections": "清除"
+		"clearSelections": "清除",
+		"peakCut": "削峰",
+		"period1d": "1 天",
+		"period7d": "7 天",
+		"period30d": "30 天"
 	},
 	"billingInfo": {
 		"remaining": "剩餘天數",

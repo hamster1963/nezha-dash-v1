@@ -47,7 +47,11 @@
 		"noData": "Kein Server Monitoring Daten, bitte fügen sie zuerst einen Monitor hinzu",
 		"avgDelay": "Latenz",
 		"packetLoss": "Paketverlust",
-		"clearSelections": "Löschen"
+		"clearSelections": "Löschen",
+		"peakCut": "Peak cut",
+		"period1d": "1 Tag",
+		"period7d": "7 Tage",
+		"period30d": "30 Tage"
 	},
 	"billingInfo": {
 		"error": "Fehler",

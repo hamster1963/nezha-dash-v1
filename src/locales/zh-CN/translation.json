@@ -114,7 +114,11 @@
 		"avgDelay": "延迟",
 		"monitorCount": "个监控服务",
 		"packetLoss": "丢包率",
-		"clearSelections": "清除"
+		"clearSelections": "清除",
+		"peakCut": "削峰",
+		"period1d": "1 天",
+		"period7d": "7 天",
+		"period30d": "30 天"
 	},
 	"pwa": {
 		"offlineReady": "应用可以离线使用了",

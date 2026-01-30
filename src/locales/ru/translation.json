@@ -100,7 +100,11 @@
 		"avgDelay": "Задержка",
 		"monitorCount": "Сервисы",
 		"packetLoss": "Потеря пакетов",
-		"clearSelections": "Очистить"
+		"clearSelections": "Очистить",
+		"peakCut": "Peak cut",
+		"period1d": "1 день",
+		"period7d": "7 дней",
+		"period30d": "30 дней"
 	},
 	"pwa": {
 		"newContent": "Доступен новый контент",

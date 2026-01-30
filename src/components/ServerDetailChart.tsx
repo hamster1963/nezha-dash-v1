@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { m } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -32,6 +33,7 @@ import type {
 	NezhaWebsocketResponse,
 } from "@/types/nezha-api";
 
+import ChartSkeleton from "./loading/ChartSkeleton";
 import { ServerDetailChartLoading } from "./loading/ServerDetailLoading";
 import AnimatedCircularProgressBar from "./ui/animated-circular-progress-bar";
 
@@ -94,31 +96,41 @@ function PeriodSelector({
 	];
 
 	return (
-		<div className="flex gap-1 mb-3 flex-wrap -mt-5">
+		<div className="flex gap-0.5 mb-3 flex-wrap -mt-5 p-0.5 bg-muted dark:bg-muted/40 rounded-full w-fit border border-border/60 dark:border-border">
 			{periods.map((period) => {
 				// Only realtime and 1d are available for non-logged-in users
 				const isLocked =
 					!isLogin && period.value !== "realtime" && period.value !== "1d";
 				return (
-					<button
+					<div
 						key={period.value}
-						type="button"
-						disabled={isLocked}
 						onClick={() => {
 							if (!isLocked) {
 								onPeriodChange(period.value);
 							}
 						}}
 						className={cn(
-							"px-2.5 py-1 text-xs rounded-md transition-all",
+							"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
 							selectedPeriod === period.value
-								? "bg-primary text-primary-foreground font-medium"
-								: "bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground",
-							isLocked && "cursor-not-allowed opacity-50",
+								? "text-foreground"
+								: "text-muted-foreground hover:text-foreground",
+							isLocked && "cursor-not-allowed opacity-40 grayscale",
 						)}
 					>
-						{period.label}
-					</button>
+						{selectedPeriod === period.value && (
+							<m.div
+								layoutId="period-selector-active"
+								className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
+								transition={{ type: "spring", stiffness: 250, damping: 30 }}
+							/>
+						)}
+						<div className="relative z-20 flex items-center gap-1.5">
+							{period.value === "realtime" && (
+								<span className="inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 dark:bg-emerald-400"></span>
+							)}
+							{period.label}
+						</div>
+					</div>
 				);
 			})}
 		</div>
@@ -261,15 +273,24 @@ function useHistoricalData<T>(
 ) {
 	const [historicalData, setHistoricalData] = useState<T[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [displayData, setDisplayData] = useState<T[]>([]);
+	const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
 	useEffect(() => {
 		if (period === "realtime") {
 			setHistoricalData([]);
+			setDisplayData([]);
+			if (loadingTimerRef.current) {
+				clearTimeout(loadingTimerRef.current);
+			}
 			return;
 		}
 
 		const fetchData = async () => {
-			setIsLoading(true);
+			loadingTimerRef.current = setTimeout(() => {
+				setIsLoading(true);
+			}, 200);
+
 			try {
 				const response = await fetchServerMetrics(
 					serverId,
@@ -281,10 +302,15 @@ function useHistoricalData<T>(
 						transformData(point.ts, point.value),
 					);
 					setHistoricalData(transformedData);
+					setDisplayData(transformedData);
 				}
 			} catch (error) {
 				console.error(`Failed to fetch ${metricName} metrics:`, error);
 			} finally {
+				if (loadingTimerRef.current) {
+					clearTimeout(loadingTimerRef.current);
+					loadingTimerRef.current = null;
+				}
 				setIsLoading(false);
 			}
 		};
@@ -292,7 +318,7 @@ function useHistoricalData<T>(
 		fetchData();
 	}, [serverId, metricName, period, transformData]);
 
-	return { historicalData, isLoading };
+	return { historicalData, displayData, isLoading };
 }
 
 function GpuChart({
@@ -328,12 +354,8 @@ function GpuChart({
 		[],
 	);
 
-	const { historicalData, isLoading } = useHistoricalData<gpuChartData>(
-		id,
-		"gpu",
-		period,
-		transformGpuData,
-	);
+	const { displayData: gpuHistoricalData, isLoading } =
+		useHistoricalData<gpuChartData>(id, "gpu", period, transformGpuData);
 
 	// 初始化历史数据
 	useEffect(() => {
@@ -397,7 +419,7 @@ function GpuChart({
 		},
 	} satisfies ChartConfig;
 
-	const displayData = period === "realtime" ? gpuChartData : historicalData;
+	const displayData = period === "realtime" ? gpuChartData : gpuHistoricalData;
 
 	return (
 		<Card
@@ -430,11 +452,7 @@ function GpuChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoading ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<AreaChart
 								syncId="serverDetailCharts"
@@ -532,12 +550,8 @@ function CpuChart({
 		[],
 	);
 
-	const { historicalData, isLoading } = useHistoricalData<cpuChartData>(
-		data.id,
-		"cpu",
-		period,
-		transformCpuData,
-	);
+	const { displayData: cpuHistoricalData, isLoading } =
+		useHistoricalData<cpuChartData>(data.id, "cpu", period, transformCpuData);
 
 	// 初始化历史数据
 	useEffect(() => {
@@ -602,7 +616,7 @@ function CpuChart({
 		},
 	} satisfies ChartConfig;
 
-	const displayData = period === "realtime" ? cpuChartData : historicalData;
+	const displayData = period === "realtime" ? cpuChartData : cpuHistoricalData;
 
 	return (
 		<Card
@@ -632,11 +646,7 @@ function CpuChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoading ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<AreaChart
 								syncId="serverDetailCharts"
@@ -737,12 +747,13 @@ function ProcessChart({
 		[],
 	);
 
-	const { historicalData, isLoading } = useHistoricalData<processChartData>(
-		data.id,
-		"process_count",
-		period,
-		transformProcessData,
-	);
+	const { displayData: processHistoricalData, isLoading } =
+		useHistoricalData<processChartData>(
+			data.id,
+			"process_count",
+			period,
+			transformProcessData,
+		);
 
 	// 初始化历史数据
 	useEffect(() => {
@@ -807,7 +818,8 @@ function ProcessChart({
 		},
 	} satisfies ChartConfig;
 
-	const displayData = period === "realtime" ? processChartData : historicalData;
+	const displayData =
+		period === "realtime" ? processChartData : processHistoricalData;
 
 	return (
 		<Card
@@ -830,11 +842,7 @@ function ProcessChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoading ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<AreaChart
 								syncId="serverDetailCharts"
@@ -1114,11 +1122,7 @@ function MemChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoadingMem ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<AreaChart
 								syncId="serverDetailCharts"
@@ -1238,12 +1242,13 @@ function DiskChart({
 		[data.host.disk_total],
 	);
 
-	const { historicalData, isLoading } = useHistoricalData<diskChartData>(
-		data.id,
-		"disk",
-		period,
-		transformDiskData,
-	);
+	const { displayData: diskHistoricalData, isLoading } =
+		useHistoricalData<diskChartData>(
+			data.id,
+			"disk",
+			period,
+			transformDiskData,
+		);
 
 	// 初始化历史数据
 	useEffect(() => {
@@ -1308,7 +1313,8 @@ function DiskChart({
 		},
 	} satisfies ChartConfig;
 
-	const displayData = period === "realtime" ? diskChartData : historicalData;
+	const displayData =
+		period === "realtime" ? diskChartData : diskHistoricalData;
 
 	return (
 		<Card
@@ -1344,11 +1350,7 @@ function DiskChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoading ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<AreaChart
 								syncId="serverDetailCharts"
@@ -1615,11 +1617,7 @@ function NetworkChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoadingNetwork ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<LineChart
 								syncId="serverDetailCharts"
@@ -1876,11 +1874,7 @@ function ConnectChart({
 						className="aspect-auto h-[130px] w-full"
 					>
 						{isLoadingConnect ? (
-							<div className="flex items-center justify-center h-full">
-								<span className="text-xs text-muted-foreground">
-									Loading...
-								</span>
-							</div>
+							<ChartSkeleton />
 						) : (
 							<LineChart
 								syncId="serverDetailCharts"

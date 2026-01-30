@@ -95,7 +95,11 @@
 		"avgDelay": "சுணக்கம்",
 		"monitorCount": "சேவைகள்",
 		"packetLoss": "தொகுப்பு இழப்பு",
-		"clearSelections": "அழி"
+		"clearSelections": "அழி",
+		"peakCut": "Peak cut",
+		"period1d": "1 நாள்",
+		"period7d": "7 நாட்கள்",
+		"period30d": "30 நாட்கள்"
 	},
 	"pwa": {
 		"offlineReady": "ஆஃப்லைனில் வேலை செய்ய பயன்பாடு தயாராக உள்ளது",

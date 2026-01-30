@@ -113,7 +113,11 @@
 		"avgDelay": "Latency",
 		"monitorCount": "Services",
 		"packetLoss": "Packet Loss",
-		"clearSelections": "Clear"
+		"clearSelections": "Clear",
+		"peakCut": "Peak cut",
+		"period1d": "1 Day",
+		"period7d": "7 Days",
+		"period30d": "30 Days"
 	},
 	"pwa": {
 		"offlineReady": "App ready to work offline",
