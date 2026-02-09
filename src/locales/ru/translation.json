@@ -10,7 +10,11 @@
 		"swap": "Swap",
 		"upload": "Загрузка",
 		"mem": "Mem",
-		"process": "Процесс"
+		"process": "Процесс",
+		"realtime": "Сейчас",
+		"period1d": "1 День",
+		"period7d": "7 Дней",
+		"period30d": "30 Дней"
 	},
 	"serverCard": {
 		"system": "Система",
