@@ -55,14 +55,14 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10",
-		"@tailwindcss/postcss": "^4.1.18",
+		"autoprefixer": "^10.4.20",
 		"@types/node": "22.13.4",
 		"@types/react": "19.0.10",
 		"@types/react-dom": "19.0.4",
 		"@vitejs/plugin-react-swc": "3.8.0",
 		"globals": "15.15.0",
 		"postcss": "8.5.3",
-		"tailwindcss": "^4.1.18",
+		"tailwindcss": "^3.4.17",
 		"typescript": "~5.6.3",
 		"vite": "6.1.1"
 	}
