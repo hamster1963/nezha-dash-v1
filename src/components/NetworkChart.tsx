@@ -29,6 +29,12 @@ import {
 	ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
 	fetchLoginUser,
 	fetchMonitor,
 	type MonitorPeriod,
@@ -533,41 +539,55 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex items-center gap-3 sm:-mt-5 -mt-3 flex-wrap">
-				<div className="flex items-center gap-1 rounded-full bg-muted dark:bg-muted/40 p-0.5 border border-border/60 dark:border-border">
-					{TIME_RANGE_OPTIONS.map((option) => {
-						const isLocked = !isLogin && option.value !== "1d";
-						return (
-							<div
-								key={option.value}
-								onClick={() => {
-									if (!isLocked) {
-										onPeriodChange(option.value);
-									}
-								}}
-								className={cn(
-									"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
-									period === option.value
-										? "text-foreground"
-										: "text-muted-foreground hover:text-foreground",
-									isLocked && "cursor-not-allowed opacity-40 grayscale",
-								)}
-							>
-								{period === option.value && (
-									<m.div
-										layoutId="network-period-selector-active"
-										className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
-										transition={{
-											type: "spring",
-											stiffness: 400,
-											damping: 30,
-										}}
-									/>
-								)}
-								<span className="relative z-20">{option.label}</span>
-							</div>
-						);
-					})}
-				</div>
+				<TooltipProvider delayDuration={120}>
+					<div className="flex items-center gap-1 rounded-full bg-muted dark:bg-muted/40 p-0.5 border border-border/60 dark:border-border">
+						{TIME_RANGE_OPTIONS.map((option) => {
+							const isLocked = !isLogin && option.value !== "1d";
+							const optionItem = (
+								<div
+									onClick={() => {
+										if (!isLocked) {
+											onPeriodChange(option.value);
+										}
+									}}
+									className={cn(
+										"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
+										period === option.value
+											? "text-foreground"
+											: "text-muted-foreground hover:text-foreground",
+										isLocked && "cursor-not-allowed opacity-40 grayscale",
+									)}
+								>
+									{period === option.value && (
+										<m.div
+											layoutId="network-period-selector-active"
+											className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
+											transition={{
+												type: "spring",
+												stiffness: 400,
+												damping: 30,
+											}}
+										/>
+									)}
+									<span className="relative z-20">{option.label}</span>
+								</div>
+							);
+
+							if (isLocked) {
+								return (
+									<Tooltip key={option.value}>
+										<TooltipTrigger asChild>{optionItem}</TooltipTrigger>
+										<TooltipContent>
+											{t("monitor.loginRequired", "Please login to view")}
+										</TooltipContent>
+									</Tooltip>
+								);
+							}
+
+							return <div key={option.value}>{optionItem}</div>;
+						})}
+					</div>
+				</TooltipProvider>
 				<div className="flex items-center space-x-2">
 					<Switch
 						id="Peak"

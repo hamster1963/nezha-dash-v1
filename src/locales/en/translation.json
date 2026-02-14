@@ -81,7 +81,9 @@
 		"realtime": "Realtime",
 		"period1d": "1 Day",
 		"period7d": "7 Days",
-		"period30d": "30 Days"
+		"period30d": "30 Days",
+		"tsdbRequired": "Enable TSDB to use historical data",
+		"loginRequired": "Please login to view"
 	},
 	"footer": {
 		"themeBy": "Theme by "
@@ -115,6 +117,7 @@
 		"packetLoss": "Packet Loss",
 		"clearSelections": "Clear",
 		"peakCut": "Peak cut",
+		"loginRequired": "Please login to view",
 		"period1d": "1 Day",
 		"period7d": "7 Days",
 		"period30d": "30 Days"

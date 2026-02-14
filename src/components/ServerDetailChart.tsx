@@ -18,9 +18,19 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useWebSocketContext } from "@/hooks/use-websocket-context";
 import { formatBytes } from "@/lib/format";
-import { fetchLoginUser, fetchServerMetrics } from "@/lib/nezha-api";
+import {
+	fetchLoginUser,
+	fetchServerMetrics,
+	fetchSetting,
+} from "@/lib/nezha-api";
 import {
 	cn,
 	formatNezhaInfo,
@@ -77,14 +87,22 @@ type connectChartData = {
 	udp: number;
 };
 
+const MIN_HISTORY_LOADING_MS = 300;
+const sleep = (ms: number) =>
+	new Promise<void>((resolve) => {
+		setTimeout(resolve, ms);
+	});
+
 function PeriodSelector({
 	selectedPeriod,
 	onPeriodChange,
 	isLogin,
+	isTsdbEnabled,
 }: {
 	selectedPeriod: ChartPeriod;
 	onPeriodChange: (period: ChartPeriod) => void;
 	isLogin: boolean;
+	isTsdbEnabled: boolean;
 }) {
 	const { t } = useTranslation();
 
@@ -96,44 +114,73 @@ function PeriodSelector({
 	];
 
 	return (
-		<div className="flex gap-0.5 mb-3 flex-wrap sm:-mt-5 -mt-3 p-0.5 bg-muted dark:bg-muted/40 rounded-full w-fit border border-border/60 dark:border-border">
-			{periods.map((period) => {
-				// Only realtime and 1d are available for non-logged-in users
-				const isLocked =
-					!isLogin && period.value !== "realtime" && period.value !== "1d";
-				return (
-					<div
-						key={period.value}
-						onClick={() => {
-							if (!isLocked) {
-								onPeriodChange(period.value);
-							}
-						}}
-						className={cn(
-							"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
-							selectedPeriod === period.value
-								? "text-foreground"
-								: "text-muted-foreground hover:text-foreground",
-							isLocked && "cursor-not-allowed opacity-40 grayscale",
-						)}
-					>
-						{selectedPeriod === period.value && (
-							<m.div
-								layoutId="period-selector-active"
-								className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
-								transition={{ type: "spring", stiffness: 250, damping: 30 }}
-							/>
-						)}
-						<div className="relative z-20 flex items-center gap-1.5">
-							{period.value === "realtime" && (
-								<span className="inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 dark:bg-emerald-400"></span>
+		<TooltipProvider delayDuration={120}>
+			<div className="flex gap-0.5 mb-3 flex-wrap sm:-mt-5 -mt-3 p-0.5 bg-muted dark:bg-muted/40 rounded-full w-fit border border-border/60 dark:border-border">
+				{periods.map((period) => {
+					const isHistoryPeriod = period.value !== "realtime";
+					const isLockedByTsdb = !isTsdbEnabled && isHistoryPeriod;
+					// Only realtime and 1d are available for non-logged-in users
+					const isLockedByLogin =
+						!isLockedByTsdb &&
+						!isLogin &&
+						period.value !== "realtime" &&
+						period.value !== "1d";
+					const isLocked = isLockedByTsdb || isLockedByLogin;
+
+					const periodItem = (
+						<div
+							onClick={() => {
+								if (!isLocked) {
+									onPeriodChange(period.value);
+								}
+							}}
+							className={cn(
+								"relative cursor-pointer rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-300",
+								selectedPeriod === period.value
+									? "text-foreground"
+									: "text-muted-foreground hover:text-foreground",
+								isLocked && "cursor-not-allowed opacity-40 grayscale",
 							)}
-							{period.label}
+						>
+							{selectedPeriod === period.value && (
+								<m.div
+									layoutId="period-selector-active"
+									className="absolute inset-0 z-10 h-full w-full bg-white dark:bg-background rounded-full ring-1 ring-border/60 dark:ring-border/40"
+									transition={{ type: "spring", stiffness: 250, damping: 30 }}
+								/>
+							)}
+							<div className="relative z-20 flex items-center gap-1.5">
+								{period.value === "realtime" && (
+									<span className="inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500 dark:bg-emerald-400"></span>
+								)}
+								{period.label}
+							</div>
 						</div>
-					</div>
-				);
-			})}
-		</div>
+					);
+
+					if (isLockedByTsdb || isLockedByLogin) {
+						return (
+							<Tooltip key={period.value}>
+								<TooltipTrigger asChild>{periodItem}</TooltipTrigger>
+								<TooltipContent>
+									{isLockedByTsdb
+										? t(
+												"serverDetailChart.tsdbRequired",
+												"Enable TSDB to use historical data",
+											)
+										: t(
+												"serverDetailChart.loginRequired",
+												"Please login to view",
+											)}
+								</TooltipContent>
+							</Tooltip>
+						);
+					}
+
+					return <div key={period.value}>{periodItem}</div>;
+				})}
+			</div>
+		</TooltipProvider>
 	);
 }
 
@@ -161,12 +208,31 @@ export default function ServerDetailChart({
 			? !!userData?.data?.id && !!document.cookie
 			: false;
 
+	const { data: settingData } = useQuery({
+		queryKey: ["setting"],
+		queryFn: () => fetchSetting(),
+		refetchOnMount: true,
+		refetchOnWindowFocus: true,
+	});
+	const isTsdbEnabled = settingData?.data?.tsdb_enabled ?? true;
+
+	useEffect(() => {
+		if (!isTsdbEnabled && selectedPeriod !== "realtime") {
+			setSelectedPeriod("realtime");
+		}
+	}, [isTsdbEnabled, selectedPeriod]);
+
 	// Reset period if user is not logged in and selected period is restricted
 	useEffect(() => {
-		if (!isLogin && selectedPeriod !== "realtime" && selectedPeriod !== "1d") {
+		if (
+			isTsdbEnabled &&
+			!isLogin &&
+			selectedPeriod !== "realtime" &&
+			selectedPeriod !== "1d"
+		) {
 			setSelectedPeriod("1d");
 		}
-	}, [isLogin, selectedPeriod]);
+	}, [isLogin, isTsdbEnabled, selectedPeriod]);
 
 	if (!connected && !lastMessage) {
 		return <ServerDetailChartLoading />;
@@ -195,6 +261,7 @@ export default function ServerDetailChart({
 				selectedPeriod={selectedPeriod}
 				onPeriodChange={setSelectedPeriod}
 				isLogin={isLogin}
+				isTsdbEnabled={isTsdbEnabled}
 			/>
 			<section className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-3 server-charts">
 				<CpuChart
@@ -274,22 +341,24 @@ function useHistoricalData<T>(
 	const [historicalData, setHistoricalData] = useState<T[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [displayData, setDisplayData] = useState<T[]>([]);
-	const loadingTimerRef = useRef<NodeJS.Timeout | null>(null);
+	const [loadedPeriod, setLoadedPeriod] = useState<ChartPeriod>("realtime");
 
 	useEffect(() => {
+		let cancelled = false;
+
 		if (period === "realtime") {
 			setHistoricalData([]);
 			setDisplayData([]);
-			if (loadingTimerRef.current) {
-				clearTimeout(loadingTimerRef.current);
-			}
-			return;
+			setIsLoading(false);
+			setLoadedPeriod("realtime");
+			return () => {
+				cancelled = true;
+			};
 		}
 
 		const fetchData = async () => {
-			loadingTimerRef.current = setTimeout(() => {
-				setIsLoading(true);
-			}, 200);
+			const loadingStartedAt = Date.now();
+			setIsLoading(true);
 
 			try {
 				const response = await fetchServerMetrics(
@@ -301,24 +370,35 @@ function useHistoricalData<T>(
 					const transformedData = response.data.data_points.map((point) =>
 						transformData(point.ts, point.value),
 					);
-					setHistoricalData(transformedData);
-					setDisplayData(transformedData);
+					if (!cancelled) {
+						setHistoricalData(transformedData);
+						setDisplayData(transformedData);
+					}
 				}
 			} catch (error) {
 				console.error(`Failed to fetch ${metricName} metrics:`, error);
 			} finally {
-				if (loadingTimerRef.current) {
-					clearTimeout(loadingTimerRef.current);
-					loadingTimerRef.current = null;
+				const elapsed = Date.now() - loadingStartedAt;
+				if (elapsed < MIN_HISTORY_LOADING_MS) {
+					await sleep(MIN_HISTORY_LOADING_MS - elapsed);
 				}
-				setIsLoading(false);
+				if (!cancelled) {
+					setIsLoading(false);
+					setLoadedPeriod(period);
+				}
 			}
 		};
 
 		fetchData();
+		return () => {
+			cancelled = true;
+		};
 	}, [serverId, metricName, period, transformData]);
 
-	return { historicalData, displayData, isLoading };
+	const isHistoricalLoading =
+		period !== "realtime" && (isLoading || loadedPeriod !== period);
+
+	return { historicalData, displayData, isLoading: isHistoricalLoading };
 }
 
 function GpuChart({
@@ -938,14 +1018,23 @@ function MemChart({
 		[],
 	);
 	const [isLoadingMem, setIsLoadingMem] = useState(false);
+	const [loadedPeriodMem, setLoadedPeriodMem] =
+		useState<ChartPeriod>("realtime");
 
 	useEffect(() => {
+		let cancelled = false;
+
 		if (period === "realtime") {
 			setMemHistoricalData([]);
-			return;
+			setIsLoadingMem(false);
+			setLoadedPeriodMem("realtime");
+			return () => {
+				cancelled = true;
+			};
 		}
 
 		const fetchMemData = async () => {
+			const loadingStartedAt = Date.now();
 			setIsLoadingMem(true);
 			try {
 				const [memResponse, swapResponse] = await Promise.all([
@@ -978,16 +1067,28 @@ function MemChart({
 							swap: swapMap.get(point.ts) || 0,
 						};
 					});
-					setMemHistoricalData(combinedData);
+					if (!cancelled) {
+						setMemHistoricalData(combinedData);
+					}
 				}
 			} catch (error) {
 				console.error("Failed to fetch memory metrics:", error);
 			} finally {
-				setIsLoadingMem(false);
+				const elapsed = Date.now() - loadingStartedAt;
+				if (elapsed < MIN_HISTORY_LOADING_MS) {
+					await sleep(MIN_HISTORY_LOADING_MS - elapsed);
+				}
+				if (!cancelled) {
+					setIsLoadingMem(false);
+					setLoadedPeriodMem(period);
+				}
 			}
 		};
 
 		fetchMemData();
+		return () => {
+			cancelled = true;
+		};
 	}, [data.id, period, data.host.mem_total, data.host.swap_total]);
 
 	// 初始化历史数据
@@ -1058,6 +1159,8 @@ function MemChart({
 	} satisfies ChartConfig;
 
 	const displayData = period === "realtime" ? memChartData : memHistoricalData;
+	const isMemLoading =
+		period !== "realtime" && (isLoadingMem || loadedPeriodMem !== period);
 
 	return (
 		<Card
@@ -1121,7 +1224,7 @@ function MemChart({
 						config={chartConfig}
 						className="aspect-auto h-[130px] w-full"
 					>
-						{isLoadingMem ? (
+						{isMemLoading ? (
 							<ChartSkeleton />
 						) : (
 							<AreaChart
@@ -1450,14 +1553,23 @@ function NetworkChart({
 		networkChartData[]
 	>([]);
 	const [isLoadingNetwork, setIsLoadingNetwork] = useState(false);
+	const [loadedPeriodNetwork, setLoadedPeriodNetwork] =
+		useState<ChartPeriod>("realtime");
 
 	useEffect(() => {
+		let cancelled = false;
+
 		if (period === "realtime") {
 			setNetworkHistoricalData([]);
-			return;
+			setIsLoadingNetwork(false);
+			setLoadedPeriodNetwork("realtime");
+			return () => {
+				cancelled = true;
+			};
 		}
 
 		const fetchNetworkData = async () => {
+			const loadingStartedAt = Date.now();
 			setIsLoadingNetwork(true);
 			try {
 				const [uploadResponse, downloadResponse] = await Promise.all([
@@ -1479,16 +1591,28 @@ function NetworkChart({
 						upload: point.value / 1024 / 1024, // Convert bytes to MB
 						download: downloadMap.get(point.ts) || 0,
 					}));
-					setNetworkHistoricalData(combinedData);
+					if (!cancelled) {
+						setNetworkHistoricalData(combinedData);
+					}
 				}
 			} catch (error) {
 				console.error("Failed to fetch network metrics:", error);
 			} finally {
-				setIsLoadingNetwork(false);
+				const elapsed = Date.now() - loadingStartedAt;
+				if (elapsed < MIN_HISTORY_LOADING_MS) {
+					await sleep(MIN_HISTORY_LOADING_MS - elapsed);
+				}
+				if (!cancelled) {
+					setIsLoadingNetwork(false);
+					setLoadedPeriodNetwork(period);
+				}
 			}
 		};
 
 		fetchNetworkData();
+		return () => {
+			cancelled = true;
+		};
 	}, [data.id, period]);
 
 	// 初始化历史数据
@@ -1554,6 +1678,9 @@ function NetworkChart({
 
 	const displayData =
 		period === "realtime" ? networkChartData : networkHistoricalData;
+	const isNetworkLoading =
+		period !== "realtime" &&
+		(isLoadingNetwork || loadedPeriodNetwork !== period);
 
 	let maxDownload = Math.max(...displayData.map((item) => item.download));
 	maxDownload = Math.ceil(maxDownload);
@@ -1616,7 +1743,7 @@ function NetworkChart({
 						config={chartConfig}
 						className="aspect-auto h-[130px] w-full"
 					>
-						{isLoadingNetwork ? (
+						{isNetworkLoading ? (
 							<ChartSkeleton />
 						) : (
 							<LineChart
@@ -1733,14 +1860,23 @@ function ConnectChart({
 		connectChartData[]
 	>([]);
 	const [isLoadingConnect, setIsLoadingConnect] = useState(false);
+	const [loadedPeriodConnect, setLoadedPeriodConnect] =
+		useState<ChartPeriod>("realtime");
 
 	useEffect(() => {
+		let cancelled = false;
+
 		if (period === "realtime") {
 			setConnectHistoricalData([]);
-			return;
+			setIsLoadingConnect(false);
+			setLoadedPeriodConnect("realtime");
+			return () => {
+				cancelled = true;
+			};
 		}
 
 		const fetchConnectData = async () => {
+			const loadingStartedAt = Date.now();
 			setIsLoadingConnect(true);
 			try {
 				const [tcpResponse, udpResponse] = await Promise.all([
@@ -1761,16 +1897,28 @@ function ConnectChart({
 						tcp: point.value,
 						udp: udpMap.get(point.ts) || 0,
 					}));
-					setConnectHistoricalData(combinedData);
+					if (!cancelled) {
+						setConnectHistoricalData(combinedData);
+					}
 				}
 			} catch (error) {
 				console.error("Failed to fetch connection metrics:", error);
 			} finally {
-				setIsLoadingConnect(false);
+				const elapsed = Date.now() - loadingStartedAt;
+				if (elapsed < MIN_HISTORY_LOADING_MS) {
+					await sleep(MIN_HISTORY_LOADING_MS - elapsed);
+				}
+				if (!cancelled) {
+					setIsLoadingConnect(false);
+					setLoadedPeriodConnect(period);
+				}
 			}
 		};
 
 		fetchConnectData();
+		return () => {
+			cancelled = true;
+		};
 	}, [data.id, period]);
 
 	// 初始化历史数据
@@ -1842,6 +1990,9 @@ function ConnectChart({
 
 	const displayData =
 		period === "realtime" ? connectChartData : connectHistoricalData;
+	const isConnectLoading =
+		period !== "realtime" &&
+		(isLoadingConnect || loadedPeriodConnect !== period);
 
 	return (
 		<Card
@@ -1873,7 +2024,7 @@ function ConnectChart({
 						config={chartConfig}
 						className="aspect-auto h-[130px] w-full"
 					>
-						{isLoadingConnect ? (
+						{isConnectLoading ? (
 							<ChartSkeleton />
 						) : (
 							<LineChart

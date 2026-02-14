@@ -156,6 +156,7 @@ export interface SettingResponse {
 	data: {
 		config: SettingConfig;
 		version: string;
+		tsdb_enabled?: boolean;
 	};
 }
 

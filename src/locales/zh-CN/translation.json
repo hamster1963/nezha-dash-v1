@@ -81,7 +81,9 @@
 		"realtime": "实时",
 		"period1d": "1 天",
 		"period7d": "7 天",
-		"period30d": "30 天"
+		"period30d": "30 天",
+		"tsdbRequired": "需要开启 TSDB 才能启用历史记录功能",
+		"loginRequired": "请登录后查看"
 	},
 	"footer": {
 		"themeBy": "主题-"
@@ -116,6 +118,7 @@
 		"packetLoss": "丢包率",
 		"clearSelections": "清除",
 		"peakCut": "削峰",
+		"loginRequired": "请登录后查看",
 		"period1d": "1 天",
 		"period7d": "7 天",
 		"period30d": "30 天"
