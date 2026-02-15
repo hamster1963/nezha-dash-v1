@@ -342,7 +342,6 @@ export const NetworkChartClient = React.memo(function NetworkChart({
 								{avgPacketLoss !== null && (
 									<span className="text-muted-foreground flex items-center gap-1">
 										{avgPacketLoss.toFixed(2)}%
-										<p className=" hidden sm:block">avg loss</p>
 									</span>
 								)}
 							</div>
