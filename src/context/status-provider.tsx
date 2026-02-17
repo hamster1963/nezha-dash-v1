@@ -1,9 +1,13 @@
-import { ReactNode, useState } from "react"
+import { type ReactNode, useState } from "react";
 
-import { Status, StatusContext } from "./status-context"
+import { type Status, StatusContext } from "./status-context";
 
 export function StatusProvider({ children }: { children: ReactNode }) {
-  const [status, setStatus] = useState<Status>("all")
+	const [status, setStatus] = useState<Status>("all");
 
-  return <StatusContext.Provider value={{ status, setStatus }}>{children}</StatusContext.Provider>
+	return (
+		<StatusContext.Provider value={{ status, setStatus }}>
+			{children}
+		</StatusContext.Provider>
+	);
 }

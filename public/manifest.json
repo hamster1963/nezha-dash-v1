@@ -1,17 +1,17 @@
 {
-  "name": "Nezha Monitoring",
-  "short_name": "Nezha Monitoring",
-  "icons": [
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "theme_color": "hsl(0 0% 98%)",
-  "background_color": "hsl(0 0% 98%)",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
+	"name": "Nezha Monitoring",
+	"short_name": "Nezha Monitoring",
+	"icons": [
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any maskable"
+		}
+	],
+	"theme_color": "hsl(0 0% 98%)",
+	"background_color": "hsl(0 0% 98%)",
+	"start_url": "/",
+	"display": "standalone",
+	"orientation": "portrait"
 }

@@ -1,137 +1,148 @@
 {
-  "nezha": "Nezha Monitoring",
-  "overview": "Overview",
-  "dashboard": "Dashboard",
-  "login": "Login",
-  "online": "Online",
-  "offline": "Offline",
-  "whereTheTimeIs": "Where the time is",
-  "refreshing": "Refreshing",
-  "info": {
-    "websocketConnecting": "WebSocket connecting",
-    "websocketConnected": "WebSocket connected",
-    "websocketDisconnected": "WebSocket disconnected",
-    "processing": "Processing..."
-  },
-  "serverOverview": {
-    "totalServers": "Total Servers",
-    "onlineServers": "Online Servers",
-    "offlineServers": "Offline Servers",
-    "totalBandwidth": "Total Bandwidth",
-    "speed": "Speed",
-    "network": "Network"
-  },
-  "map": {
-    "Distributions": "Servers are distributed in",
-    "Regions": "Regions",
-    "Servers": "servers"
-  },
-  "serverCard": {
-    "mem": "MEM",
-    "stg": "STG",
-    "days": "Days",
-    "hours": "Hours",
-    "upload": "Upload",
-    "download": "Download",
-    "system": "System",
-    "uptime": "Uptime",
-    "totalUpload": "Upload",
-    "totalDownload": "Download"
-  },
-  "cycleTransfer": {
-    "used": "used",
-    "total": "total",
-    "nextUpdate": "next update"
-  },
-  "serviceTracker": {
-    "noService": "No service data",
-    "uptime": "Uptime",
-    "delay": "Delay",
-    "daysAgo": "days ago",
-    "today": "Today",
-    "loading": "Loading..."
-  },
-  "serverDetail": {
-    "status": "Status",
-    "online": "Online",
-    "days": "Days",
-    "hours": "Hours",
-    "offline": "Offline",
-    "unknown": "Unknown",
-    "uptime": "Uptime",
-    "version": "Version",
-    "arch": "Arch",
-    "mem": "Mem",
-    "disk": "Disk",
-    "region": "Region",
-    "system": "System",
-    "upload": "Upload",
-    "download": "Download",
-    "lastActive": "Last active time",
-    "temperature": "Temperature",
-    "bootTime": "Boot time"
-  },
-  "serverDetailChart": {
-    "process": "Process",
-    "disk": "Disk",
-    "mem": "Mem",
-    "swap": "Swap",
-    "upload": "Upload",
-    "download": "Download"
-  },
-  "footer": {
-    "themeBy": "Theme by "
-  },
-  "language": {
-    "zh-CN": "简体中文",
-    "zh-TW": "繁體中文",
-    "en-US": "English",
-    "de-DE": "Deutsch",
-    "es-ES": "Español",
-    "ru-RU": "Русский",
-    "ta-IN": "தமிழ்"
-  },
-  "theme": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
-  "error": {
-    "pageNotFound": "Page not found",
-    "backToHome": "Back to home"
-  },
-  "tabSwitch": {
-    "Detail": "Detail",
-    "Network": "Network"
-  },
-  "monitor": {
-    "noData": "No server monitor data, please add a service monitor first",
-    "avgDelay": "Latency",
-    "monitorCount": "Services",
-    "packetLoss": "Packet Loss",
-    "clearSelections": "Clear"
-  },
-  "pwa": {
-    "offlineReady": "App ready to work offline",
-    "newContent": "New content available",
-    "reload": "Update"
-  },
-  "billingInfo": {
-    "remaining": "Remaining",
-    "error": "error",
-    "indefinite": "Indefinite",
-    "expired": "Expired",
-    "days": "days",
-    "price": "Price",
-    "free": "Free",
-    "usage-baseed": "Usage-based"
-  },
-  "TypeCommand": "Type a command or search...",
-  "NoResults": "No results found.",
-  "Servers": "Servers",
-  "Shortcuts": "Shortcuts",
-  "ToggleLightMode": "Toggle Light Mode",
-  "ToggleDarkMode": "Toggle Dark Mode",
-  "ToggleSystemMode": "Toggle System Mode",
-  "Home": "Home"
+	"nezha": "Nezha Monitoring",
+	"overview": "Overview",
+	"dashboard": "Dashboard",
+	"login": "Login",
+	"online": "Online",
+	"offline": "Offline",
+	"whereTheTimeIs": "Where the time is",
+	"refreshing": "Refreshing",
+	"info": {
+		"websocketConnecting": "WebSocket connecting",
+		"websocketConnected": "WebSocket connected",
+		"websocketDisconnected": "WebSocket disconnected",
+		"processing": "Processing..."
+	},
+	"serverOverview": {
+		"totalServers": "Total Servers",
+		"onlineServers": "Online Servers",
+		"offlineServers": "Offline Servers",
+		"totalBandwidth": "Total Bandwidth",
+		"speed": "Speed",
+		"network": "Network"
+	},
+	"map": {
+		"Distributions": "Servers are distributed in",
+		"Regions": "Regions",
+		"Servers": "servers"
+	},
+	"serverCard": {
+		"mem": "MEM",
+		"stg": "STG",
+		"days": "Days",
+		"hours": "Hours",
+		"upload": "Upload",
+		"download": "Download",
+		"system": "System",
+		"uptime": "Uptime",
+		"totalUpload": "Upload",
+		"totalDownload": "Download"
+	},
+	"cycleTransfer": {
+		"used": "used",
+		"total": "total",
+		"nextUpdate": "next update"
+	},
+	"serviceTracker": {
+		"noService": "No service data",
+		"uptime": "Uptime",
+		"delay": "Delay",
+		"daysAgo": "days ago",
+		"today": "Today",
+		"loading": "Loading..."
+	},
+	"serverDetail": {
+		"status": "Status",
+		"online": "Online",
+		"days": "Days",
+		"hours": "Hours",
+		"offline": "Offline",
+		"unknown": "Unknown",
+		"uptime": "Uptime",
+		"version": "Version",
+		"arch": "Arch",
+		"mem": "Mem",
+		"disk": "Disk",
+		"region": "Region",
+		"system": "System",
+		"upload": "Upload",
+		"download": "Download",
+		"lastActive": "Last active time",
+		"temperature": "Temperature",
+		"bootTime": "Boot time"
+	},
+	"serverDetailChart": {
+		"process": "Process",
+		"disk": "Disk",
+		"mem": "Mem",
+		"swap": "Swap",
+		"upload": "Upload",
+		"download": "Download",
+		"realtime": "Realtime",
+		"period1d": "1 Day",
+		"period7d": "7 Days",
+		"period30d": "30 Days",
+		"tsdbRequired": "Enable TSDB to use historical data",
+		"loginRequired": "Please login to view"
+	},
+	"footer": {
+		"themeBy": "Theme by "
+	},
+	"language": {
+		"zh-CN": "简体中文",
+		"zh-TW": "繁體中文",
+		"en-US": "English",
+		"de-DE": "Deutsch",
+		"es-ES": "Español",
+		"ru-RU": "Русский",
+		"ta-IN": "தமிழ்"
+	},
+	"theme": {
+		"light": "Light",
+		"dark": "Dark",
+		"system": "System"
+	},
+	"error": {
+		"pageNotFound": "Page not found",
+		"backToHome": "Back to home"
+	},
+	"tabSwitch": {
+		"Detail": "Detail",
+		"Network": "Network"
+	},
+	"monitor": {
+		"noData": "No server monitor data, please add a service monitor first",
+		"avgDelay": "Latency",
+		"monitorCount": "Services",
+		"packetLoss": "Packet Loss",
+		"clearSelections": "Clear",
+		"peakCut": "Peak cut",
+		"loginRequired": "Please login to view",
+		"period1d": "1 Day",
+		"period7d": "7 Days",
+		"period30d": "30 Days"
+	},
+	"pwa": {
+		"offlineReady": "App ready to work offline",
+		"newContent": "New content available",
+		"reload": "Update"
+	},
+	"billingInfo": {
+		"remaining": "Remaining",
+		"error": "error",
+		"indefinite": "Indefinite",
+		"expired": "Expired",
+		"days": "days",
+		"price": "Price",
+		"free": "Free",
+		"usage-baseed": "Usage-based"
+	},
+	"TypeCommand": "Type a command or search...",
+	"NoResults": "No results found.",
+	"Servers": "Servers",
+	"Shortcuts": "Shortcuts",
+	"ToggleLightMode": "Toggle Light Mode",
+	"ToggleDarkMode": "Toggle Dark Mode",
+	"ToggleSystemMode": "Toggle System Mode",
+	"Home": "Home"
 }
