@@ -1,137 +1,145 @@
 {
-  "map": {
-    "Servers": "сервера",
-    "Distributions": "Серверы распределены в",
-    "Regions": "Регионы"
-  },
-  "serverDetailChart": {
-    "disk": "Диск",
-    "download": "Скачивание",
-    "swap": "Swap",
-    "upload": "Загрузка",
-    "mem": "Mem",
-    "process": "Процесс"
-  },
-  "serverCard": {
-    "system": "Система",
-    "hours": "Часов",
-    "uptime": "Аптайм",
-    "download": "Скачать",
-    "mem": "MEM",
-    "stg": "STG",
-    "upload": "Загрузка",
-    "totalUpload": "Загружено",
-    "totalDownload": "Скачано",
-    "days": "Дней"
-  },
-  "tabSwitch": {
-    "Detail": "Детали",
-    "Network": "Сеть"
-  },
-  "whereTheTimeIs": "Где время",
-  "theme": {
-    "dark": "Темная тема",
-    "light": "Светлая тема",
-    "system": "Как в Системе"
-  },
-  "login": "Логин",
-  "language": {
-    "zh-TW": "Традиционный китайский",
-    "zh-CN": "Упрощенный китайский",
-    "en-US": "Английский",
-    "de-DE": "Немецкий",
-    "ta-IN": "Тамильский",
-    "ru-RU": "Русский",
-    "es-ES": "Испанский"
-  },
-  "overview": "Обзор",
-  "info": {
-    "websocketConnecting": "WebSocket подключение",
-    "websocketConnected": "WebSocket подключен",
-    "websocketDisconnected": "WebSocket отключен",
-    "processing": "Обработка..."
-  },
-  "cycleTransfer": {
-    "nextUpdate": "следующее обновление",
-    "used": "использовано",
-    "total": "всего"
-  },
-  "dashboard": "Панель",
-  "online": "Онлайн",
-  "refreshing": "Обновление",
-  "serverOverview": {
-    "totalServers": "Всего Серверов",
-    "totalBandwidth": "Общая пропускная способность",
-    "network": "Сеть",
-    "speed": "Скорость",
-    "onlineServers": "Серверы в сети",
-    "offlineServers": "Серверы не в сети"
-  },
-  "serviceTracker": {
-    "noService": "Нет данных о сервисе",
-    "delay": "Задержка",
-    "daysAgo": "Дней назад",
-    "today": "Сегодня",
-    "uptime": "Аптайм",
-    "loading": "Загрузка..."
-  },
-  "serverDetail": {
-    "status": "Статус",
-    "days": "Дней",
-    "hours": "Часов",
-    "offline": "Оффлайн",
-    "uptime": "Аптайм",
-    "arch": "Arch",
-    "mem": "Mem",
-    "disk": "Диск",
-    "system": "Система",
-    "lastActive": "Время последней активности",
-    "download": "Скачивание",
-    "unknown": "Неизвестно",
-    "version": "Версия",
-    "online": "В сети",
-    "region": "Регион",
-    "bootTime": "Время загрузки",
-    "upload": "Загрузка",
-    "temperature": "Температура"
-  },
-  "monitor": {
-    "noData": "Нет данных мониторинга сервера, пожалуйста, сначала добавьте монитор службы",
-    "avgDelay": "Задержка",
-    "monitorCount": "Сервисы",
-    "packetLoss": "Потеря пакетов",
-    "clearSelections": "Очистить"
-  },
-  "pwa": {
-    "newContent": "Доступен новый контент",
-    "reload": "Обновить",
-    "offlineReady": "Приложение готово работать в офлайн-режиме"
-  },
-  "billingInfo": {
-    "remaining": "Осталось",
-    "error": "ошибка",
-    "indefinite": "Неопределено",
-    "expired": "Истекло",
-    "price": "Цена",
-    "free": "Бесплатно",
-    "days": "дней",
-    "usage-baseed": "Оплата по использованию"
-  },
-  "TypeCommand": "Введите команду или выполните поиск...",
-  "Servers": "Серверы",
-  "ToggleLightMode": "Переключить на светлую тему",
-  "Home": "Главная",
-  "offline": "Оффлайн",
-  "error": {
-    "pageNotFound": "Страница не найдена",
-    "backToHome": "Вернуться на главную"
-  },
-  "ToggleDarkMode": "Переключить на темную тему",
-  "Shortcuts": "Горячие клавиши",
-  "ToggleSystemMode": "Использовать системную тему",
-  "footer": {
-    "themeBy": "Тема от "
-  },
-  "NoResults": "Ничего не найдено.",
-  "nezha": "Nezha Monitoring"
+	"map": {
+		"Servers": "сервера",
+		"Distributions": "Серверы распределены в",
+		"Regions": "Регионы"
+	},
+	"serverDetailChart": {
+		"disk": "Диск",
+		"download": "Скачивание",
+		"swap": "Swap",
+		"upload": "Загрузка",
+		"mem": "Mem",
+		"process": "Процесс",
+		"realtime": "Сейчас",
+		"period1d": "1 День",
+		"period7d": "7 Дней",
+		"period30d": "30 Дней"
+	},
+	"serverCard": {
+		"system": "Система",
+		"hours": "Часов",
+		"uptime": "Аптайм",
+		"download": "Скачать",
+		"mem": "MEM",
+		"stg": "STG",
+		"upload": "Загрузка",
+		"totalUpload": "Загружено",
+		"totalDownload": "Скачано",
+		"days": "Дней"
+	},
+	"tabSwitch": {
+		"Detail": "Детали",
+		"Network": "Сеть"
+	},
+	"whereTheTimeIs": "Где время",
+	"theme": {
+		"dark": "Темная тема",
+		"light": "Светлая тема",
+		"system": "Как в Системе"
+	},
+	"login": "Логин",
+	"language": {
+		"zh-TW": "Традиционный китайский",
+		"zh-CN": "Упрощенный китайский",
+		"en-US": "Английский",
+		"de-DE": "Немецкий",
+		"ta-IN": "Тамильский",
+		"ru-RU": "Русский",
+		"es-ES": "Испанский"
+	},
+	"overview": "Обзор",
+	"info": {
+		"websocketConnecting": "WebSocket подключение",
+		"websocketConnected": "WebSocket подключен",
+		"websocketDisconnected": "WebSocket отключен",
+		"processing": "Обработка..."
+	},
+	"cycleTransfer": {
+		"nextUpdate": "следующее обновление",
+		"used": "использовано",
+		"total": "всего"
+	},
+	"dashboard": "Панель",
+	"online": "Онлайн",
+	"refreshing": "Обновление",
+	"serverOverview": {
+		"totalServers": "Всего Серверов",
+		"totalBandwidth": "Общая пропускная способность",
+		"network": "Сеть",
+		"speed": "Скорость",
+		"onlineServers": "Серверы в сети",
+		"offlineServers": "Серверы не в сети"
+	},
+	"serviceTracker": {
+		"noService": "Нет данных о сервисе",
+		"delay": "Задержка",
+		"daysAgo": "Дней назад",
+		"today": "Сегодня",
+		"uptime": "Аптайм",
+		"loading": "Загрузка..."
+	},
+	"serverDetail": {
+		"status": "Статус",
+		"days": "Дней",
+		"hours": "Часов",
+		"offline": "Оффлайн",
+		"uptime": "Аптайм",
+		"arch": "Arch",
+		"mem": "Mem",
+		"disk": "Диск",
+		"system": "Система",
+		"lastActive": "Время последней активности",
+		"download": "Скачивание",
+		"unknown": "Неизвестно",
+		"version": "Версия",
+		"online": "В сети",
+		"region": "Регион",
+		"bootTime": "Время загрузки",
+		"upload": "Загрузка",
+		"temperature": "Температура"
+	},
+	"monitor": {
+		"noData": "Нет данных мониторинга сервера, пожалуйста, сначала добавьте монитор службы",
+		"avgDelay": "Задержка",
+		"monitorCount": "Сервисы",
+		"packetLoss": "Потеря пакетов",
+		"clearSelections": "Очистить",
+		"peakCut": "Peak cut",
+		"period1d": "1 день",
+		"period7d": "7 дней",
+		"period30d": "30 дней"
+	},
+	"pwa": {
+		"newContent": "Доступен новый контент",
+		"reload": "Обновить",
+		"offlineReady": "Приложение готово работать в офлайн-режиме"
+	},
+	"billingInfo": {
+		"remaining": "Осталось",
+		"error": "ошибка",
+		"indefinite": "Неопределено",
+		"expired": "Истекло",
+		"price": "Цена",
+		"free": "Бесплатно",
+		"days": "дней",
+		"usage-baseed": "Оплата по использованию"
+	},
+	"TypeCommand": "Введите команду или выполните поиск...",
+	"Servers": "Серверы",
+	"ToggleLightMode": "Переключить на светлую тему",
+	"Home": "Главная",
+	"offline": "Оффлайн",
+	"error": {
+		"pageNotFound": "Страница не найдена",
+		"backToHome": "Вернуться на главную"
+	},
+	"ToggleDarkMode": "Переключить на темную тему",
+	"Shortcuts": "Горячие клавиши",
+	"ToggleSystemMode": "Использовать системную тему",
+	"footer": {
+		"themeBy": "Тема от "
+	},
+	"NoResults": "Ничего не найдено.",
+	"nezha": "Nezha Monitoring"
 }

@@ -1,10 +1,12 @@
-import { createContext } from "react"
+import { createContext } from "react";
 
 export interface CommandContextType {
-  isOpen: boolean
-  openCommand: () => void
-  closeCommand: () => void
-  toggleCommand: () => void
+	isOpen: boolean;
+	openCommand: () => void;
+	closeCommand: () => void;
+	toggleCommand: () => void;
 }
 
-export const CommandContext = createContext<CommandContextType | undefined>(undefined)
+export const CommandContext = createContext<CommandContextType | undefined>(
+	undefined,
+);
