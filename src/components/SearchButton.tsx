@@ -1,23 +1,31 @@
-"use client"
+"use client";
 
-import { useCommand } from "@/hooks/use-command"
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid"
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { useCommand } from "@/hooks/use-command";
+import { cn } from "@/lib/utils";
 
-import { Button } from "./ui/button"
+import { Button } from "./ui/button";
 
 export function SearchButton() {
-  const { openCommand } = useCommand()
+	const { openCommand } = useCommand();
 
-  return (
-    <Button
-      variant="outline"
-      size="sm"
-      className="cursor-pointer rounded-full bg-white px-[9px] hover:bg-accent/50 dark:bg-black dark:hover:bg-accent/50"
-      onClick={openCommand}
-      title="Search"
-    >
-      <MagnifyingGlassIcon className="size-4" />
-      <span className="sr-only">Search</span>
-    </Button>
-  )
+	const customBackgroundImage =
+		(window.CustomBackgroundImage as string) !== ""
+			? window.CustomBackgroundImage
+			: undefined;
+
+	return (
+		<Button
+			variant="outline"
+			size="sm"
+			className={cn("rounded-full px-[9px] bg-white dark:bg-black", {
+				"bg-white/70 dark:bg-black/70": customBackgroundImage,
+			})}
+			onClick={openCommand}
+			title="Search"
+		>
+			<MagnifyingGlassIcon className="size-4" />
+			<span className="sr-only">Search</span>
+		</Button>
+	);
 }

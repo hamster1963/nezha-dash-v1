@@ -1,122 +1,126 @@
 {
-  "refreshing": "Aktualisieren",
-  "serviceTracker": {
-    "uptime": "Uptime",
-    "today": "Heute",
-    "noService": "Keine Servicedaten",
-    "daysAgo": "vor Tagen",
-    "loading": "Laden..."
-  },
-  "serverCard": {
-    "uptime": "Uptime",
-    "mem": "MEM",
-    "upload": "Upload",
-    "download": "Download",
-    "system": "System",
-    "stg": "STG",
-    "totalDownload": "Download",
-    "days": "Tage",
-    "hours": "Stunden",
-    "totalUpload": "Upload"
-  },
-  "serverDetail": {
-    "unknown": "Unbekannt",
-    "arch": "Arch",
-    "status": "Status",
-    "online": "Online",
-    "days": "Tage",
-    "upload": "Upload",
-    "download": "Download",
-    "offline": "Offline",
-    "uptime": "Uptime",
-    "version": "Version",
-    "mem": "Speicher",
-    "disk": "Festplatte",
-    "region": "Region",
-    "system": "System",
-    "lastActive": "Letzte Aktivität",
-    "temperature": "Temperatur"
-  },
-  "theme": {
-    "system": "Folgen Sie dem System",
-    "light": "Hell",
-    "dark": "Dunkel"
-  },
-  "monitor": {
-    "monitorCount": "Services",
-    "noData": "Kein Server Monitoring Daten, bitte fügen sie zuerst einen Monitor hinzu",
-    "avgDelay": "Latenz",
-    "packetLoss": "Paketverlust",
-    "clearSelections": "Löschen"
-  },
-  "billingInfo": {
-    "error": "Fehler",
-    "remaining": "Verbleibend",
-    "indefinite": "Unbestimmt",
-    "expired": "Verfallen",
-    "days": "tage",
-    "price": "Preis",
-    "free": "Kostenlos",
-    "usage-baseed": "Verwendungsbasiert"
-  },
-  "overview": "Überblick",
-  "map": {
-    "Regions": "Regionen",
-    "Servers": "server",
-    "Distributions": "Server sind verteilt in"
-  },
-  "pwa": {
-    "reload": "Update",
-    "newContent": "Neue Inhalte verfügbar",
-    "offlineReady": "Anwendung bereit, offline zu verwenden"
-  },
-  "error": {
-    "pageNotFound": "Seite nicht gefunden",
-    "backToHome": "Zurück zur Startseite"
-  },
-  "whereTheTimeIs": "Wo die Zeit ist",
-  "info": {
-    "websocketConnecting": "WebSocket verbindet",
-    "websocketConnected": "WebSocket verbunden",
-    "websocketDisconnected": "WebSocket getrennt",
-    "processing": "Verarbeiten..."
-  },
-  "tabSwitch": {
-    "Network": "Netzwerk",
-    "Detail": "Detail"
-  },
-  "nezha": "Nezha Monitoring",
-  "dashboard": "Dashboard",
-  "serverDetailChart": {
-    "upload": "Upload",
-    "download": "Download",
-    "process": "Prozess",
-    "disk": "Festplatte",
-    "mem": "Speicher",
-    "swap": "Swap"
-  },
-  "language": {
-    "zh-TW": "Traditionelles Chinesisch",
-    "en-US": "Englisch",
-    "zh-CN": "vereinfachtes Chinesisch"
-  },
-  "online": "Online",
-  "offline": "Offline",
-  "serverOverview": {
-    "totalServers": "Server insgesamt",
-    "onlineServers": "Online Server",
-    "offlineServers": "Offline Server",
-    "totalBandwidth": "Gesamte Bandbreite",
-    "speed": "Geschwindigkeit",
-    "network": "Netzwerk"
-  },
-  "cycleTransfer": {
-    "used": "benutzt",
-    "total": "gesamt",
-    "nextUpdate": "nächstes update"
-  },
-  "footer": {
-    "themeBy": "Design von "
-  },
-  "login": "Login"
+	"refreshing": "Aktualisieren",
+	"serviceTracker": {
+		"uptime": "Uptime",
+		"today": "Heute",
+		"noService": "Keine Servicedaten",
+		"daysAgo": "vor Tagen",
+		"loading": "Laden..."
+	},
+	"serverCard": {
+		"uptime": "Uptime",
+		"mem": "MEM",
+		"upload": "Upload",
+		"download": "Download",
+		"system": "System",
+		"stg": "STG",
+		"totalDownload": "Download",
+		"days": "Tage",
+		"hours": "Stunden",
+		"totalUpload": "Upload"
+	},
+	"serverDetail": {
+		"unknown": "Unbekannt",
+		"arch": "Arch",
+		"status": "Status",
+		"online": "Online",
+		"days": "Tage",
+		"upload": "Upload",
+		"download": "Download",
+		"offline": "Offline",
+		"uptime": "Uptime",
+		"version": "Version",
+		"mem": "Speicher",
+		"disk": "Festplatte",
+		"region": "Region",
+		"system": "System",
+		"lastActive": "Letzte Aktivität",
+		"temperature": "Temperatur"
+	},
+	"theme": {
+		"system": "Folgen Sie dem System",
+		"light": "Hell",
+		"dark": "Dunkel"
+	},
+	"monitor": {
+		"monitorCount": "Services",
+		"noData": "Kein Server Monitoring Daten, bitte fügen sie zuerst einen Monitor hinzu",
+		"avgDelay": "Latenz",
+		"packetLoss": "Paketverlust",
+		"clearSelections": "Löschen",
+		"peakCut": "Peak cut",
+		"period1d": "1 Tag",
+		"period7d": "7 Tage",
+		"period30d": "30 Tage"
+	},
+	"billingInfo": {
+		"error": "Fehler",
+		"remaining": "Verbleibend",
+		"indefinite": "Unbestimmt",
+		"expired": "Verfallen",
+		"days": "tage",
+		"price": "Preis",
+		"free": "Kostenlos",
+		"usage-baseed": "Verwendungsbasiert"
+	},
+	"overview": "Überblick",
+	"map": {
+		"Regions": "Regionen",
+		"Servers": "server",
+		"Distributions": "Server sind verteilt in"
+	},
+	"pwa": {
+		"reload": "Update",
+		"newContent": "Neue Inhalte verfügbar",
+		"offlineReady": "Anwendung bereit, offline zu verwenden"
+	},
+	"error": {
+		"pageNotFound": "Seite nicht gefunden",
+		"backToHome": "Zurück zur Startseite"
+	},
+	"whereTheTimeIs": "Wo die Zeit ist",
+	"info": {
+		"websocketConnecting": "WebSocket verbindet",
+		"websocketConnected": "WebSocket verbunden",
+		"websocketDisconnected": "WebSocket getrennt",
+		"processing": "Verarbeiten..."
+	},
+	"tabSwitch": {
+		"Network": "Netzwerk",
+		"Detail": "Detail"
+	},
+	"nezha": "Nezha Monitoring",
+	"dashboard": "Dashboard",
+	"serverDetailChart": {
+		"upload": "Upload",
+		"download": "Download",
+		"process": "Prozess",
+		"disk": "Festplatte",
+		"mem": "Speicher",
+		"swap": "Swap"
+	},
+	"language": {
+		"zh-TW": "Traditionelles Chinesisch",
+		"en-US": "Englisch",
+		"zh-CN": "vereinfachtes Chinesisch"
+	},
+	"online": "Online",
+	"offline": "Offline",
+	"serverOverview": {
+		"totalServers": "Server insgesamt",
+		"onlineServers": "Online Server",
+		"offlineServers": "Offline Server",
+		"totalBandwidth": "Gesamte Bandbreite",
+		"speed": "Geschwindigkeit",
+		"network": "Netzwerk"
+	},
+	"cycleTransfer": {
+		"used": "benutzt",
+		"total": "gesamt",
+		"nextUpdate": "nächstes update"
+	},
+	"footer": {
+		"themeBy": "Design von "
+	},
+	"login": "Login"
 }
