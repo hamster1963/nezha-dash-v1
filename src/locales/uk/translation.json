@@ -1,24 +1,73 @@
 {
   "nezha": "Nezha Моніторинг",
   "theme": {
-    "light": "Світла тема",
-    "dark": "Темна тема",
-    "system": "Система"
+    "light": "Світло",
+    "dark": "Темний",
+    "system": "Як в Системі"
   },
-  "NoResults": "Немає результатів",
+  "NoResults": "Немає результатів.",
   "Servers": "Сервери",
   "map": {
-    "Servers": "сервери"
+    "Servers": "сервери",
+    "Distributions": "Сервери розподілені в",
+    "Regions": "Регіони"
   },
   "serverCard": {
-    "mem": "МЕМ"
+    "mem": "МЕМ",
+    "stg": "STG",
+    "days": "Днів",
+    "hours": "Годин",
+    "upload": "Завантаження",
+    "download": "Завантажити",
+    "system": "Система",
+    "uptime": "Аптайм",
+    "totalUpload": "Завантажено",
+    "totalDownload": "Скачано"
   },
   "serverDetail": {
-    "mem": "МЕМ"
+    "mem": "Мем",
+    "status": "Статус",
+    "online": "Online",
+    "days": "Днів",
+    "hours": "Годин",
+    "offline": "Offline",
+    "unknown": "Невідомо"
   },
   "serverDetailChart": {
-    "mem": "МЕМ"
+    "mem": "Мем"
   },
   "overview": "Огляд",
-  "dashboard": "Інформаційна панель"
+  "dashboard": "Інформаційна панель",
+  "online": "Онлайн",
+  "offline": "Оффлайн",
+  "whereTheTimeIs": "Де час",
+  "refreshing": "Оновлення",
+  "info": {
+    "websocketConnecting": "WebSocket з'єднання",
+    "websocketConnected": "WebSocket з'єднано",
+    "websocketDisconnected": "WebSocket відключено",
+    "processing": "Обробка..."
+  },
+  "serverOverview": {
+    "totalServers": "Всього Серверів",
+    "onlineServers": "Сервери в мережі",
+    "offlineServers": "Сервери не в мережі",
+    "totalBandwidth": "Загальна пропускна здатність",
+    "speed": "Швидкість",
+    "network": "Мережа"
+  },
+  "cycleTransfer": {
+    "used": "використано",
+    "total": "всього",
+    "nextUpdate": "наступне оновлення"
+  },
+  "serviceTracker": {
+    "noService": "Немає даних про сервіс",
+    "uptime": "Аптайм",
+    "delay": "Затримка",
+    "daysAgo": "Днів тому",
+    "today": "Сьогодні",
+    "loading": "Завантаження..."
+  },
+  "login": "Логін"
 }
