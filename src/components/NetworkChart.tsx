@@ -177,18 +177,23 @@ export function NetworkChart({
 
 	const formattedData = formatData(monitorData.data);
 
-	const monitorIdByName = new Map(
-		monitorData.data.map((item) => [item.monitor_name, item.monitor_id]),
+	const monitorInfoByName = new Map(
+		monitorData.data.map((item) => [
+			item.monitor_name,
+			{ id: item.monitor_id, displayIndex: item.display_index },
+		]),
 	);
 	const chartDataKey = Object.keys(transformedData).sort((a, b) => {
-		const aId = monitorIdByName.get(a);
-		const bId = monitorIdByName.get(b);
-		if (aId === undefined && bId === undefined) {
-			return a.localeCompare(b);
-		}
-		if (aId === undefined) return 1;
-		if (bId === undefined) return -1;
-		return aId - bId;
+		const aInfo = monitorInfoByName.get(a);
+		const bInfo = monitorInfoByName.get(b);
+		if (!aInfo && !bInfo) return a.localeCompare(b);
+		if (!aInfo) return 1;
+		if (!bInfo) return -1;
+
+		const indexDiff = (bInfo.displayIndex ?? 0) - (aInfo.displayIndex ?? 0);
+		if (indexDiff !== 0) return indexDiff;
+
+		return aInfo.id - bInfo.id;
 	});
 
 	const initChartConfig = {
