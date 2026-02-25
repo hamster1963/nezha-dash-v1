@@ -93,6 +93,7 @@ export type ServerMonitorChart = {
 export interface NezhaMonitor {
 	monitor_id: number;
 	monitor_name: string;
+	display_index: number;
 	server_id: number;
 	server_name: string;
 	created_at: number[];
