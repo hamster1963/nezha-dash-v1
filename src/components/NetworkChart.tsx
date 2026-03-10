@@ -126,7 +126,7 @@ export function NetworkChart({
 	show: boolean;
 }) {
 	const { t } = useTranslation();
-	const [period, setPeriod] = React.useState<MonitorPeriod>("30d");
+	const [period, setPeriod] = React.useState<MonitorPeriod>("1d");
 	const { data: userData, isError: isLoginError } = useQuery({
 		queryKey: ["login-user"],
 		queryFn: () => fetchLoginUser(),
