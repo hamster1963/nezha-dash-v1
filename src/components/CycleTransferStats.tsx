@@ -1,62 +1,68 @@
-import { CycleTransferStats, NezhaServer } from "@/types/nezha-api"
-import React from "react"
+import type React from "react";
+import type { CycleTransferStats, NezhaServer } from "@/types/nezha-api";
 
-import { CycleTransferStatsClient } from "./CycleTransferStatsClient"
+import { CycleTransferStatsClient } from "./CycleTransferStatsClient";
 
 interface CycleTransferStatsProps {
-  serverList: NezhaServer[]
-  cycleStats: CycleTransferStats
-  className?: string
+	serverList: NezhaServer[];
+	cycleStats: CycleTransferStats;
+	className?: string;
 }
 
-export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({ serverList, cycleStats, className }) => {
-  if (serverList.length === 0) {
-    return null
-  }
+export const CycleTransferStatsCard: React.FC<CycleTransferStatsProps> = ({
+	serverList,
+	cycleStats,
+	className,
+}) => {
+	if (serverList.length === 0) {
+		return null;
+	}
 
-  const serverIdList = serverList.map((server) => server.id.toString())
+	const serverIdList = serverList.map((server) => server.id.toString());
 
-  return (
-    <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {Object.entries(cycleStats).map(([cycleId, cycleData]) => {
-        if (!cycleData.server_name) {
-          return null
-        }
+	return (
+		<section className="grid grid-cols-1 md:grid-cols-3 gap-3">
+			{Object.entries(cycleStats).map(([cycleId, cycleData]) => {
+				if (!cycleData.server_name) {
+					return null;
+				}
 
-        return Object.entries(cycleData.server_name).map(([serverId, serverName]) => {
-          const transfer = cycleData.transfer?.[serverId] || 0
-          const nextUpdate = cycleData.next_update?.[serverId]
+				return Object.entries(cycleData.server_name).map(
+					([serverId, serverName]) => {
+						const transfer = cycleData.transfer?.[serverId] || 0;
+						const nextUpdate = cycleData.next_update?.[serverId];
 
-          if (!serverIdList.includes(serverId)) {
-            return null
-          }
+						if (!serverIdList.includes(serverId)) {
+							return null;
+						}
 
-          if (!transfer && !nextUpdate) {
-            return null
-          }
+						if (!transfer && !nextUpdate) {
+							return null;
+						}
 
-          return (
-            <CycleTransferStatsClient
-              key={`${cycleId}-${serverId}`}
-              name={cycleData.name}
-              from={cycleData.from}
-              to={cycleData.to}
-              max={cycleData.max}
-              serverStats={[
-                {
-                  serverId,
-                  serverName,
-                  transfer,
-                  nextUpdate: nextUpdate || "",
-                },
-              ]}
-              className={className}
-            />
-          )
-        })
-      })}
-    </section>
-  )
-}
+						return (
+							<CycleTransferStatsClient
+								key={`${cycleId}-${serverId}`}
+								name={cycleData.name}
+								from={cycleData.from}
+								to={cycleData.to}
+								max={cycleData.max}
+								serverStats={[
+									{
+										serverId,
+										serverName,
+										transfer,
+										nextUpdate: nextUpdate || "",
+									},
+								]}
+								className={className}
+							/>
+						);
+					},
+				);
+			})}
+		</section>
+	);
+};
 
-export default CycleTransferStatsCard
+export default CycleTransferStatsCard;

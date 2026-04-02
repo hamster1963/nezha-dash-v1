@@ -10,7 +10,7 @@
           theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
         }
         document.documentElement.classList.add(theme)
-      } catch (e) {
+      } catch (_e) {
         document.documentElement.classList.add("light")
       }
     </script>
@@ -36,15 +36,15 @@
       }
 
       html {
-        background-color: var(--bg) !important;
+        background-color: var(--bg);
       }
 
       body {
-        background-color: var(--bg) !important;
+        background-color: var(--bg);
       }
 
       #root {
-        background-color: var(--bg) !important;
+        background-color: var(--bg);
         visibility: hidden;
       }
 
@@ -63,7 +63,7 @@
       }
     </style>
     <script>
-      ;(function () {
+      ;(() => {
         const storageKey = "vite-ui-theme"
         const theme = localStorage.getItem(storageKey) || "system"
         const root = document.documentElement
