@@ -1,7 +1,7 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import react from "@vitejs/plugin-react-swc";
+import react from '@vitejs/plugin-react'
 import { defineConfig } from "vite";
 
 // Get git commit hash
@@ -12,6 +12,22 @@ const getGitHash = () => {
 		console.log(e);
 		return "unknown";
 	}
+};
+
+const getVendorChunkName = (moduleId: string) => {
+	const normalizedId = moduleId.replace(/\\/g, "/");
+
+	if (!normalizedId.includes("/node_modules/")) {
+		return null;
+	}
+
+	const packagePath = normalizedId.split("/node_modules/").pop();
+	if (!packagePath) {
+		return null;
+	}
+
+	const packageName = packagePath.split("/")[0];
+	return packageName || null;
 };
 
 // https://vite.dev/config/
@@ -48,19 +64,18 @@ export default defineConfig({
 		},
 	},
 	build: {
-		rollupOptions: {
+		rolldownOptions: {
 			output: {
 				entryFileNames: `assets/[name].[hash].js`,
 				chunkFileNames: `assets/[name].[hash].js`,
 				assetFileNames: `assets/[name].[hash].[ext]`,
-				manualChunks(id) {
-					if (id.includes("node_modules")) {
-						return id
-							.toString()
-							.split("node_modules/")[1]
-							.split("/")[0]
-							.toString();
-					}
+				codeSplitting: {
+					groups: [
+						{
+							name: getVendorChunkName,
+							test: /[\\/]node_modules[\\/]/,
+						},
+					],
 				},
 			},
 		},
